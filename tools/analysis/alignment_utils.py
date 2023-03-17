@@ -3,18 +3,27 @@ from array import array
 from math import floor
 
 
-def MakeFit(histoGram, fitType, range=[], color=None):
+def find_max(histos):
+    maximum = -1
+
+    for histo in histos:
+        if (histo.GetMaximum() > maximum):
+            maximum = histo.GetMaximum()
+    return maximum
+
+
+def make_fit(histoGram, fitType, range=[], color=None):
 
     # no Fit
     if fitType == "noFit":
         return None
     elif fitType == "singleGausIterative":
-        fit = singleGausIterative(histoGram, 2, range, color)
+        fit = single_gauss_iterative(histoGram, 2, range, color)
 
     return fit
 
 
-def ProfileYwithIterativeGaussFit(hist, mu_graph, sigma_graph, num_bins, fitrange=[-2e5, 2e5], color=None):
+def profile_y_with_iterative_gauss_fit(hist, mu_graph, sigma_graph, num_bins, fitrange=[-2e5, 2e5], color=None):
 
     if (num_bins < 1):
         return
@@ -54,7 +63,7 @@ def ProfileYwithIterativeGaussFit(hist, mu_graph, sigma_graph, num_bins, fitrang
         if (current_proj.GetEntries() < minEntries):
             continue
         else:
-            fit = singleGausIterative(current_proj, 2, fitrange, color)
+            fit = single_gauss_iterative(current_proj, 2, fitrange, color)
 
         mu = fit.GetParameter(1)
         mu_err = fit.GetParError(1)
@@ -104,7 +113,7 @@ def ProfileYwithIterativeGaussFit(hist, mu_graph, sigma_graph, num_bins, fitrang
         print("Number of skipped bins: ", num_skipped)
 
 
-def singleGausIterative(hist, sigmaRange, range=[], color=None):
+def single_gauss_iterative(hist, sigmaRange, range=[], color=None):
     debug = False
     # first perform a single Gaus fit across full range of histogram or in a specified range
 
@@ -150,7 +159,7 @@ def singleGausIterative(hist, sigmaRange, range=[], color=None):
         hist.Fit("fit", "ORQN", "same")
         newFitMean = fit.GetParameter(1)
         newFitSig = fit.GetParameter(2)
-        if debug:  ## \todo logging analogously to Jeremy's hps-mc PR
+        if debug:  # \todo logging analogously to Jeremy's hps-mc PR
             print("i = ", i, " newFitMean = ", newFitMean, " newFitSig = ", newFitSig)
         if (i > 50):
             if debug:
@@ -159,7 +168,7 @@ def singleGausIterative(hist, sigmaRange, range=[], color=None):
                 print("final sigma =  ", newFitSig, ", previous iter sigma = ", fitSig)
             break
 
-        i+=1
+        i += 1
 
     if debug:
         print("Final i = ", i, " finalFitMean = ", fit.GetParameter(1), " finalFitSig = ", fit.GetParameter(2))
