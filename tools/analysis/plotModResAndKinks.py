@@ -2,37 +2,27 @@ import FEE_momentum_plots as feePlots
 from alignmentUtils import *
 import trackPlots as tp
 from makeIndexPage import htmlWriter
+import commonConfig as config
 import utilities as utils
 import ROOT as r
 import sys
 import os
-sys.path.insert(0, "/sdf/group/hps/users/sgaiser/src/hpstr/plotUtils")
 
 
-colors = [r.kBlue+2, r.kCyan+2, r.kRed+2, r.kOrange+10, r.kYellow+2, r.kGreen-1, r.kAzure-2, r.kGreen-8, r.kOrange+3, r.kYellow+2, r.kRed+2, r.kBlue+2, r.kGreen-8, r.kOrange+3, r.kYellow+2, r.kRed+2, r.kBlue+2, r.kGreen-8, r.kOrange+3, r.kYellow+2, r.kRed+2, r.kBlue+2, r.kGreen-8, r.kOrange+3, r.kYellow+2, r.kRed+2, r.kBlue+2, r.kGreen-8, r.kOrange+3]
-markers = [r.kFullCircle, r.kFullTriangleUp, r.kFullSquare, r.kOpenSquare, r.kOpenTriangleUp, r.kOpenCircle, r.kFullCircle, r.kOpenSquare, r.kFullSquare, r.kOpenTriangleUp, r.kOpenCircle, r.kFullCircle, r.kOpenSquare, r.kFullSquare, r.kOpenTriangleUp, r.kOpenCircle, r.kFullCircle, r.kOpenSquare, r.kFullSquare, r.kOpenTriangleUp, r.kOpenCircle, r.kFullCircle, r.kOpenSquare, r.kFullSquare, r.kOpenTriangleUp, r.kOpenCircle, r.kFullCircle, r.kOpenSquare, r.kFullSquare, r.kOpenTriangleUp]
-
-binLabels = ["", "L1tA", "L1tS", "L2tA", "L2tS", "L3tA", "L3tS", "L4tA", "L4tS", "L5tAh", "L5tSh", "L5tAs", "L5tSs", "L6tAh", "L6tSh", "L6tAs", "L6tSs", "L7tAh", "L7tSh", "L7tAs", "L7tSs"]
-binLabels += ["", "", "", "", ""]
-binLabels += ["L1bA", "L1bS", "L2bA", "L2bS", "L3bA", "L3bS", "L4bA", "L4bS", "L5bAh", "L5bSh", "L5bAs", "L5bSs", "L6bAh", "L6bSh", "L6bAs", "L6bSs", "L7bAh", "L7bSh", "L7bAs", "L7bSs"]
-binLabels += ["", "", "", "", "", ""]
-binLabels += ["", "", "", "", "", ""]
 #oFext = ".pdf"
-oFext = ".png"
+oFext = config.args.oFext
+inFiles = config.args.inputFiles
+inLegends = config.args.legend
 
-inFiles = [
-                "/sdf/group/hps/users/sgaiser/run/ali_invest/mod_detectors/sensor_movements/KF/fee_recon_20um120nA_aliRecon_KF_HPS_IDEAL_iter0_76.root",
-                "/sdf/group/hps/users/sgaiser/run/ali_invest/mod_detectors/sensor_movements/KF/fee_recon_20um120nA_aliRecon_KF_HPS_IDEAL_top_L5_stereo_tu_m1mm_iter1_76.root",
-                "/sdf/group/hps/users/sgaiser/run/ali_invest/mod_detectors/sensor_movements/KF/fee_recon_20um120nA_aliRecon_KF_HPS_IDEAL_top_L5_stereo_tv_m1mm_iter1_76.root",
-                "/sdf/group/hps/users/sgaiser/run/ali_invest/mod_detectors/sensor_movements/KF/fee_recon_20um120nA_aliRecon_KF_HPS_IDEAL_top_L5_stereo_tw_m1mm_iter1_76.root"
-          ]
+# inFiles = [
+#                 "/Users/schababi/Desktop/fee_recon_20um120nA_aliRecon_KF_HPS_IDEAL_iter0_76.root",
+#                 "/Users/schababi/Desktop/fee_recon_20um120nA_aliRecon_KF_HPS_IDEAL_top_L5_stereo_tu_m1mm_iter1_76.root"
+#           ]
     
-inLegends = [
-                "HPS_IDEAL_iter0",
-                "HPS_IDEAL_top_L5_stereo_tu_m1mm_iter1",
-                "HPS_IDEAL_top_L5_stereo_tv_m1mm_iter1",
-                "HPS_IDEAL_top_L5_stereo_tw_m1mm_iter1"
-            ]
+# inLegends = [
+#                 "HPS_IDEAL_iter0",
+#                 "HPS_IDEAL_top_L5_stereo_tu_m1mm_iter1"
+#             ]
 
 r.gStyle.SetOptStat(0)
 
@@ -73,10 +63,10 @@ def doDerPlots(inputF, name, legends=[]):
             maximum = histo.GetMaximum()
 
     for ihisto in range(len(histos)):
-        histos[ihisto].SetMarkerStyle(markers[ihisto])
-        histos[ihisto].SetMarkerColor(colors[ihisto])
+        histos[ihisto].SetMarkerStyle(config.markers[ihisto])
+        histos[ihisto].SetMarkerColor(config.colors[ihisto])
         histos[ihisto].SetMarkerSize(4)
-        histos[ihisto].SetLineColor(colors[ihisto])
+        histos[ihisto].SetLineColor(config.colors[ihisto])
         histos[ihisto].GetXaxis().SetLabelSize(0.05)
         histos[ihisto].GetYaxis().SetLabelSize(0.05)
         histos[ihisto].SetLineWidth(5)
@@ -129,10 +119,10 @@ def doMultVtxPlots(inputF, legends=[], outDir="./MultiVtx_plots/"):
     maximum = 150
 
     for ihisto in range(len(histos)):
-        histos[ihisto].SetMarkerStyle(markers[ihisto])
-        histos[ihisto].SetMarkerColor(colors[ihisto])
+        histos[ihisto].SetMarkerStyle(config.markers[ihisto])
+        histos[ihisto].SetMarkerColor(config.colors[ihisto])
         histos[ihisto].SetMarkerSize(4)
-        histos[ihisto].SetLineColor(colors[ihisto])
+        histos[ihisto].SetLineColor(config.colors[ihisto])
         histos[ihisto].SetLineWidth(5)
         histos[ihisto].Rebin(1)
 
@@ -160,10 +150,10 @@ def doMultVtxPlots(inputF, legends=[], outDir="./MultiVtx_plots/"):
     c.SetGridy()
 
     for ihisto in range(len(histos_top)):
-        histos_top[ihisto].SetMarkerStyle(markers[ihisto])
-        histos_top[ihisto].SetMarkerColor(colors[ihisto])
+        histos_top[ihisto].SetMarkerStyle(config.markers[ihisto])
+        histos_top[ihisto].SetMarkerColor(config.colors[ihisto])
         histos_top[ihisto].SetMarkerSize(4)
-        histos_top[ihisto].SetLineColor(colors[ihisto])
+        histos_top[ihisto].SetLineColor(config.colors[ihisto])
         histos_top[ihisto].SetLineStyle(2)
         histos_top[ihisto].SetLineWidth(5)
         histos_top[ihisto].Rebin(1)
@@ -186,10 +176,10 @@ def doMultVtxPlots(inputF, legends=[], outDir="./MultiVtx_plots/"):
             histos_top[ihisto].Draw("P SAME")
 
     for ihisto in range(len(histos_bot)):
-        histos_bot[ihisto].SetMarkerStyle(markers[ihisto])
-        histos_bot[ihisto].SetMarkerColor(colors[ihisto])
+        histos_bot[ihisto].SetMarkerStyle(config.markers[ihisto])
+        histos_bot[ihisto].SetMarkerColor(config.colors[ihisto])
         histos_bot[ihisto].SetMarkerSize(4)
-        histos_bot[ihisto].SetLineColor(colors[ihisto])
+        histos_bot[ihisto].SetLineColor(config.colors[ihisto])
         histos_bot[ihisto].SetLineWidth(5)
         histos_bot[ihisto].Rebin(1)
         histos_bot[ihisto].Draw("P SAME")
@@ -207,13 +197,13 @@ def doMultVtxPlots(inputF, legends=[], outDir="./MultiVtx_plots/"):
         histos2d_top.append(iF.Get(f_path + "/vtx_x_y_top"))
         # names.append("MultiEventVtx_x_y_top" + iF.GetName().strip(".root"))
 
-    utils.Make2DPlots(names, outDir, histos2d_top, legends=legends, xtitle="MultiEvt Vtx V_{x} [mm]", ytitle="MultiEvt Vtx V_{y} [mm]", colors2d=colors)
+    utils.Make2DPlots(names, outDir, histos2d_top, legends=legends, xtitle="MultiEvt Vtx V_{x} [mm]", ytitle="MultiEvt Vtx V_{y} [mm]", colors2d=config.colors)
 
     histos2d_bot = []
     names = [leg+"_x_y_bot" for leg in legends]
     for iF in inputF:
         histos2d_bot.append(iF.Get(f_path + "/vtx_x_y_bottom"))
-    utils.Make2DPlots(names, outDir, histos2d_bot, legends=legends, xtitle="Multi Vtx FEE V_{x} [mm]", ytitle="Multi Vtx FEE V_{y} [mm]", colors2d=colors)
+    utils.Make2DPlots(names, outDir, histos2d_bot, legends=legends, xtitle="Multi Vtx FEE V_{x} [mm]", ytitle="Multi Vtx FEE V_{y} [mm]", colors2d=config.colors)
 
     histos2d = []
     names = [leg+"_x_y_top_bot" for leg in legends]
@@ -223,14 +213,14 @@ def doMultVtxPlots(inputF, legends=[], outDir="./MultiVtx_plots/"):
         histos1.Add(histos2)
         histos2d.append(histos1)
 
-    utils.Make2DPlots(names, outDir, histos2d, legends=legends, xtitle="MultiEvt Vtx V_{x} [mm]", ytitle="MultiEvt Vtx V_{y} [mm]", colors2d=colors)
+    utils.Make2DPlots(names, outDir, histos2d, legends=legends, xtitle="MultiEvt Vtx V_{x} [mm]", ytitle="MultiEvt Vtx V_{y} [mm]", colors2d=config.colors)
 
     histos2d = []
     names = [leg+"_x_y_combined" for leg in legends]
     for iF in inputF:
         histo = iF.Get(f_path + "/vtx_x_y")
         histos2d.append(histo)
-    utils.Make2DPlots(names, outDir, histos2d, legends=legends, xtitle="MultiEvt Vtx V_{x} [mm]", ytitle="MultiEvt Vtx V_{y} [mm]", colors2d=colors)
+    utils.Make2DPlots(names, outDir, histos2d, legends=legends, xtitle="MultiEvt Vtx V_{x} [mm]", ytitle="MultiEvt Vtx V_{y} [mm]", colors2d=config.colors)
 
 
 # 1: bottom right
@@ -307,10 +297,10 @@ def z0VsTanLambdaFitPlot(inputF, name, legends=[], outFolder="./"):
         fit_par1 = fitF.GetParameter(1)
         plotProperties.append((" z_tgt=%.3f" % round(fit_par1, 3)))
 
-        histos_mu[ihisto].SetMarkerStyle(markers[ihisto])
-        histos_mu[ihisto].SetMarkerColor(colors[ihisto])
+        histos_mu[ihisto].SetMarkerStyle(config.markers[ihisto])
+        histos_mu[ihisto].SetMarkerColor(config.colors[ihisto])
         histos_mu[ihisto].SetMarkerSize(4)
-        histos_mu[ihisto].SetLineColor(colors[ihisto])
+        histos_mu[ihisto].SetLineColor(config.colors[ihisto])
         histos_mu[ihisto].GetXaxis().SetLabelSize(0.05)
         histos_mu[ihisto].GetYaxis().SetLabelSize(0.05)
         histos_mu[ihisto].SetLineWidth(5)
@@ -329,7 +319,7 @@ def z0VsTanLambdaFitPlot(inputF, name, legends=[], outFolder="./"):
             print("Drawing same")
             histos_mu[ihisto].Draw("P SAME")
 
-        fitF.SetLineColor(colors[ihisto])
+        fitF.SetLineColor(config.colors[ihisto])
         fitF.DrawClone("SAME")
 
     leg = doLegend(histos_mu, legends, 2, plotProperties)
@@ -374,16 +364,16 @@ def plot1DResiduals(inputF, name, legends=[], outFolder="./", inFolder="res/", t
         titleName += "_hole"
 
     for ihisto in range(len(histos)):
-        histos[ihisto].SetMarkerStyle(markers[ihisto])
-        histos[ihisto].SetMarkerColor(colors[ihisto])
+        histos[ihisto].SetMarkerStyle(config.markers[ihisto])
+        histos[ihisto].SetMarkerColor(config.colors[ihisto])
         histos[ihisto].SetMarkerSize(4)
-        histos[ihisto].SetLineColor(colors[ihisto])
+        histos[ihisto].SetLineColor(config.colors[ihisto])
         histos[ihisto].GetXaxis().SetLabelSize(0.05)
         histos[ihisto].GetYaxis().SetLabelSize(0.05)
         histos[ihisto].SetLineWidth(5)
 
         # Fitting
-        fitList.append(MakeFit(histos[ihisto], "singleGausIterative", range=[], utils.colors[ihisto]))
+        fitList.append(MakeFit(histos[ihisto], "singleGausIterative", [], config.colors[ihisto]))
 
         if (ihisto == 0):
             # histos[ihisto].GetXaxis().SetTitle(titleName + " local X residual [mm]")
@@ -437,16 +427,16 @@ def plotRes(inputF, legends=[], outputF="./"):
 
     for ihisto in range(len(histos)):
         print(ihisto, histos[ihisto])
-        histos[ihisto].SetMarkerStyle(markers[ihisto])
-        histos[ihisto].SetMarkerColor(colors[ihisto])
+        histos[ihisto].SetMarkerStyle(config.markers[ihisto])
+        histos[ihisto].SetMarkerColor(config.colors[ihisto])
         histos[ihisto].SetMarkerSize(4)
-        histos[ihisto].SetLineColor(colors[ihisto])
+        histos[ihisto].SetLineColor(config.colors[ihisto])
         histos[ihisto].SetLineWidth(5)
 
         if (ihisto == 0):
 
             for ibin in range(0, histos[ihisto].GetXaxis().GetNbins()):
-                histos[ihisto].GetXaxis().SetBinLabel(ibin+1, binLabels[ibin])
+                histos[ihisto].GetXaxis().SetBinLabel(ibin+1, config.binLabels[ibin])
                 histos[ihisto].GetXaxis().SetLabelSize(0.04)
                 histos[ihisto].GetXaxis().ChangeLabel(ibin+1, 270)
             histos[ihisto].GetYaxis().SetRangeUser(-0.2, 0.2)
@@ -484,16 +474,16 @@ def plotLambdaKinks(inputF, legends=[], outFolder=""):
 
     for ihisto in range(len(histos)):
         print(ihisto, histos[ihisto])
-        histos[ihisto].SetMarkerStyle(markers[ihisto])
-        histos[ihisto].SetMarkerColor(colors[ihisto])
+        histos[ihisto].SetMarkerStyle(config.markers[ihisto])
+        histos[ihisto].SetMarkerColor(config.colors[ihisto])
         histos[ihisto].SetMarkerSize(4)
-        histos[ihisto].SetLineColor(colors[ihisto])
+        histos[ihisto].SetLineColor(config.colors[ihisto])
         histos[ihisto].SetLineWidth(5)
 
         if (ihisto == 0):
 
             for ibin in range(0, histos[ihisto].GetXaxis().GetNbins()):
-                histos[ihisto].GetXaxis().SetBinLabel(ibin+1, binLabels[ibin])
+                histos[ihisto].GetXaxis().SetBinLabel(ibin+1, config.binLabels[ibin])
                 histos[ihisto].GetXaxis().SetLabelSize(0.04)
                 histos[ihisto].GetXaxis().ChangeLabel(ibin+1, 270)
 
@@ -547,16 +537,16 @@ def plotProfileY(inputF, name, legends=[],
         ProfileYwithIterativeGaussFit(histos[ihisto], histos_mu[ihisto], histos_sigma[ihisto], num_bins, fitrange=fitrange)
         # ProfileYwithIterativeGaussFit(histos[ihisto],histos_sigma[ihisto] ,histos_mu[ihisto], num_bins,fitrange=fitrange)
 
-        histos_mu[ihisto].SetMarkerStyle(markers[ihisto])
-        histos_mu[ihisto].SetMarkerColor(colors[ihisto])
+        histos_mu[ihisto].SetMarkerStyle(config.markers[ihisto])
+        histos_mu[ihisto].SetMarkerColor(config.colors[ihisto])
         histos_mu[ihisto].SetMarkerSize(4)
-        histos_mu[ihisto].SetLineColor(colors[ihisto])
+        histos_mu[ihisto].SetLineColor(config.colors[ihisto])
         histos_mu[ihisto].SetLineWidth(5)
 
-        histos_sigma[ihisto].SetMarkerStyle(markers[ihisto])
-        histos_sigma[ihisto].SetMarkerColor(colors[ihisto])
+        histos_sigma[ihisto].SetMarkerStyle(config.markers[ihisto])
+        histos_sigma[ihisto].SetMarkerColor(config.colors[ihisto])
         histos_sigma[ihisto].SetMarkerSize(4)
-        histos_sigma[ihisto].SetLineColor(colors[ihisto])
+        histos_sigma[ihisto].SetLineColor(config.colors[ihisto])
         histos_sigma[ihisto].SetLineWidth(5)
 
         hist = histos_mu[ihisto]
@@ -592,7 +582,7 @@ def plotProfileY(inputF, name, legends=[],
         else:
             histos_mu[ihisto].Draw("P SAME")
 
-        fitF.SetLineColor(colors[ihisto])
+        fitF.SetLineColor(config.colors[ihisto])
         # fitF.Draw("SAME")
 
     leg = doLegend(histos_mu, legends, 2, plotProperties)
@@ -629,7 +619,7 @@ def plotProfileY(inputF, name, legends=[],
             histos_sigma[ihisto].Draw("P SAME")
             pass
 
-        fitF.SetLineColor(colors[ihisto])
+        fitF.SetLineColor(config.colors[ihisto])
         # fitF.Draw("SAME")
 
     leg = doLegend(histos_sigma, legends, 2, plotProperties)
@@ -651,15 +641,15 @@ def plotPhiKinks(inputF, legends=[], outFolder="./"):
 
     for ihisto in range(len(histos)):
         print(ihisto, histos[ihisto])
-        histos[ihisto].SetMarkerStyle(markers[ihisto])
-        histos[ihisto].SetMarkerColor(colors[ihisto])
+        histos[ihisto].SetMarkerStyle(config.markers[ihisto])
+        histos[ihisto].SetMarkerColor(config.colors[ihisto])
         histos[ihisto].SetMarkerSize(4)
-        histos[ihisto].SetLineColor(colors[ihisto])
+        histos[ihisto].SetLineColor(config.colors[ihisto])
         histos[ihisto].SetLineWidth(5)
 
         if (ihisto == 0):
             for ibin in range(0, histos[ihisto].GetXaxis().GetNbins()):
-                histos[ihisto].GetXaxis().SetBinLabel(ibin+1, binLabels[ibin])
+                histos[ihisto].GetXaxis().SetBinLabel(ibin+1, config.binLabels[ibin])
                 histos[ihisto].GetXaxis().SetLabelSize(0.04)
                 histos[ihisto].GetXaxis().ChangeLabel(ibin+1, 270)
             histos[ihisto].GetYaxis().SetLabelSize(0.05)
@@ -688,15 +678,15 @@ def plotPhiKinks(inputF, legends=[], outFolder="./"):
         sigma_graph = r.TH1F(histos[ihisto].GetName()+"_sigma"+str(ihisto), histos[ihisto].GetName()+"_sigma"+str(ihisto), histos[ihisto].GetXaxis().GetNbins(), histos[ihisto].GetXaxis().GetXmin(), histos[ihisto].GetXaxis().GetXmax())
         ProfileYwithIterativeGaussFit(histos[ihisto], histos_mu[ihisto], sigma_graph, 1)
 
-        histos_mu[ihisto].SetMarkerStyle(markers[ihisto])
-        histos_mu[ihisto].SetMarkerColor(colors[ihisto])
+        histos_mu[ihisto].SetMarkerStyle(config.markers[ihisto])
+        histos_mu[ihisto].SetMarkerColor(config.colors[ihisto])
         histos_mu[ihisto].SetMarkerSize(4)
-        histos_mu[ihisto].SetLineColor(colors[ihisto])
+        histos_mu[ihisto].SetLineColor(config.colors[ihisto])
         histos_mu[ihisto].SetLineWidth(5)
 
         if (ihisto == 0):
             for ibin in range(0, histos[ihisto].GetXaxis().GetNbins()):
-                histos_mu[ihisto].GetXaxis().SetBinLabel(ibin+1, binLabels[ibin])
+                histos_mu[ihisto].GetXaxis().SetBinLabel(ibin+1, config.binLabels[ibin])
                 histos_mu[ihisto].GetXaxis().SetLabelSize(0.04)
                 histos_mu[ihisto].GetXaxis().ChangeLabel(ibin+1, 270)
             histos_mu[ihisto].GetYaxis().SetLabelSize(0.05)
@@ -740,15 +730,15 @@ def main():
     # utils.SetStyle()
 
     # MAX 4 FILES
-    if sys.argv[1]:
-        inputFiles = sys.argv[1]
-    else: 
-        inputFiles = inFiles
+    # if sys.argv[1]:
+    #     inputFiles = sys.argv[1]
+    # else: 
+    inputFiles = inFiles
     
-    if sys.argv[2]:
-        legends = sys.argv[2]
-    else:
-        legends = inLegends
+    # if sys.argv[2]:
+    #     legends = sys.argv[2]
+    # else:
+    legends = inLegends
 
     inputF = []
     for inputFile in inputFiles:
@@ -967,7 +957,7 @@ def main():
             plotProfileY(inputF,"uresidual_GBL_vs_v_pred_module_L7b_halfmodule_axial_slot_sensor0",legends,outFolder,xtitle="L7b Axial slot-v predicted [mm]",rangeX=[-60,60],rangeY=[v_min,v_max])
             plotProfileY(inputF,"uresidual_GBL_vs_v_pred_module_L7b_halfmodule_stereo_slot_sensor0",legends,outFolder,xtitle="L7b Stereo slot-v predicted [mm]",rangeX=[-60,60],rangeY=[v_min,v_max])
 
-    doMultVtxPlots(inputF, legends, outFolder+"/MultVtx_plots/")
+    # doMultVtxPlots(inputF, legends, outFolder+"/MultVtx_plots/")
     
     plotProfileY(inputF, "p_vs_tanLambda_top", legends=legends, inFolder="trk_params/",
                  outFolder=outFolder, xtitle="tan(#lambda)", ytitle="p [GeV]", rangeY=[0., 5.], fit="[0] + [1]*x")
@@ -1023,7 +1013,7 @@ def main():
                      outFolder=outFolder, xtitle="Bottom track #phi [GeV]", rangeY=[0.5, 1.3], fit="[0]*x*x*x + [1]*x*x + [2]*x + [3]")
 
     if (doTrackPlots):
-        tp.trackPlots(inputFiles, outFolder+"/TrackPlots/", legends)
+        tp.trackPlots(inputFiles, outFolder+"/TrackPlots/", legends, config.colors, config.markers)
         feePlots.feeMomentumPlot(inputF, legends, "trk_params/z0_top", outFolder, oFext)
         feePlots.feeMomentumPlot(inputF, legends, "trk_params/z0_bottom", outFolder, oFext)
         feePlots.feeMomentumPlot(inputF, legends, "trk_params/d0_top", outFolder, oFext)
@@ -1078,12 +1068,10 @@ def main():
         doDerPlots(inputF, "22310", legends)
 
     # Put plots in a webpage
-    # print "Do Html"
-    ## \todo Add html option via hpstr plotUtils here
-    # utils.makeHTML(outdir, ...)
-    # hw = htmlWriter(outFolder)
-    # hw.AddImages(outFolder)
-    # hw.closeHtml()
+    if config.args.doHTML:
+        hw = htmlWriter(outFolder)
+        hw.AddImages(outFolder)
+        hw.closeHtml()
 
 
 if __name__ == "__main__":

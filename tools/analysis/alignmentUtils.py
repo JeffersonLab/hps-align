@@ -3,7 +3,7 @@ from array import array
 from math import floor
 
 
-def MakeFit(histoGram, fitType,  range=[], color=None):
+def MakeFit(histoGram, fitType, range=[], color=None):
 
     # no Fit
     if fitType == "noFit":
@@ -111,6 +111,7 @@ def singleGausIterative(hist, sigmaRange, range=[], color=None):
     min = hist.GetBinLowEdge(1)
     max = hist.GetBinLowEdge(hist.GetNbinsX()) + hist.GetBinWidth(hist.GetNbinsX())
 
+    # if range:
     if (len(range) != 0):
         min = range[0]
         max = range[1]

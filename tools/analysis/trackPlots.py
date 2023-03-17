@@ -1,28 +1,32 @@
-from commonConfig import *
+import commonConfig as config 
 import utilities as utils
 import ROOT as r
 import os
 import sys
-sys.path.append("/Users/pbutti/sw/hpstr/plotUtils")
+# sys.path.append("/Users/pbutti/sw/hpstr/plotUtils")
 
 
-utils.SetStyle()
+# utils.SetStyle()
 
-inFileList = [
-    config.indir+"/nominal_gblmon.root",
-    config.inputFile
-]
+# inFileList = [
+#     config.indir+"/nominal_gblmon.root",
+#     config.inputFile
+# ]
 
-inputFiles = []
-legName = (config.inputFile.split("/")[-1]).strip(".root")
+inFileList = config.args.inputFiles
+legends = config.legend
+
+# legName = (args.inputFile.split("/")[-1]).strip(".root")
 
 r.gROOT.SetBatch(1)
 
 
-def trackPlots(inFileList, outdir, legends):
+def trackPlots(inFileList, outdir, legends, colors, markers):
 
     if not os.path.exists(outdir):
         os.makedirs(outdir)
+
+    inputFiles = []
 
     for ifile in inFileList:
         print("Loading ... ", ifile)
@@ -67,12 +71,12 @@ def trackPlots(inFileList, outdir, legends):
                 # File loop
                 histos = []
 
-                for i_f in xrange(len(inputFiles)):
+                for i_f in range(len(inputFiles)):
                     histo_u = inputFiles[i_f].Get(hname)
                     histos.append(histo_u)
                     pass
 
-                can = utils.Make1DPlot(var+vol+crg, outdir, histos, legends, oFext, xtitle=var+" "+vol+" "+corrcrg, ytitle="tracks", RebinFactor=1, ymax=0.05, Normalise=True)
+                can = utils.Make1Dplots(var+vol+crg, outdir, histos, colors, markers, legends, config.args.oFext, xtitle=var+" "+vol+" "+corrcrg, ytitle="tracks", RebinFactor=1, ymax=0.05)
 
                 pass
             pass

@@ -34,7 +34,7 @@ def feeMomentumPlot(inputF, legends, histopath, outputF="", oFext=".png", doFit=
         histos[ihisto].SetLineWidth(3)
 
         if doFit:
-            fitList.append(MakeFit(histos[ihisto], "singleGausIterative", utils.colors[ihisto]))
+            fitList.append(MakeFit(histos[ihisto], "singleGausIterative", color=utils.colors[ihisto]))
 
         if (ihisto == 0):
             histos[ihisto].Draw("h")
