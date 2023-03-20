@@ -18,15 +18,15 @@ r.gStyle.SetOptStat(0)
 
 def main():
 
-    doTrackPlots = False ## \todo FIXME: AttributeError: 'NoneType' object has no attribute 'SaveAs'
+    doTrackPlots = True
     doFEEs = True
-    doResiduals = False
+    doResiduals = True
     doSummaryPlots = True
-    doDerivatives = False
+    doDerivatives = False  ## note: this only works if root file has gbl_derivatives/
     outputFolder = "AlignmentResults"
-    doEoPPlots = False  ## \todo: FIXME eop broken because EoP/EoP_vs_trackP_top_fid NOT FOUND
+    doEoPPlots = False  ## note: this only works if root file has EoP/
     is2016 = False
-    do_vertex_plots = False
+    do_vertex_plots = False  ## note: this only works if root file has MultiEventVtx/
     set_style = False
 
     outdir = "translations"
@@ -44,22 +44,11 @@ def main():
     if set_style:
         utils.SetStyle()
 
-    inputFiles = config.args.inputFiles
-    legends = config.args.legend
-
-    # inputFiles = inFiles
-    # legends = inLegends
-
-    inputF = []
-    for inputFile in inputFiles:
-        inputF.append(r.TFile(inputFile))
 
     if doSummaryPlots:
         kink_plotter = KinkPlots()
         kink_plotter.plot_lambda_kinks()
         kink_plotter.plot_phi_kinks()
-        # plotLambdaKinks(inputF, legends, outFolder)
-        # plotPhiKinks(inputF, legends, outFolder)
 
     tanL_plotter = TanLambdaPlots()
     tanL_plotter.plot_z0_vs_tanL_fit("z0_vs_tanLambda_top")
@@ -342,9 +331,9 @@ def main():
         fee_plots.plot_histos("trk_params/p5h_top", xtitle="p [GeV]", ytitle="Tracks")
         fee_plots.plot_histos("trk_params/p6h_top", xtitle="p [GeV]", ytitle="Tracks")
         fee_plots.plot_histos("trk_params/p7h_top", xtitle="p [GeV]", ytitle="Tracks")
-        # fee_plots.plot_histos(inputF,legends,"trk_params/p6h_top",outFolder,config.args.oFext)
-        # fee_plots.plot_histos(inputF,legends,"trk_params/p6h_bottom",outFolder,config.args.oFext)
-        # fee_plots.plot_histos(inputF,legends,"trk_params/p7h_bottom")
+        # fee_plots.plot_histos("trk_params/p6h_top")
+        # fee_plots.plot_histos("trk_params/p6h_bottom")
+        # fee_plots.plot_histos("trk_params/p7h_bottom")
 
     if (doDerivatives):
         print("doDerivatives")

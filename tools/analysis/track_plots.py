@@ -41,8 +41,6 @@ class TrackPlots(BasePlotter):
             for vol in vols:
                 for var in variables:
                     hname = plotFolder+var+vol+crg
-                    #### TEMPORARY ###
-                    ### BUG ###
 
                     if ("pos" in crg):
                         corrcrg = "q-"
@@ -51,18 +49,10 @@ class TrackPlots(BasePlotter):
                     else:
                         corrcrg = "All"
 
-                    ### BUG ###
-
-                    print(hname)
                     # File loop
                     histos = []
-
                     for i_f in range(len(inputFiles)):
                         histo_u = inputFiles[i_f].Get(hname)
                         histos.append(histo_u)
 
-                    can = utils.Make1Dplots(var+vol+crg, self.outdir, histos, self.colors, self.markers, self.legend_names, self.oFext, xtitle=var+" "+vol+" "+corrcrg, ytitle="tracks", RebinFactor=1, ymax=0.05)
-
-                    save_name = self.outdir + "/TrackPlots/" + hname + self.oFext
-
-                    can.SaveAs(save_name)
+                    utils.Make1Dplots(var+vol+crg, self.outdir, histos, self.colors, self.markers, self.legend_names, self.oFext, xtitle=var+" "+vol+" "+corrcrg, ytitle="tracks", RebinFactor=1, ymax=0.05)

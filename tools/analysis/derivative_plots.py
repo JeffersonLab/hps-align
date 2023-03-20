@@ -48,7 +48,6 @@ class DerivativePlots(BasePlotter):
             os.mkdir(self.outdir)
 
         histos = []
-
         for infile in self.input_files:
             histos.append(infile.Get("gbl_derivatives/" + name))
 
@@ -60,6 +59,7 @@ class DerivativePlots(BasePlotter):
         maximum = -1.
 
         for histo in histos:
+            print(type(histo))
             if abs(histo.Integral()) > 1e-8:
                 histo.Scale(1./histo.Integral())
 
