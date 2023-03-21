@@ -16,10 +16,10 @@ def main():
     doFEEs = False
     doResiduals = True
     doSummaryPlots = False
-    doDerivatives = False  ## note: this only works if root file has gbl_derivatives/
-    doEoPPlots = False  ## note: this only works if root file has EoP/
+    doDerivatives = False  # note: this only works if root file has gbl_derivatives/
+    doEoPPlots = False  # note: this only works if root file has EoP/
     is2016 = False
-    do_vertex_plots = False  ## note: this only works if root file has MultiEventVtx/
+    do_vertex_plots = False  # note: this only works if root file has MultiEventVtx/
 
     f = open("plot_list.json", 'r')
     plot_list_config = json.load(f)
@@ -50,13 +50,12 @@ def main():
                 res_plot_list = plot_list_config['1D_residual_plots']['2016']
             else:
                 raise Exception("Plot list not found.")
-            
+
         for plot_name in res_plot_list:
             res_plotter.plot_1D_residuals(plot_name)
 
-
         profile_plotter = ProfilePlots()
-            
+
         for vol in ["top", "bottom"]:
             if not is2016:
                 ures_vs_u_plot_list = plot_list_config['ures_vs_u_plots']['not2016'][vol]['name']
@@ -69,7 +68,7 @@ def main():
                 ures_vs_v_plot_list = plot_list_config['ures_vs_v_pred_plots']['2016'][vol]['name']
                 ures_vs_v_title_list = plot_list_config['ures_vs_v_pred_plots']['2016'][vol]['title']
 
-            if ures_vs_u_plot_list==[] or ures_vs_v_title_list==[]:
+            if ures_vs_u_plot_list == [] or ures_vs_v_title_list == []:
                 raise Exception("Plot list not found.")
 
             for ipl in range(len(ures_vs_u_plot_list)):

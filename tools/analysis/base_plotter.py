@@ -55,7 +55,7 @@ class BasePlotter:
         if (not os.path.exists(self.outdir)):
             os.mkdir(self.outdir)
 
-        print ("STORING RESULTS IN::", self.outdir)
+        print("STORING RESULTS IN::", self.outdir)
 
     def parse_args(self):
         """! Parse command line arguments"""

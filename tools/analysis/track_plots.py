@@ -62,7 +62,6 @@ class TrackPlots(BasePlotter):
             hw.add_images(self.outdir)
             hw.close_html()
 
-
     def Make1Dplots(self, name, histos, xtitle="", ytitle="", ymin=0, ymax=1, RebinFactor=0, LogY=False):
 
         can = r.TCanvas(name, name, 2200, 2000)
@@ -108,7 +107,6 @@ class TrackPlots(BasePlotter):
 
         can.SaveAs(self.outdir + "/TrackPlots/" + name + self.oFext)
 
-
     def do_legend(self, histos, legend_names, location=1, plot_properties=[], leg_location=[]):
         """! Create legend"""
         # leg = super().do_legend(histos, legend_names, location, leg_location)
@@ -130,13 +128,13 @@ class TrackPlots(BasePlotter):
 
         if len(leg_location) == 2:
             leg = r.TLegend(leg_location[0], leg_location[1], leg_location[0]+xshift, leg_location[1]-yshift*0.6)
-        for l in range(len(histos)):
+        for ihist in range(len(histos)):
             if (len(plot_properties) != len(histos)):
-                leg.AddEntry(histos[l], legend_names[l], 'lpf')
+                leg.AddEntry(histos[ihist], legend_names[ihist], 'lpf')
             else:
                 # splitline{The Data }{slope something }
-                entry = "#splitline{" + legend_names[l] + "}{" + plot_properties[l] + "}"
-                leg.AddEntry(histos[l], entry, 'lpf')
+                entry = "#splitline{" + legend_names[ihist] + "}{" + plot_properties[ihist] + "}"
+                leg.AddEntry(histos[ihist], entry, 'lpf')
         leg.SetBorderSize(0)
 
         return leg
