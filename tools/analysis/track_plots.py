@@ -1,5 +1,5 @@
-import ROOT as r
 import os
+import ROOT as r
 from base_plotter import BasePlotter
 from index_page import htmlWriter
 

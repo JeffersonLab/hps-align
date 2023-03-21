@@ -1,28 +1,31 @@
+import json
 from fee_momentum_plots import FeeMomentumPlots
 from track_plots import TrackPlots
-import ROOT as r
 from residual_plots import ResidualPlots
 from kink_plots import KinkPlots
 from profile_plots import ProfilePlots
 from vertex_plots import VertexPlots
 from derivative_plots import DerivativePlots
 from tanL_plots import TanLambdaPlots
-from alignment_utils import *
+import alignment_utils as alignUtils
 
 
 def main():
 
-    doTrackPlots = True
-    doFEEs = True
+    doTrackPlots = False
+    doFEEs = False
     doResiduals = True
-    doSummaryPlots = True
+    doSummaryPlots = False
     doDerivatives = False  ## note: this only works if root file has gbl_derivatives/
     doEoPPlots = False  ## note: this only works if root file has EoP/
     is2016 = False
     do_vertex_plots = False  ## note: this only works if root file has MultiEventVtx/
 
+    f = open("plot_list.json", 'r')
+    plot_list_config = json.load(f)
+
     # set style of histograms
-    set_style()
+    alignUtils.set_style()
 
     if doSummaryPlots:
         kink_plotter = KinkPlots()
@@ -36,210 +39,46 @@ def main():
     if (doResiduals):
         res_plotter = ResidualPlots()
         res_plotter.plot_summary()
-        res_plotter.plot_1D_residuals("uresidual_GBL_module_L1b_halfmodule_axial_sensor0")
-        res_plotter.plot_1D_residuals("uresidual_GBL_module_L1b_halfmodule_stereo_sensor0")
-        res_plotter.plot_1D_residuals("uresidual_GBL_module_L2b_halfmodule_axial_sensor0")
-        res_plotter.plot_1D_residuals("uresidual_GBL_module_L2b_halfmodule_stereo_sensor0")
-        res_plotter.plot_1D_residuals("uresidual_GBL_module_L3b_halfmodule_axial_sensor0")
-        res_plotter.plot_1D_residuals("uresidual_GBL_module_L3b_halfmodule_stereo_sensor0")
-
+        res_plot_list = []
         if not is2016:
-            res_plotter.plot_1D_residuals("uresidual_GBL_module_L4b_halfmodule_axial_sensor0")
-            res_plotter.plot_1D_residuals("uresidual_GBL_module_L4b_halfmodule_stereo_sensor0")
+            if plot_list_config['1D_residual_plots']['not2016']:
+                res_plot_list = plot_list_config['1D_residual_plots']['not2016']
+            else:
+                raise Exception("Plot list not found.")
         else:
-            res_plotter.plot_1D_residuals("uresidual_GBL_module_L4b_halfmodule_axial_hole_sensor0")
-            res_plotter.plot_1D_residuals("uresidual_GBL_module_L4b_halfmodule_axial_slot_sensor0")
-            res_plotter.plot_1D_residuals("uresidual_GBL_module_L4b_halfmodule_stereo_hole_sensor0")
-            res_plotter.plot_1D_residuals("uresidual_GBL_module_L4b_halfmodule_stereo_slot_sensor0")
+            if plot_list_config['1D_residual_plots']['2016']:
+                res_plot_list = plot_list_config['1D_residual_plots']['2016']
+            else:
+                raise Exception("Plot list not found.")
+            
+        for plot_name in res_plot_list:
+            res_plotter.plot_1D_residuals(plot_name)
 
-        res_plotter.plot_1D_residuals("uresidual_GBL_module_L5b_halfmodule_axial_hole_sensor0")
-        res_plotter.plot_1D_residuals("uresidual_GBL_module_L5b_halfmodule_axial_slot_sensor0")
-        res_plotter.plot_1D_residuals("uresidual_GBL_module_L5b_halfmodule_stereo_hole_sensor0")
-        res_plotter.plot_1D_residuals("uresidual_GBL_module_L5b_halfmodule_stereo_slot_sensor0")
-
-        res_plotter.plot_1D_residuals("uresidual_GBL_module_L6b_halfmodule_axial_hole_sensor0")
-        res_plotter.plot_1D_residuals("uresidual_GBL_module_L6b_halfmodule_axial_slot_sensor0")
-        res_plotter.plot_1D_residuals("uresidual_GBL_module_L6b_halfmodule_stereo_hole_sensor0")
-        res_plotter.plot_1D_residuals("uresidual_GBL_module_L6b_halfmodule_stereo_slot_sensor0")
-
-        if not is2016:
-            res_plotter.plot_1D_residuals("uresidual_GBL_module_L7b_halfmodule_axial_hole_sensor0")
-            res_plotter.plot_1D_residuals("uresidual_GBL_module_L7b_halfmodule_axial_slot_sensor0")
-            res_plotter.plot_1D_residuals("uresidual_GBL_module_L7b_halfmodule_stereo_hole_sensor0")
-            res_plotter.plot_1D_residuals("uresidual_GBL_module_L7b_halfmodule_stereo_slot_sensor0")
-
-        res_plotter.plot_1D_residuals("uresidual_GBL_module_L1t_halfmodule_axial_sensor0")
-        res_plotter.plot_1D_residuals("uresidual_GBL_module_L1t_halfmodule_stereo_sensor0")
-        res_plotter.plot_1D_residuals("uresidual_GBL_module_L2t_halfmodule_axial_sensor0")
-        res_plotter.plot_1D_residuals("uresidual_GBL_module_L2t_halfmodule_stereo_sensor0")
-        res_plotter.plot_1D_residuals("uresidual_GBL_module_L3t_halfmodule_axial_sensor0")
-        res_plotter.plot_1D_residuals("uresidual_GBL_module_L3t_halfmodule_stereo_sensor0")
-
-        if not is2016:
-            res_plotter.plot_1D_residuals("uresidual_GBL_module_L4t_halfmodule_axial_sensor0")
-            res_plotter.plot_1D_residuals("uresidual_GBL_module_L4t_halfmodule_stereo_sensor0")
-        else:
-            res_plotter.plot_1D_residuals("uresidual_GBL_module_L4t_halfmodule_axial_hole_sensor0")
-            res_plotter.plot_1D_residuals("uresidual_GBL_module_L4t_halfmodule_axial_slot_sensor0")
-            res_plotter.plot_1D_residuals("uresidual_GBL_module_L4t_halfmodule_stereo_hole_sensor0")
-            res_plotter.plot_1D_residuals("uresidual_GBL_module_L4t_halfmodule_stereo_slot_sensor0")
-
-        res_plotter.plot_1D_residuals("uresidual_GBL_module_L5t_halfmodule_axial_hole_sensor0")
-        res_plotter.plot_1D_residuals("uresidual_GBL_module_L5t_halfmodule_axial_slot_sensor0")
-        res_plotter.plot_1D_residuals("uresidual_GBL_module_L5t_halfmodule_stereo_hole_sensor0")
-        res_plotter.plot_1D_residuals("uresidual_GBL_module_L5t_halfmodule_stereo_slot_sensor0")
-
-        res_plotter.plot_1D_residuals("uresidual_GBL_module_L6t_halfmodule_axial_hole_sensor0")
-        res_plotter.plot_1D_residuals("uresidual_GBL_module_L6t_halfmodule_axial_slot_sensor0")
-        res_plotter.plot_1D_residuals("uresidual_GBL_module_L6t_halfmodule_stereo_hole_sensor0")
-        res_plotter.plot_1D_residuals("uresidual_GBL_module_L6t_halfmodule_stereo_slot_sensor0")
-
-        if not is2016:
-            res_plotter.plot_1D_residuals("uresidual_GBL_module_L7t_halfmodule_axial_hole_sensor0")
-            res_plotter.plot_1D_residuals("uresidual_GBL_module_L7t_halfmodule_axial_slot_sensor0")
-            res_plotter.plot_1D_residuals("uresidual_GBL_module_L7t_halfmodule_stereo_hole_sensor0")
-            res_plotter.plot_1D_residuals("uresidual_GBL_module_L7t_halfmodule_stereo_slot_sensor0")
 
         profile_plotter = ProfilePlots()
-        profile_plotter.plot_profileY("uresidual_GBL_vs_u_hit_module_L1t_halfmodule_axial_sensor0", xtitle="L1t Axial - hit u-pos [mm]", rangeX=[-10, 10], rangeY=[-0.2, 0.2])
+            
+        for vol in ["top", "bottom"]:
+            if not is2016:
+                ures_vs_u_plot_list = plot_list_config['ures_vs_u_plots']['not2016'][vol]['name']
+                ures_vs_u_title_list = plot_list_config['ures_vs_u_plots']['not2016'][vol]['title']
+                ures_vs_v_plot_list = plot_list_config['ures_vs_v_pred_plots']['not2016'][vol]['name']
+                ures_vs_v_title_list = plot_list_config['ures_vs_v_pred_plots']['not2016'][vol]['title']
+            else:
+                ures_vs_u_plot_list = plot_list_config['ures_vs_u_plots']['2016'][vol]['name']
+                ures_vs_u_title_list = plot_list_config['ures_vs_u_plots']['2016'][vol]['title']
+                ures_vs_v_plot_list = plot_list_config['ures_vs_v_pred_plots']['2016'][vol]['name']
+                ures_vs_v_title_list = plot_list_config['ures_vs_v_pred_plots']['2016'][vol]['title']
 
-        profile_plotter.plot_profileY("uresidual_GBL_vs_u_hit_module_L1t_halfmodule_stereo_sensor0", xtitle="L1t Stereo - hit u-pos [mm]", rangeX=[-10, 10], rangeY=[-0.2, 0.2])
+            if ures_vs_u_plot_list==[] or ures_vs_v_title_list==[]:
+                raise Exception("Plot list not found.")
 
-        profile_plotter.plot_profileY("uresidual_GBL_vs_u_hit_module_L2t_halfmodule_axial_sensor0", xtitle="L2t Axial - hit u-pos [mm]", rangeY=[-0.2, 0.2])
-        profile_plotter.plot_profileY("uresidual_GBL_vs_u_hit_module_L2t_halfmodule_stereo_sensor0", xtitle="L2t Stereo - hit u-pos [mm]", rangeY=[-0.2, 0.2])
-
-        profile_plotter.plot_profileY("uresidual_GBL_vs_u_hit_module_L3t_halfmodule_axial_sensor0", xtitle="L3t Axial - hit u-pos [mm]", rangeY=[-0.2, 0.2])
-        profile_plotter.plot_profileY("uresidual_GBL_vs_u_hit_module_L3t_halfmodule_stereo_sensor0", xtitle="L3t Stereo - hit u-pos [mm]", rangeY=[-0.2, 0.2])
-
-        if not is2016:
-            profile_plotter.plot_profileY("uresidual_GBL_vs_u_hit_module_L4t_halfmodule_axial_sensor0", xtitle="L4t Axial - hit u-pos [mm]", rangeY=[-0.2, 0.2])
-            profile_plotter.plot_profileY("uresidual_GBL_vs_u_hit_module_L4t_halfmodule_stereo_sensor0", xtitle="L4t Stereo - hit u-pos [mm]", rangeY=[-0.2, 0.2])
-        else:
-            profile_plotter.plot_profileY("uresidual_GBL_vs_u_hit_module_L4t_halfmodule_axial_hole_sensor0", xtitle="L5t Axial hole - hit u-pos [mm]", rangeY=[-0.2, 0.2])
-            profile_plotter.plot_profileY("uresidual_GBL_vs_u_hit_module_L4t_halfmodule_stereo_hole_sensor0", xtitle="L5t Stereo hole - hit u-pos [mm]", rangeY=[-0.2, 0.2])
-            profile_plotter.plot_profileY("uresidual_GBL_vs_u_hit_module_L4t_halfmodule_axial_slot_sensor0", xtitle="L5t Axial slot - hit u-pos [mm]", rangeY=[-0.2, 0.2])
-            profile_plotter.plot_profileY("uresidual_GBL_vs_u_hit_module_L4t_halfmodule_stereo_slot_sensor0", xtitle="L5t Stereo slot - hit u-pos [mm]", rangeY=[-0.2, 0.2])
-
-        profile_plotter.plot_profileY("uresidual_GBL_vs_u_hit_module_L5t_halfmodule_axial_hole_sensor0", xtitle="L5t Axial hole - hit u-pos [mm]", rangeY=[-0.2, 0.2])
-        profile_plotter.plot_profileY("uresidual_GBL_vs_u_hit_module_L5t_halfmodule_stereo_hole_sensor0", xtitle="L5t Stereo hole - hit u-pos [mm]", rangeY=[-0.2, 0.2])
-        profile_plotter.plot_profileY("uresidual_GBL_vs_u_hit_module_L5t_halfmodule_axial_slot_sensor0", xtitle="L5t Axial slot - hit u-pos [mm]", rangeY=[-0.2, 0.2])
-        profile_plotter.plot_profileY("uresidual_GBL_vs_u_hit_module_L5t_halfmodule_stereo_slot_sensor0", xtitle="L5t Stereo slot - hit u-pos [mm]", rangeY=[-0.2, 0.2])
-
-        profile_plotter.plot_profileY("uresidual_GBL_vs_u_hit_module_L6t_halfmodule_axial_hole_sensor0", xtitle="L6t Axial hole - hit u-pos [mm]", rangeY=[-0.2, 0.2], rebin=2)
-        profile_plotter.plot_profileY("uresidual_GBL_vs_u_hit_module_L6t_halfmodule_stereo_hole_sensor0", xtitle="L6t Stereo hole - hit u-pos [mm]", rangeY=[-0.2, 0.2], rebin=2)
-        profile_plotter.plot_profileY("uresidual_GBL_vs_u_hit_module_L6t_halfmodule_axial_slot_sensor0", xtitle="L6t Axial slot - hit u-pos [mm]", rangeY=[-0.2, 0.2], rebin=2)
-        profile_plotter.plot_profileY("uresidual_GBL_vs_u_hit_module_L6t_halfmodule_stereo_slot_sensor0", xtitle="L6t Stereo slot - hit u-pos [mm]", rangeY=[-0.2, 0.2], rebin=2)
-
-        if not is2016:
-            profile_plotter.plot_profileY("uresidual_GBL_vs_u_hit_module_L7t_halfmodule_axial_hole_sensor0", xtitle="L7t Axial hole - hit u-pos [mm]", rangeY=[-0.2, 0.2])
-            profile_plotter.plot_profileY("uresidual_GBL_vs_u_hit_module_L7t_halfmodule_stereo_hole_sensor0", xtitle="76t Stereo hole - hit u-pos [mm]", rangeY=[-0.2, 0.2])
-            profile_plotter.plot_profileY("uresidual_GBL_vs_u_hit_module_L7t_halfmodule_axial_slot_sensor0", xtitle="L7t Axial slot - hit u-pos [mm]", rangeY=[-0.2, 0.2])
-            profile_plotter.plot_profileY("uresidual_GBL_vs_u_hit_module_L7t_halfmodule_stereo_slot_sensor0", xtitle="L7t Stereo slot - hit u-pos [mm]", rangeY=[-0.2, 0.2])
-
-        profile_plotter.plot_profileY("uresidual_GBL_vs_u_hit_module_L1b_halfmodule_axial_sensor0", xtitle="L1b Axial - hit u-pos [mm]", rangeX=[-10, 10], rangeY=[-0.2, 0.2])
-        profile_plotter.plot_profileY("uresidual_GBL_vs_u_hit_module_L1b_halfmodule_stereo_sensor0", xtitle="L1b Stereo - hit u-pos [mm]", rangeX=[-10, 10], rangeY=[-0.2, 0.2])
-
-        profile_plotter.plot_profileY("uresidual_GBL_vs_u_hit_module_L2b_halfmodule_axial_sensor0", xtitle="L2b Axial - hit u-pos [mm]", rangeY=[-0.2, 0.2])
-        profile_plotter.plot_profileY("uresidual_GBL_vs_u_hit_module_L2b_halfmodule_stereo_sensor0", xtitle="L2b Stereo - hit u-pos [mm]", rangeY=[-0.2, 0.2])
-
-        profile_plotter.plot_profileY("uresidual_GBL_vs_u_hit_module_L3b_halfmodule_axial_sensor0", xtitle="L3b Axial - hit u-pos [mm]", rangeY=[-0.2, 0.2])
-        profile_plotter.plot_profileY("uresidual_GBL_vs_u_hit_module_L3b_halfmodule_stereo_sensor0", xtitle="L3b Stereo - hit u-pos [mm]", rangeY=[-0.2, 0.2])
-
-        if not is2016:
-            profile_plotter.plot_profileY("uresidual_GBL_vs_u_hit_module_L4b_halfmodule_axial_sensor0", xtitle="L4b Axial - hit u-pos [mm]", rangeY=[-0.2, 0.2])
-            profile_plotter.plot_profileY("uresidual_GBL_vs_u_hit_module_L4b_halfmodule_stereo_sensor0", xtitle="L4b Stereo - hit u-pos [mm]", rangeY=[-0.2, 0.2])
-        else:
-            profile_plotter.plot_profileY("uresidual_GBL_vs_u_hit_module_L4b_halfmodule_axial_hole_sensor0", xtitle="L5b Axial hole - hit u-pos [mm]", rangeY=[-0.2, 0.2])
-            profile_plotter.plot_profileY("uresidual_GBL_vs_u_hit_module_L4b_halfmodule_stereo_hole_sensor0", xtitle="L5b Stereo hole - hit u-pos [mm]", rangeY=[-0.2, 0.2])
-            profile_plotter.plot_profileY("uresidual_GBL_vs_u_hit_module_L4b_halfmodule_axial_slot_sensor0", xtitle="L5b Axial slot - hit u-pos [mm]", rangeY=[-0.2, 0.2])
-            profile_plotter.plot_profileY("uresidual_GBL_vs_u_hit_module_L4b_halfmodule_stereo_slot_sensor0", xtitle="L5b Stereo slot - hit u-pos [mm]", rangeY=[-0.2, 0.2])
-
-        profile_plotter.plot_profileY("uresidual_GBL_vs_u_hit_module_L5b_halfmodule_axial_hole_sensor0", xtitle="L5b Axial hole - hit u-pos [mm]", rangeY=[-0.2, 0.2])
-        profile_plotter.plot_profileY("uresidual_GBL_vs_u_hit_module_L5b_halfmodule_stereo_hole_sensor0", xtitle="L5b Stereo hole - hit u-pos [mm]", rangeY=[-0.2, 0.2])
-        profile_plotter.plot_profileY("uresidual_GBL_vs_u_hit_module_L5b_halfmodule_axial_slot_sensor0", xtitle="L5b Axial slot - hit u-pos [mm]", rangeY=[-0.2, 0.2])
-        profile_plotter.plot_profileY("uresidual_GBL_vs_u_hit_module_L5b_halfmodule_stereo_slot_sensor0", xtitle="L5b Stereo slot - hit u-pos [mm]", rangeY=[-0.2, 0.2])
-
-        profile_plotter.plot_profileY("uresidual_GBL_vs_u_hit_module_L6b_halfmodule_axial_hole_sensor0", xtitle="L6b Axial hole - hit u-pos [mm]", rangeY=[-0.2, 0.2])
-        profile_plotter.plot_profileY("uresidual_GBL_vs_u_hit_module_L6b_halfmodule_stereo_hole_sensor0", xtitle="L6b Stereo hole - hit u-pos [mm]", rangeY=[-0.2, 0.2])
-        profile_plotter.plot_profileY("uresidual_GBL_vs_u_hit_module_L6b_halfmodule_axial_slot_sensor0", xtitle="L6b Axial slot - hit u-pos [mm]", rangeY=[-0.2, 0.2])
-        profile_plotter.plot_profileY("uresidual_GBL_vs_u_hit_module_L6b_halfmodule_stereo_slot_sensor0", xtitle="L6b Stereo slot - hit u-pos [mm]", rangeY=[-0.2, 0.2])
-
-        if not is2016:
-            profile_plotter.plot_profileY("uresidual_GBL_vs_u_hit_module_L7b_halfmodule_axial_hole_sensor0", xtitle="L7b Axial hole - hit u-pos [mm]", rangeY=[-0.2, 0.2])
-            profile_plotter.plot_profileY("uresidual_GBL_vs_u_hit_module_L7b_halfmodule_stereo_hole_sensor0", xtitle="L7b Stereo hole - hit u-pos [mm]", rangeY=[-0.2, 0.2])
-            profile_plotter.plot_profileY("uresidual_GBL_vs_u_hit_module_L7b_halfmodule_axial_slot_sensor0", xtitle="L7b Axial slot - hit u-pos [mm]", rangeY=[-0.2, 0.2])
-            profile_plotter.plot_profileY("uresidual_GBL_vs_u_hit_module_L7b_halfmodule_stereo_slot_sensor0", xtitle="L7b Stereo slot - hit u-pos [mm]", rangeY=[-0.2, 0.2])
-
-        v_min = -0.15
-        v_max = 0.15
-
-        profile_plotter.plot_profileY("uresidual_GBL_vs_v_pred_module_L1t_halfmodule_axial_sensor0", xtitle="L1t Axial - v predicted [mm]", rangeX=[-20, 20], rangeY=[v_min, v_max])
-        profile_plotter.plot_profileY("uresidual_GBL_vs_v_pred_module_L1t_halfmodule_stereo_sensor0", xtitle="L1t Stereo - v predicted [mm]", rangeX=[-20, 20], rangeY=[v_min, v_max])
-
-        profile_plotter.plot_profileY("uresidual_GBL_vs_v_pred_module_L2t_halfmodule_axial_sensor0", xtitle="L2t Axial -v predicted [mm]", rangeY=[v_min, v_max])
-        profile_plotter.plot_profileY("uresidual_GBL_vs_v_pred_module_L2t_halfmodule_stereo_sensor0", xtitle="L2t Stereo -v predicted [mm]", rangeY=[v_min, v_max])
-
-        profile_plotter.plot_profileY("uresidual_GBL_vs_v_pred_module_L3t_halfmodule_axial_sensor0", xtitle="L3t Axial -v predicted [mm]", rangeY=[v_min, v_max])
-        profile_plotter.plot_profileY("uresidual_GBL_vs_v_pred_module_L3t_halfmodule_stereo_sensor0", xtitle="L3t Stereo -v predicted [mm]", rangeY=[v_min, v_max])
-
-        if not is2016:
-            profile_plotter.plot_profileY("uresidual_GBL_vs_v_pred_module_L4t_halfmodule_axial_sensor0", xtitle="L4t Axial -v predicted [mm]", rangeX=[-30, 30], rangeY=[v_min, v_max])
-            profile_plotter.plot_profileY("uresidual_GBL_vs_v_pred_module_L4t_halfmodule_stereo_sensor0", xtitle="L4t Stereo -v predicted [mm]", rangeX=[-30, 30], rangeY=[v_min, v_max])
-        else:
-            profile_plotter.plot_profileY("uresidual_GBL_vs_v_pred_module_L4t_halfmodule_axial_hole_sensor0", xtitle="L5t Axial hole-v predicted [mm]", rangeY=[v_min, v_max], rebin=2)
-            profile_plotter.plot_profileY("uresidual_GBL_vs_v_pred_module_L4t_halfmodule_stereo_hole_sensor0", xtitle="L5t Stereo hole-v predicted [mm]", rangeY=[v_min, v_max], rebin=2)
-            profile_plotter.plot_profileY("uresidual_GBL_vs_v_pred_module_L4t_halfmodule_axial_slot_sensor0", xtitle="L5t Axial slot-v predicted [mm]", rangeY=[v_min, v_max], rebin=2)
-            profile_plotter.plot_profileY("uresidual_GBL_vs_v_pred_module_L4t_halfmodule_stereo_slot_sensor0", xtitle="L5t Stereo slot-v predicted [mm]", rangeY=[v_min, v_max], rebin=2)
-
-        profile_plotter.plot_profileY("uresidual_GBL_vs_v_pred_module_L5t_halfmodule_axial_hole_sensor0", xtitle="L5t Axial hole-v predicted [mm]", rangeY=[v_min, v_max], rebin=2)
-        profile_plotter.plot_profileY("uresidual_GBL_vs_v_pred_module_L5t_halfmodule_stereo_hole_sensor0", xtitle="L5t Stereo hole-v predicted [mm]", rangeY=[v_min, v_max], rebin=2)
-        profile_plotter.plot_profileY("uresidual_GBL_vs_v_pred_module_L5t_halfmodule_axial_slot_sensor0", xtitle="L5t Axial slot-v predicted [mm]", rangeY=[v_min, v_max], rebin=2)
-        profile_plotter.plot_profileY("uresidual_GBL_vs_v_pred_module_L5t_halfmodule_stereo_slot_sensor0", xtitle="L5t Stereo slot-v predicted [mm]", rangeY=[v_min, v_max], rebin=2)
-
-        profile_plotter.plot_profileY("uresidual_GBL_vs_v_pred_module_L6t_halfmodule_axial_hole_sensor0", xtitle="L6t Axial hole-v predicted [mm]", rangeY=[v_min, v_max], rebin=2)
-        profile_plotter.plot_profileY("uresidual_GBL_vs_v_pred_module_L6t_halfmodule_stereo_hole_sensor0", xtitle="L6t Stereo hole-v predicted [mm]", rangeY=[v_min, v_max], rebin=2)
-        profile_plotter.plot_profileY("uresidual_GBL_vs_v_pred_module_L6t_halfmodule_axial_slot_sensor0", xtitle="L6t Axial slot-v predicted [mm]", rangeY=[v_min, v_max], rebin=2)
-        profile_plotter.plot_profileY("uresidual_GBL_vs_v_pred_module_L6t_halfmodule_stereo_slot_sensor0", xtitle="L6t Stereo slot-v predicted [mm]", rangeY=[v_min, v_max], rebin=2)
-
-        if not is2016:
-            profile_plotter.plot_profileY("uresidual_GBL_vs_v_pred_module_L7t_halfmodule_axial_hole_sensor0", xtitle="L7t Axial hole-v predicted [mm]", rangeY=[v_min, v_max], rebin=2)
-            profile_plotter.plot_profileY("uresidual_GBL_vs_v_pred_module_L7t_halfmodule_stereo_hole_sensor0", xtitle="L7t Stereo hole-v predicted [mm]", rangeY=[v_min, v_max], rebin=2)
-            profile_plotter.plot_profileY("uresidual_GBL_vs_v_pred_module_L7t_halfmodule_axial_slot_sensor0", xtitle="L7t Axial slot-v predicted [mm]", rangeY=[v_min, v_max], rebin=2)
-            profile_plotter.plot_profileY("uresidual_GBL_vs_v_pred_module_L7t_halfmodule_stereo_slot_sensor0", xtitle="L7t Stereo slot-v predicted [mm]", rangeY=[v_min, v_max], rebin=2)
-
-        profile_plotter.plot_profileY("uresidual_GBL_vs_v_pred_module_L1b_halfmodule_axial_sensor0", xtitle="L1b Axial - v predicted [mm]", rangeY=[v_min, v_max])
-        profile_plotter.plot_profileY("uresidual_GBL_vs_v_pred_module_L1b_halfmodule_stereo_sensor0", xtitle="L1b Stereo - v predicted [mm]", rangeY=[v_min, v_max])
-
-        profile_plotter.plot_profileY("uresidual_GBL_vs_v_pred_module_L2b_halfmodule_axial_sensor0", xtitle="L2b Axial -v predicted [mm]", rangeY=[v_min, v_max])
-        profile_plotter.plot_profileY("uresidual_GBL_vs_v_pred_module_L2b_halfmodule_stereo_sensor0", xtitle="L2b Stereo -v predicted [mm]", rangeY=[v_min, v_max])
-
-        profile_plotter.plot_profileY("uresidual_GBL_vs_v_pred_module_L3b_halfmodule_axial_sensor0", xtitle="L3b Axial -v predicted [mm]", rangeY=[v_min, v_max])
-        profile_plotter.plot_profileY("uresidual_GBL_vs_v_pred_module_L3b_halfmodule_stereo_sensor0", xtitle="L3b Stereo -v predicted [mm]", rangeY=[v_min, v_max])
-
-        if not is2016:
-            profile_plotter.plot_profileY("uresidual_GBL_vs_v_pred_module_L4b_halfmodule_axial_sensor0", xtitle="L4b Axial -v predicted [mm]", rangeX=[-30, 30], rangeY=[v_min, v_max])
-            profile_plotter.plot_profileY("uresidual_GBL_vs_v_pred_module_L4b_halfmodule_stereo_sensor0", xtitle="L4b Stereo -v predicted [mm]", rangeX=[-30, 30], rangeY=[v_min, v_max])
-        else:
-            profile_plotter.plot_profileY("uresidual_GBL_vs_v_pred_module_L4b_halfmodule_axial_hole_sensor0", xtitle="L5b Axial hole-v predicted [mm]", rangeY=[v_min, v_max])
-            profile_plotter.plot_profileY("uresidual_GBL_vs_v_pred_module_L4b_halfmodule_stereo_hole_sensor0", xtitle="L5b Stereo hole-v predicted [mm]", rangeY=[v_min, v_max])
-            profile_plotter.plot_profileY("uresidual_GBL_vs_v_pred_module_L4b_halfmodule_axial_slot_sensor0", xtitle="L5b Axial slot-v predicted [mm]", rangeY=[v_min, v_max])
-            profile_plotter.plot_profileY("uresidual_GBL_vs_v_pred_module_L4b_halfmodule_stereo_slot_sensor0", xtitle="L5b Stereo slot-v predicted [mm]", rangeY=[v_min, v_max])
-
-        profile_plotter.plot_profileY("uresidual_GBL_vs_v_pred_module_L5b_halfmodule_axial_hole_sensor0", xtitle="L5b Axial hole-v predicted [mm]", rangeY=[v_min, v_max])
-        profile_plotter.plot_profileY("uresidual_GBL_vs_v_pred_module_L5b_halfmodule_stereo_hole_sensor0", xtitle="L5b Stereo hole-v predicted [mm]", rangeY=[v_min, v_max])
-        profile_plotter.plot_profileY("uresidual_GBL_vs_v_pred_module_L5b_halfmodule_axial_slot_sensor0", xtitle="L5b Axial slot-v predicted [mm]", rangeY=[v_min, v_max])
-        profile_plotter.plot_profileY("uresidual_GBL_vs_v_pred_module_L5b_halfmodule_stereo_slot_sensor0", xtitle="L5b Stereo slot-v predicted [mm]", rangeY=[v_min, v_max])
-
-        profile_plotter.plot_profileY("uresidual_GBL_vs_v_pred_module_L6b_halfmodule_axial_hole_sensor0", xtitle="L6b Axial hole-v predicted [mm]", rangeY=[v_min, v_max])
-        profile_plotter.plot_profileY("uresidual_GBL_vs_v_pred_module_L6b_halfmodule_stereo_hole_sensor0", xtitle="L6b Stereo hole-v predicted [mm]", rangeY=[v_min, v_max])
-        profile_plotter.plot_profileY("uresidual_GBL_vs_v_pred_module_L6b_halfmodule_axial_slot_sensor0", xtitle="L6b Axial slot-v predicted [mm]", rangeY=[v_min, v_max])
-        profile_plotter.plot_profileY("uresidual_GBL_vs_v_pred_module_L6b_halfmodule_stereo_slot_sensor0", xtitle="L6b Stereo slot-v predicted [mm]", rangeY=[v_min, v_max])
-
-        if not is2016:
-            profile_plotter.plot_profileY("uresidual_GBL_vs_v_pred_module_L7b_halfmodule_axial_hole_sensor0", xtitle="L7b Axial hole-v predicted [mm]", rangeX=[-60, 60], rangeY=[v_min, v_max])
-            profile_plotter.plot_profileY("uresidual_GBL_vs_v_pred_module_L7b_halfmodule_stereo_hole_sensor0", xtitle="L7b Stereo hole-v predicted [mm]", rangeX=[-60, 60], rangeY=[v_min, v_max])
-            profile_plotter.plot_profileY("uresidual_GBL_vs_v_pred_module_L7b_halfmodule_axial_slot_sensor0", xtitle="L7b Axial slot-v predicted [mm]", rangeX=[-60, 60], rangeY=[v_min, v_max])
-            profile_plotter.plot_profileY("uresidual_GBL_vs_v_pred_module_L7b_halfmodule_stereo_slot_sensor0", xtitle="L7b Stereo slot-v predicted [mm]", rangeX=[-60, 60], rangeY=[v_min, v_max])
+            for ipl in range(len(ures_vs_u_plot_list)):
+                if ipl == 0 or ipl == 1:
+                    profile_plotter.plot_profileY(ures_vs_u_plot_list[ipl], xtitle=ures_vs_u_title_list[ipl], rangeX=[-10, 10], rangeY=[-0.2, 0.2])
+                    profile_plotter.plot_profileY(ures_vs_v_plot_list[ipl], xtitle=ures_vs_v_title_list[ipl], rangeX=[-20, 20], rangeY=[-0.15, 0.15])
+                else:
+                    profile_plotter.plot_profileY(ures_vs_u_plot_list[ipl], xtitle=ures_vs_u_title_list[ipl], rangeY=[-0.2, 0.2])
+                    profile_plotter.plot_profileY(ures_vs_v_plot_list[ipl], xtitle=ures_vs_v_title_list[ipl], rangeY=[-0.15, 0.15])
 
     if do_vertex_plots:
         vertex_plotter = VertexPlots()

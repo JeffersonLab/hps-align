@@ -1,5 +1,5 @@
 ###############################################################################
-# Macro for defining an LDMX code module
+# Macro for defining a code module
 #
 # The following arguments are accepted by this macro:
 # 

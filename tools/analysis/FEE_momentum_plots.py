@@ -1,5 +1,5 @@
 import ROOT as r
-from alignment_utils import *
+import alignment_utils as alignUtils
 from base_plotter import BasePlotter
 from index_page import htmlWriter
 
@@ -30,7 +30,7 @@ class FeeMomentumPlots(BasePlotter):
             histos[ihisto].SetLineWidth(3)
 
             if do_fit:
-                fitList.append(make_fit(histos[ihisto], "singleGausIterative", color=self.colors[ihisto]))
+                fitList.append(alignUtils.make_fit(histos[ihisto], "singleGausIterative", color=self.colors[ihisto]))
 
             if (ihisto == 0):
                 histos[ihisto].Draw("h")

@@ -1,5 +1,5 @@
-from base_plotter import BasePlotter
 import ROOT as r
+from base_plotter import BasePlotter
 import alignment_utils as alignUtils
 from index_page import htmlWriter
 

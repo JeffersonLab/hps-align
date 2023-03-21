@@ -1,7 +1,7 @@
 import json
+import os
 import ROOT as r
 from argparse import ArgumentParser
-import os
 
 
 class BasePlotter:

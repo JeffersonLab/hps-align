@@ -1,6 +1,6 @@
-import ROOT as r
 from array import array
 from math import floor
+import ROOT as r
 
 
 def find_max(histos):

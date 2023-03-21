@@ -1,7 +1,6 @@
-from base_plotter import BasePlotter
 import ROOT as r
+from base_plotter import BasePlotter
 import alignment_utils as alignUtils
-import os
 from index_page import htmlWriter
 
 
