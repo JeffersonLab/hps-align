@@ -3,6 +3,7 @@ import ROOT as r
 import alignment_utils as alignUtils
 import os
 import utilities as utils
+from index_page import htmlWriter
 
 
 class VertexPlots(BasePlotter):
@@ -155,3 +156,8 @@ class VertexPlots(BasePlotter):
             histo = infile.Get(f_path + "/vtx_x_y")
             histos2d.append(histo)
         utils.Make2DPlots(names, self.outdir, histos2d, legends=self.legend_names, xtitle="MultiEvt Vtx V_{x} [mm]", ytitle="MultiEvt Vtx V_{y} [mm]", colors2d=self.colors)
+
+        if self.do_HTML:
+            hw = htmlWriter(self.outdir)
+            hw.add_images(self.outdir)
+            hw.close_html()

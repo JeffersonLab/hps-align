@@ -1,6 +1,7 @@
 from base_plotter import BasePlotter
 import ROOT as r
 import alignment_utils as alignUtils
+from index_page import htmlWriter
 
 
 class ProfilePlots(BasePlotter):
@@ -53,7 +54,7 @@ class ProfilePlots(BasePlotter):
 
         for infile in self.input_files:
             if not infile.Get(self.indir+name):
-                raise Exception(self.indir+name + "   NOT FOUND")
+                raise Exception(self.indir + name + "   NOT FOUND")
 
             histos.append(infile.Get(self.indir+name))
 
@@ -153,3 +154,8 @@ class ProfilePlots(BasePlotter):
             leg.Draw()
 
         c1.SaveAs(self.outdir + "/" + name + "_sigma_profiled" + self.oFext)
+
+        if self.do_HTML:
+            hw = htmlWriter(self.outdir)
+            hw.add_images(self.outdir)
+            hw.close_html()

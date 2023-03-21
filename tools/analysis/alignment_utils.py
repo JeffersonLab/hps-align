@@ -1,4 +1,4 @@
-from ROOT import *
+import ROOT as r
 from array import array
 from math import floor
 
@@ -125,7 +125,7 @@ def single_gauss_iterative(hist, sigmaRange, range=[], color=None):
         min = range[0]
         max = range[1]
 
-    fitA = TF1("fitA", "gaus", min, max)
+    fitA = r.TF1("fitA", "gaus", min, max)
     hist.Fit("fitA", "ORQN", "same")
     fitAMean = fitA.GetParameter(1)
     fitASig = fitA.GetParameter(2)
@@ -133,7 +133,7 @@ def single_gauss_iterative(hist, sigmaRange, range=[], color=None):
     # performs a second fit with range determined by first fit
     max = fitAMean + (fitASig*sigmaRange)
     min = fitAMean - (fitASig*sigmaRange)
-    fitB = TF1("fitB", "gaus", min, max)
+    fitB = r.TF1("fitB", "gaus", min, max)
     hist.Fit("fitB", "ORQN", "same")
     fitMean = fitB.GetParameter(1)
     fitSig = fitB.GetParameter(2)
@@ -143,7 +143,7 @@ def single_gauss_iterative(hist, sigmaRange, range=[], color=None):
     i = 0
     max = fitMean + (fitSig*sigmaRange)
     min = fitMean - (fitSig*sigmaRange)
-    fit = TF1("fit", "gaus", min, max)
+    fit = r.TF1("fit", "gaus", min, max)
 
     while abs(fitSig - newFitSig) > 0.0005 or abs(fitMean - newFitMean) > 0.0005:
 
@@ -178,3 +178,61 @@ def single_gauss_iterative(hist, sigmaRange, range=[], color=None):
         fit.SetLineColor(color)
 
     return fit
+
+
+def set_style():
+    r.gROOT.SetBatch(1)
+
+    # put tick marks on top and RHS of plots
+    r.gStyle.SetPadTickX(1)
+    r.gStyle.SetPadTickY(1)
+
+    # do not display any of the standard histogram decorations
+    r.gStyle.SetOptTitle(0)
+    r.gStyle.SetOptStat(0)
+    r.gStyle.SetOptFit(0)
+
+    # use bold lines and markers
+    r.gStyle.SetMarkerSize(1.0)
+    r.gStyle.SetHistLineWidth(3)
+    r.gStyle.SetLineStyleString(2, "[12 12]")  # postscript dashes
+
+    # set the paper & margin sizes
+    r.gStyle.SetPaperSize(20, 26)
+    r.gStyle.SetPadLeftMargin(0.14)
+    r.gStyle.SetPadRightMargin(0.06)
+    r.gStyle.SetPadBottomMargin(0.15)
+    r.gStyle.SetPadTopMargin(0.08)
+    r.gStyle.SetFrameFillColor(0)
+
+    # use large fonts
+    r.gStyle.SetTextFont(62)
+    r.gStyle.SetLegendFont(62)
+    r.gStyle.SetLabelFont(42, "xyz")
+    r.gStyle.SetTitleSize(0.04, "xyz")
+    r.gStyle.SetLabelSize(0.04, "xyz")
+    r.gStyle.SetTitleFont(42, "xyz")
+    r.gStyle.SetLabelFont(42, "xyz")
+
+    # get rid of X error bars and y error bar caps
+    r.gStyle.SetErrorX(0.001)
+
+    # use plain black on white colors
+    r.gStyle.SetFrameBorderMode(0)
+    r.gStyle.SetCanvasBorderMode(0)
+    r.gStyle.SetPadBorderMode(0)
+    r.gStyle.SetPadColor(0)
+    r.gStyle.SetCanvasColor(0)
+    r.gStyle.SetStatColor(0)
+
+    NRGBs = 5
+    NCont = 255
+
+    stops = array("d", [0.00, 0.34, 0.61, 0.84, 1.00])
+    red = array("d", [0.00, 0.00, 0.87, 1.00, 0.51])
+    green = array("d", [0.00, 0.81, 1.00, 0.20, 0.00])
+    blue = array("d", [0.51, 1.00, 0.12, 0.00, 0.00])
+    r.TColor.CreateGradientColorTable(NRGBs, stops, red, green, blue, NCont)
+    r.gStyle.SetNumberContours(NCont)
+
+    r.gROOT.ForceStyle()

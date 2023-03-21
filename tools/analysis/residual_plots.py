@@ -1,6 +1,7 @@
 from base_plotter import BasePlotter
 import alignment_utils as alignUtils
 import ROOT as r
+from index_page import htmlWriter
 
 
 class ResidualPlots(BasePlotter):
@@ -113,6 +114,11 @@ class ResidualPlots(BasePlotter):
 
         c.SaveAs(self.outdir + "/" + histo_name + self.oFext)
 
+        if self.do_HTML:
+            hw = htmlWriter(self.outdir)
+            hw.add_images(self.outdir)
+            hw.close_html()
+
     def plot_summary(self, out_dir_ext=""):
 
         histos = []
@@ -153,3 +159,8 @@ class ResidualPlots(BasePlotter):
         text.DrawLatex(0.52, 0.87, '#bf{#it{HPS} Work In Progress}')
 
         c.SaveAs(self.outdir + "/" + out_dir_ext + "/uresiduals" + self.oFext)
+
+        if self.do_HTML:
+            hw = htmlWriter(self.outdir)
+            hw.add_images(self.outdir)
+            hw.close_html()

@@ -1,19 +1,13 @@
 from fee_momentum_plots import FeeMomentumPlots
 from track_plots import TrackPlots
-from index_page import htmlWriter
-import commonConfig as config
-import utilities as utils
 import ROOT as r
-import os
 from residual_plots import ResidualPlots
 from kink_plots import KinkPlots
 from profile_plots import ProfilePlots
 from vertex_plots import VertexPlots
 from derivative_plots import DerivativePlots
 from tanL_plots import TanLambdaPlots
-
-
-r.gStyle.SetOptStat(0)
+from alignment_utils import *
 
 
 def main():
@@ -23,27 +17,12 @@ def main():
     doResiduals = True
     doSummaryPlots = True
     doDerivatives = False  ## note: this only works if root file has gbl_derivatives/
-    outputFolder = "AlignmentResults"
     doEoPPlots = False  ## note: this only works if root file has EoP/
     is2016 = False
     do_vertex_plots = False  ## note: this only works if root file has MultiEventVtx/
-    set_style = False
 
-    outdir = "translations"
-    if (not os.path.exists(outputFolder)):
-        os.mkdir(outputFolder)
-
-    outFolder = outputFolder + "/" + outdir
-
-    if (not os.path.exists(outFolder)):
-        os.mkdir(outFolder)
-
-    print("STORING RESULTS IN::", outFolder)
-
-    # Style of plots
-    if set_style:
-        utils.SetStyle()
-
+    # set style of histograms
+    set_style()
 
     if doSummaryPlots:
         kink_plotter = KinkPlots()
@@ -362,12 +341,6 @@ def main():
         # deriv_plotter.plot_derivatives("22110")
         # deriv_plotter.plot_derivatives("22210")
         deriv_plotter.plot_derivatives("22310")
-
-    # Put plots in a webpage
-    if config.args.doHTML:
-        hw = htmlWriter(outFolder)
-        hw.add_images(outFolder)
-        hw.close_html()
 
 
 if __name__ == "__main__":

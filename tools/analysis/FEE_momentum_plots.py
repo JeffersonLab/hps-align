@@ -1,6 +1,7 @@
-from ROOT import *
+import ROOT as r
 from alignment_utils import *
 from base_plotter import BasePlotter
+from index_page import htmlWriter
 
 
 class FeeMomentumPlots(BasePlotter):
@@ -11,9 +12,7 @@ class FeeMomentumPlots(BasePlotter):
 
     def plot_histos(self, histopath, do_fit=True, xtitle="", ytitle="", scale_histos=False):
 
-        c = TCanvas("c", "c", 2400, 2000)
-        # c.SetGridx()
-        # c.SetGridy()
+        c = r.TCanvas("c", "c", 2400, 2000)
 
         histos = []
         for infile in self.input_files:
@@ -63,16 +62,21 @@ class FeeMomentumPlots(BasePlotter):
 
         leg.Draw("same")
 
-        text = TLatex()
+        text = r.TLatex()
         text.SetNDC()
         text.SetTextFont(42)
         text.SetTextSize(0.04)
-        text.SetTextColor(kBlack)
+        text.SetTextColor(r.kBlack)
         text.DrawLatex(0.62, 0.82, '#bf{#it{HPS}} Work In Progress')
 
         saveName = self.outdir + "/" + histopath.split("/")[-1] + self.oFext
 
         c.SaveAs(saveName)
+
+        if self.do_HTML:
+            hw = htmlWriter(self.outdir)
+            hw.add_images(self.outdir)
+            hw.close_html()
 
     def do_legend(self, histos, legend_names, location=1, plot_properties=[], leg_location=[]):
         """! Create legend"""
@@ -84,17 +88,17 @@ class FeeMomentumPlots(BasePlotter):
         xshift = 0.3
         yshift = 0.3
         if (location == 1):
-            leg = TLegend(0.6, 0.35, 0.90, 0.15)
+            leg = r.TLegend(0.6, 0.35, 0.90, 0.15)
         if (location == 2):
-            leg = TLegend(0.40, 0.3, 0.65, 0.2)
+            leg = r.TLegend(0.40, 0.3, 0.65, 0.2)
         if (location == 3):
-            leg = TLegend(0.20, 0.90, 0.20+xshift, 0.90-yshift)
+            leg = r.TLegend(0.20, 0.90, 0.20+xshift, 0.90-yshift)
         if (location == 4):
             xmin = 0.6
-            leg = TLegend(xmin, 0.90, xmin+xshift, 0.90-yshift)
+            leg = r.TLegend(xmin, 0.90, xmin+xshift, 0.90-yshift)
 
         if len(leg_location) == 2:
-            leg = TLegend(leg_location[0], leg_location[1], leg_location[0]+xshift, leg_location[1]-yshift*0.6)
+            leg = r.TLegend(leg_location[0], leg_location[1], leg_location[0]+xshift, leg_location[1]-yshift*0.6)
         for l in range(len(histos)):
             if (len(plot_properties) != len(histos)):
                 leg.AddEntry(histos[l], legend_names[l], 'lpf')

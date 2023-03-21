@@ -2,6 +2,7 @@ from base_plotter import BasePlotter
 import ROOT as r
 import alignment_utils as alignUtils
 import os
+from index_page import htmlWriter
 
 
 class DerivativePlots(BasePlotter):
@@ -93,3 +94,8 @@ class DerivativePlots(BasePlotter):
             leg.Draw()
 
         c.SaveAs(self.outdir + "/" + name + self.oFext)
+
+        if self.do_HTML:
+            hw = htmlWriter(self.outdir)
+            hw.add_images(self.outdir)
+            hw.close_html()

@@ -1,6 +1,7 @@
 import json
 import ROOT as r
 from argparse import ArgumentParser
+import os
 
 
 class BasePlotter:
@@ -50,6 +51,11 @@ class BasePlotter:
 
         for inFile in self.infile_names:
             self.input_files.append(r.TFile(inFile))
+
+        if (not os.path.exists(self.outdir)):
+            os.mkdir(self.outdir)
+
+        print ("STORING RESULTS IN::", self.outdir)
 
     def parse_args(self):
         """! Parse command line arguments"""

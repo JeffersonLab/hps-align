@@ -9,19 +9,19 @@ class htmlWriter:
     img_folder = ""
     img_type = "png"
 
-    def __init__(self, fld, update_only=False, html_name="index.html"):
+    def __init__(self, dir, update_only=False, html_name="index.html"):
         if not update_only:
-            self.index_html = open(fld+"/"+html_name, "w")
-            self.img_folder = fld
+            self.index_html = open(dir + "/" + html_name, "w")
+            self.img_folder = dir
 
             self.wline("<html>")
             self.wline("<head>")
             self.wline("</head>")
         else:
-            self.index_html = open(fld+"/"+html_name, 'r+')
+            self.index_html = open(dir + "/" + html_name, 'r+')
 
     def wline(self, line):
-        self.index_html.write(line+"\n")
+        self.index_html.write(line + "\n")
 
     def close_html(self):
         self.wline("</body>")
@@ -32,14 +32,14 @@ class htmlWriter:
 
         print("searching for " + self.img_type)
         import glob
-        list_images = glob.glob(folder + "/*"+self.img_type)
+        list_images = glob.glob(folder + "/*" + self.img_type)
         for img in list_images:
             # print img
             if (self.img_type == "png"):
-                self.wline('<img src="'+img.split("/")[-1]+'" width="900" height="700" >')
+                self.wline('<img src="' + img.split("/")[-1]+'" width="900" height="700" >')
             elif (self.img_type == "pdf"):
                 # print "Found pdf"
-                self.wline('<embed src="'+img.split("/")[-1]+'" width="700px" height="500px" />')
+                self.wline('<embed src="' + img.split("/")[-1] + '" width="700px" height="500px" />')
 
     def add_folder_links(self):
         list_folders = next(os.walk('.'))[1]

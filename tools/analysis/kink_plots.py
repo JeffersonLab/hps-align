@@ -1,6 +1,7 @@
 from base_plotter import BasePlotter
 import ROOT as r
 import alignment_utils as alignUtils
+from index_page import htmlWriter
 
 
 class KinkPlots(BasePlotter):
@@ -73,6 +74,12 @@ class KinkPlots(BasePlotter):
             leg.Draw()
         c.SaveAs(self.outdir + "/" + "lambda_kinks" + self.oFext)
 
+        # Put plots in a webpage
+        if self.do_HTML:
+            hw = htmlWriter(self.outdir)
+            hw.add_images(self.outdir)
+            hw.close_html()
+
     def plot_phi_kinks(self):
         histos = []
         for infile in self.input_files:
@@ -94,7 +101,7 @@ class KinkPlots(BasePlotter):
                 histos[ihisto].GetYaxis().SetTitle("<#phi kink>")
                 histos[ihisto].GetYaxis().SetTitleSize(histos[ihisto].GetYaxis().GetTitleSize()*0.7)
                 histos[ihisto].GetYaxis().SetTitleOffset(histos[ihisto].GetYaxis().GetTitleOffset()*1.35)
-                histos[ihisto].GetYaxis().SetRangeUser(-0.001, 0.001)
+                histos[ihisto].GetYaxis().SetRangeUser(-0.00099, 0.00099)
                 histos[ihisto].Draw("P")
             else:
                 histos[ihisto].Draw("P SAME")
@@ -105,15 +112,14 @@ class KinkPlots(BasePlotter):
         c.SaveAs(self.outdir + "/" + "phi_kinks" + self.oFext)
 
         # Profile with gaussian
-
         histos = []
         histos_mu = []
         for infile in self.input_files:
             histos.append(infile.Get("gbl_kinks/phi_kink_mod"))
 
         for ihisto in range(len(histos)):
-            histos_mu.append(r.TH1F(histos[ihisto].GetName()+"_mu"+str(ihisto), histos[ihisto].GetName()+"_mu"+str(ihisto), histos[ihisto].GetXaxis().GetNbins(), histos[ihisto].GetXaxis().GetXmin(), histos[ihisto].GetXaxis().GetXmax()))
-            sigma_graph = r.TH1F(histos[ihisto].GetName()+"_sigma"+str(ihisto), histos[ihisto].GetName()+"_sigma"+str(ihisto), histos[ihisto].GetXaxis().GetNbins(), histos[ihisto].GetXaxis().GetXmin(), histos[ihisto].GetXaxis().GetXmax())
+            histos_mu.append(r.TH1F(histos[ihisto].GetName() + "_mu" + str(ihisto), histos[ihisto].GetName() + "_mu" + str(ihisto), histos[ihisto].GetXaxis().GetNbins(), histos[ihisto].GetXaxis().GetXmin(), histos[ihisto].GetXaxis().GetXmax()))
+            sigma_graph = r.TH1F(histos[ihisto].GetName() + "_sigma" + str(ihisto), histos[ihisto].GetName() + "_sigma" + str(ihisto), histos[ihisto].GetXaxis().GetNbins(), histos[ihisto].GetXaxis().GetXmin(), histos[ihisto].GetXaxis().GetXmax())
             alignUtils.profile_y_with_iterative_gauss_fit(histos[ihisto], histos_mu[ihisto], sigma_graph, 1)
 
             self.set_histo_style(histos_mu[ihisto], ihisto)
@@ -124,10 +130,10 @@ class KinkPlots(BasePlotter):
                     histos_mu[ihisto].GetXaxis().SetLabelSize(0.04)
                     histos_mu[ihisto].GetXaxis().ChangeLabel(ibin+1, 270)
                 histos_mu[ihisto].GetYaxis().SetLabelSize(0.05)
-                histos_mu[ihisto].GetYaxis().SetTitle("<#phi kink>")
+                histos_mu[ihisto].GetYaxis().SetTitle("<#phi kink> gauss")
                 histos_mu[ihisto].GetYaxis().SetTitleSize(histos[ihisto].GetYaxis().GetTitleSize()*0.7)
                 histos_mu[ihisto].GetYaxis().SetTitleOffset(histos[ihisto].GetYaxis().GetTitleOffset()*1.35)
-                histos_mu[ihisto].GetYaxis().SetRangeUser(-0.002, 0.002)
+                histos_mu[ihisto].GetYaxis().SetRangeUser(-0.00099, 0.00099)
                 histos_mu[ihisto].Draw("P")
             else:
                 histos_mu[ihisto].Draw("P SAME")
@@ -136,3 +142,8 @@ class KinkPlots(BasePlotter):
         if (leg is not None):
             leg.Draw()
         c.SaveAs(self.outdir + "/" + "phi_kinks_gaus" + self.oFext)
+
+        if self.do_HTML:
+            hw = htmlWriter(self.outdir)
+            hw.add_images(self.outdir)
+            hw.close_html()
