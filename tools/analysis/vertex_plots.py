@@ -10,7 +10,7 @@ class VertexPlots(BasePlotter):
 
     def __init__(self):
         super().__init__()
-        self.outdir = self.outdir + "/MultiVtx_plots/"  # add /MultiVtx_plots/ to output directory
+        self.outdir = self.outdir + "/MultiVtx_plots/"  ## add /MultiVtx_plots/ to output directory
 
     def do_legend(self, histos, legend_names, location=1, plot_properties=[], leg_location=[]):
         """! Create legend

@@ -8,7 +8,7 @@ class ProfilePlots(BasePlotter):
 
     def __init__(self, indir="res/"):
         super().__init__()
-        self.indir = indir  # directory  in root files with relevant histograms
+        self.indir = indir  ## directory  in root files with relevant histograms
 
     def do_legend(self, histos, legend_names, location=1, plot_properties=[], leg_location=[]):
         """! Create legend
@@ -21,7 +21,6 @@ class ProfilePlots(BasePlotter):
 
         @return legend
         """
-        # leg = super().do_legend(histos, legend_names, location, leg_location)
         if len(legend_names) < len(histos):
             raise Exception("WARNING:: size of legends doesn't match the size of histos")
 

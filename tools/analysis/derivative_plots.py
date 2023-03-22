@@ -12,7 +12,7 @@ class DerivativePlots(BasePlotter):
 
     def __init__(self):
         super().__init__()
-        self.outdir = self.outdir + "/derivatives/"  # add /derivatives/ to output directory
+        self.outdir = self.outdir + "/derivatives/"  ## add /derivatives/ to output directory
 
     def do_legend(self, histos, legend_names, location=1, plot_properties=[], leg_location=[]):
         """! Create legend

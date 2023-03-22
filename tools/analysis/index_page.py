@@ -5,8 +5,8 @@ class htmlWriter:
     """! Class to write html file with output plots"""
 
     def __init__(self, dir, img_type="png", update_only=False, html_name="index.html", img_folder=""):
-        self.img_type = img_type  # png or pdf
-        self.img_folder = img_folder  # folder where the images are stored
+        self.img_type = img_type  ## png or pdf
+        self.img_folder = img_folder  ## folder where the images are stored
 
         if not update_only:
             self.index_html = open(dir + "/" + html_name, "w")  # html file to be written

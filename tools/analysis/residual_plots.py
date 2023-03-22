@@ -9,7 +9,7 @@ class ResidualPlots(BasePlotter):
 
     def __init__(self, indir="res/"):
         super().__init__()
-        self.indir = indir
+        self.indir = indir  ## input directory
 
     def do_legend(self, histos, legend_names, location=1, plot_properties=[], leg_location=[]):
         """! Create legend
@@ -60,7 +60,7 @@ class ResidualPlots(BasePlotter):
 
         histos = []
         for infile in self.input_files:
-            histos.append(infile.Get(self.indir+histo_name))
+            histos.append(infile.Get(self.indir + histo_name))
 
         canv = r.TCanvas("c1", "c1", 2200, 2000)
 

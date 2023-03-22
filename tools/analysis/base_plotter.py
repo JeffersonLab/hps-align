@@ -49,13 +49,13 @@ class BasePlotter:
                           "L6bSh", "L6bAs", "L6bSs", "L7bAh", "L7bSh",
                           "L7bAs", "L7bSs", "", "", "", "", "", "", "", "", "", "", "", ""]
 
-        self.legend_names = []  # legend names
-        self.infile_names = []  # input file names
-        self.outdir = ""  # output directory
-        self.do_HTML = False  # create html page
-        self.oFext = ".png"  # extension of output files
-        self.config_file = ""  # configuration file
-        self.input_files = []  # input TFiles
+        self.legend_names = []  ## legend names
+        self.infile_names = []  ## input file names
+        self.outdir = ""  ## output directory
+        self.do_HTML = False  ## create html page
+        self.oFext = ".png"  ## extension of output files
+        self.config_file = ""  ## configuration file
+        self.input_files = []  ## input TFiles
 
         self.parse_args()
 
