@@ -1,17 +1,15 @@
 import sys
-import os
 
 
 class htmlWriter:
-    """! Write html file with images"""
+    """! Class to write html file with output plots"""
 
-    index_html = ""
-    img_folder = ""
-    img_type = "png"
+    def __init__(self, dir, img_type="png", update_only=False, html_name="index.html", img_folder=""):
+        self.img_type = img_type  ## png or pdf
+        self.img_folder = img_folder  ## folder where the images are stored
 
-    def __init__(self, dir, update_only=False, html_name="index.html"):
         if not update_only:
-            self.index_html = open(dir + "/" + html_name, "w")
+            self.index_html = open(dir + "/" + html_name, "w")  # html file to be written
             self.img_folder = dir
 
             self.wline("<html>")
@@ -21,15 +19,23 @@ class htmlWriter:
             self.index_html = open(dir + "/" + html_name, 'r+')
 
     def wline(self, line):
+        """! Write line to html file
+
+        @param line line to be written
+        """
         self.index_html.write(line + "\n")
 
     def close_html(self):
+        """! Close html file"""
         self.wline("</body>")
         self.wline("</html>")
         self.index_html.close()
 
     def add_images(self, folder=""):
+        """! Add images to html file
 
+        @param folder folder where the images are stored
+        """
         print("searching for " + self.img_type)
         import glob
         list_images = glob.glob(folder + "/*" + self.img_type)
@@ -42,20 +48,12 @@ class htmlWriter:
                 self.wline('<embed src="' + img.split("/")[-1] + '" width="700px" height="500px" />')
 
     def add_folder_links(self):
-        list_folders = next(os.walk('.'))[1]
-
+        """! Add links to subfolders to html file"""
         list_of_links = []
         for line in self.index_html.readlines():
             if "href" in line:
                 list_of_links.append(line.strip())
         self.index_html.seek(0)
-
-    #    for line in self.indexHtml.readlines():
-    #        if "Available Plots" in line:
-
-    #            for folder in list_folders:
-    #    entry = '<a href="'+folder+'">'+folder+"</a> </br>"
-    #        print entry
 
 
 def main():

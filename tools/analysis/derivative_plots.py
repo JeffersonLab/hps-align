@@ -1,18 +1,30 @@
 import os
 import ROOT as r
-from base_plotter import BasePlotter
-from index_page import htmlWriter
+from tools.analysis.base_plotter import BasePlotter
+from tools.analysis.index_page import htmlWriter
 
 
 class DerivativePlots(BasePlotter):
+    """! Class for plotting derivative plots
+
+    The input root files must contain the gbl_derivatives directory.
+    """
 
     def __init__(self):
         super().__init__()
-        self.outdir = self.outdir + "/derivatives/"
+        self.outdir = self.outdir + "/derivatives/"  ## add /derivatives/ to output directory
 
     def do_legend(self, histos, legend_names, location=1, plot_properties=[], leg_location=[]):
-        """! Create legend"""
-        # leg = super().do_legend(histos, legend_names, location, leg_location)
+        """! Create legend
+
+        @param histos list of histograms
+        @param legend_names list of names for legend entries
+        @param location location of the legend
+        @param plot_properties list of properties for legend entries
+        @param leg_location more precise location of the legend overwriting simple location
+
+        @return legend
+        """
         if len(legend_names) < len(histos):
             raise Exception("WARNING:: size of legends doesn't match the size of histos")
 
@@ -43,6 +55,12 @@ class DerivativePlots(BasePlotter):
         return leg
 
     def plot_derivatives(self, name):
+        """! Plot the derivatives
+
+        The input root files must contain the gbl_derivatives directory.
+
+        @param name name of the derivative plot
+        """
 
         if (not os.path.exists(self.outdir)):
             os.mkdir(self.outdir)
@@ -51,9 +69,9 @@ class DerivativePlots(BasePlotter):
         for infile in self.input_files:
             histos.append(infile.Get("gbl_derivatives/" + name))
 
-        c = r.TCanvas("c1", "c1", 2200, 2000)
-        c.SetGridx()
-        c.SetGridy()
+        canv = r.TCanvas("c1", "c1", 2200, 2000)
+        canv.SetGridx()
+        canv.SetGridy()
 
         titleName = name
         maximum = -1.
@@ -92,9 +110,10 @@ class DerivativePlots(BasePlotter):
         if (leg is not None):
             leg.Draw()
 
-        c.SaveAs(self.outdir + "/" + name + self.oFext)
+        canv.SaveAs(self.outdir + "/" + name + self.oFext)
 
         if self.do_HTML:
-            hw = htmlWriter(self.outdir)
+            img_type = self.oFext.strip(".")
+            hw = htmlWriter(self.outdir, img_type=img_type)
             hw.add_images(self.outdir)
             hw.close_html()

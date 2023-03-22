@@ -1,7 +1,7 @@
 import ROOT as r
-from base_plotter import BasePlotter
-import alignment_utils as alignUtils
-from index_page import htmlWriter
+from tools.analysis.base_plotter import BasePlotter
+import tools.analysis.alignment_utils as alignUtils
+from tools.analysis.index_page import htmlWriter
 
 
 class KinkPlots(BasePlotter):
@@ -10,8 +10,16 @@ class KinkPlots(BasePlotter):
         super().__init__()
 
     def do_legend(self, histos, legend_names, location=1, plot_properties=[], leg_location=[]):
-        """! Create legend"""
-        # leg = super().do_legend(histos, legend_names, location, leg_location)
+        """! Create legend
+
+        @param histos list of histograms
+        @param legend_names list of names for legend entries
+        @param location location of the legend
+        @param plot_properties list of properties for legend entries
+        @param leg_location more precise location of the legend overwriting simple location
+
+        @return legend
+        """
         if len(legend_names) < len(histos):
             raise Exception("WARNING:: size of legends doesn't match the size of histos")
 
@@ -42,13 +50,15 @@ class KinkPlots(BasePlotter):
         return leg
 
     def plot_lambda_kinks(self):
+        """! Create and save the lambda kink summary plots"""
+
         histos = []
         for infile in self.input_files:
             histos.append(infile.Get("gbl_kinks/lambda_kink_mod_p"))
 
-        c = r.TCanvas("c1", "c1", 2200, 2000)
-        c.SetGridx()
-        c.SetGridy()
+        canv = r.TCanvas("c1", "c1", 2200, 2000)
+        canv.SetGridx()
+        canv.SetGridy()
 
         for ihisto in range(len(histos)):
             self.set_histo_style(histos[ihisto], ihisto)
@@ -72,7 +82,7 @@ class KinkPlots(BasePlotter):
         leg = self.do_legend(histos, self.legend_names, 2)
         if (leg is not None):
             leg.Draw()
-        c.SaveAs(self.outdir + "/" + "lambda_kinks" + self.oFext)
+        canv.SaveAs(self.outdir + "/" + "lambda_kinks" + self.oFext)
 
         # Put plots in a webpage
         if self.do_HTML:
@@ -81,13 +91,15 @@ class KinkPlots(BasePlotter):
             hw.close_html()
 
     def plot_phi_kinks(self):
+        """! Create and save the phi kink summary plots"""
+
         histos = []
         for infile in self.input_files:
             histos.append(infile.Get("gbl_kinks/phi_kink_mod_p"))
 
-        c = r.TCanvas("c1", "c1", 2200, 2000)
-        c.SetGridx()
-        c.SetGridy()
+        canv = r.TCanvas("c1", "c1", 2200, 2000)
+        canv.SetGridx()
+        canv.SetGridy()
 
         for ihisto in range(len(histos)):
             self.set_histo_style(histos[ihisto], ihisto)
@@ -109,7 +121,7 @@ class KinkPlots(BasePlotter):
         leg = self.do_legend(histos, self.legend_names, 2)
         if (leg is not None):
             leg.Draw()
-        c.SaveAs(self.outdir + "/" + "phi_kinks" + self.oFext)
+        canv.SaveAs(self.outdir + "/" + "phi_kinks" + self.oFext)
 
         # Profile with gaussian
         histos = []
@@ -141,9 +153,10 @@ class KinkPlots(BasePlotter):
         leg = self.do_legend(histos_mu, self.legend_names, 2)
         if (leg is not None):
             leg.Draw()
-        c.SaveAs(self.outdir + "/" + "phi_kinks_gaus" + self.oFext)
+        canv.SaveAs(self.outdir + "/" + "phi_kinks_gaus" + self.oFext)
 
         if self.do_HTML:
-            hw = htmlWriter(self.outdir)
+            img_type = self.oFext.strip(".")
+            hw = htmlWriter(self.outdir, img_type=img_type)
             hw.add_images(self.outdir)
             hw.close_html()

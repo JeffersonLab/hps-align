@@ -1,7 +1,7 @@
 import ROOT as r
-from base_plotter import BasePlotter
-import alignment_utils as alignUtils
-from index_page import htmlWriter
+from tools.analysis.base_plotter import BasePlotter
+import tools.analysis.alignment_utils as alignUtils
+from tools.analysis.index_page import htmlWriter
 
 
 class TanLambdaPlots(BasePlotter):
@@ -10,8 +10,16 @@ class TanLambdaPlots(BasePlotter):
         super().__init__()
 
     def do_legend(self, histos, legend_names, location=1, plot_properties=[], leg_location=[]):
-        """! Create legend"""
-        # leg = super().do_legend(histos, legend_names, location, leg_location)
+        """! Create legend
+
+        @param histos list of histograms
+        @param legend_names list of names for legend entries
+        @param location location of the legend
+        @param plot_properties list of properties for legend entries
+        @param leg_location more precise location of the legend overwriting simple location
+
+        @return legend
+        """
         if len(legend_names) < len(histos):
             raise Exception("WARNING:: size of legends doesn't match the size of histos")
 
@@ -42,25 +50,28 @@ class TanLambdaPlots(BasePlotter):
         return leg
 
     def plot_z0_vs_tanL_fit(self, name):
+        """! Plot z0 vs tanL and fit it
+        root file has to contain directory "trk_params/"
+
+        @param name name of the histogram
+        """
 
         histos = []
         # grab the histos
         for infile in self.input_files:
-            histos.append(infile.Get("trk_params/"+name))
+            histos.append(infile.Get("trk_params/" + name))
 
         print("Histograms to fit:", len(histos))
-        c = r.TCanvas("c1", "c1", 2200, 2000)
-        c.SetGridx()
-        c.SetGridy()
+        canv = r.TCanvas("c1", "c1", 2200, 2000)
+        canv.SetGridx()
+        canv.SetGridy()
 
-        fitList = []
         plotProperties = []
 
         histos_mu = []
         histos_sigma = []
 
         for ihisto in range(0, len(histos)):
-
             # Profile it
             histos_mu.append(r.TH1F(histos[ihisto].GetName()+"_mu"+str(ihisto), histos[ihisto].GetName()+"_mu"+str(ihisto), histos[ihisto].GetXaxis().GetNbins(), histos[ihisto].GetXaxis().GetXmin(), histos[ihisto].GetXaxis().GetXmax()))
 
@@ -72,11 +83,14 @@ class TanLambdaPlots(BasePlotter):
             hmax = (hist.GetBinLowEdge(hist.GetNbinsX()))+hist.GetBinWidth(hist.GetNbinsX())
 
             fitF = r.TF1("fit"+str(ihisto), "[1]*x + [0]", hmin, hmax)
-
-            histos_mu[ihisto].Fit("fit"+str(ihisto), "QNR")
-            fit_par0 = fitF.GetParameter(0)
-            fit_par1 = fitF.GetParameter(1)
-            plotProperties.append((" z_tgt=%.3f" % round(fit_par1, 3)))
+            histos_mu[ihisto].Fit("fit" + str(ihisto), "QNR")
+            string = ""
+            for i in range(fitF.GetNpar()):
+                if i < range(fitF.GetNpar())[-1]:
+                    string += str(round(fitF.GetParameter(i), 3)) + ","
+                else:
+                    string += str(round(fitF.GetParameter(i), 3))
+            plotProperties.append(string)
 
             self.set_histo_style(histos_mu[ihisto], ihisto)
             histos_mu[ihisto].GetYaxis().SetTitle("<z0> [mm]")
@@ -99,9 +113,10 @@ class TanLambdaPlots(BasePlotter):
         if (leg is not None):
             leg.Draw()
 
-        c.SaveAs(self.outdir + "/" + name + self.oFext)
+        canv.SaveAs(self.outdir + "/" + name + self.oFext)
 
         if self.do_HTML:
-            hw = htmlWriter(self.outdir)
+            img_type = self.oFext.strip(".")
+            hw = htmlWriter(self.outdir, img_type=img_type)
             hw.add_images(self.outdir)
             hw.close_html()

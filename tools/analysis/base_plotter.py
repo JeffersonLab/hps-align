@@ -6,6 +6,16 @@ from argparse import ArgumentParser
 
 class BasePlotter:
     """! Base class for plotting alignment results
+
+    This class contains the basic functionality and setup for plotting alignment results.
+    It is intended to be inherited by other classes that implement specific plotting.
+
+    The class is initialized with the following arguments:
+    - input_file_list: list of file names containing the alignment results
+    - outdir: directory where the plots will be saved
+    - legend_names: list of names for the legend entries
+    - do_html: if True, an index page with links to the plots will be created
+    - oFext: extension of the output files
     """
 
     def __init__(self):
@@ -39,13 +49,13 @@ class BasePlotter:
                           "L6bSh", "L6bAs", "L6bSs", "L7bAh", "L7bSh",
                           "L7bAs", "L7bSs", "", "", "", "", "", "", "", "", "", "", "", ""]
 
-        self.legend_names = []  # legend names
-        self.infile_names = []  # input file names
-        self.outdir = ""  # output directory
-        self.do_HTML = False  # create html page
-        self.oFext = ".png"  # extension of output files
-        self.config_file = ""  # configuration file
-        self.input_files = []  # input TFiles
+        self.legend_names = []  ## legend names
+        self.infile_names = []  ## input file names
+        self.outdir = ""  ## output directory
+        self.do_HTML = False  ## create html page
+        self.oFext = ".png"  ## extension of output files
+        self.config_file = ""  ## configuration file
+        self.input_files = []  ## input TFiles
 
         self.parse_args()
 
@@ -87,6 +97,7 @@ class BasePlotter:
 
     def generate_legend(self):
         """! Generate legend names from input file names"""
+
         print("SETUP:: Generating legend names from input names.")
         for file in self.infile_names:
             pos1 = file.find('HPS')
@@ -99,9 +110,8 @@ class BasePlotter:
             self.legend_names.append(legName)
 
     def read_config(self):
-        """! Read configuration file
-        @param config_file configuration file
-        """
+        """! Read configuration file"""
+
         f = open(self.config_file, 'r')
         config = json.load(f)
 
@@ -116,10 +126,15 @@ class BasePlotter:
         if config['legend']:
             self.legend_names = config['legend']
 
-    def do_legend(histos, legend_names, location=1, plot_properties=[], leg_location=[]):
-        """! Create legend"""
-        print(len(legend_names))
-        print(len(histos))
+    def do_legend(histos, legend_names, location=1, leg_location=[]):
+        """! Create legend
+
+        @param histos list of histograms
+        @param legend_names list of legend names
+        @param location location of the legend
+        @param leg_location location of the legend
+        """
+
         if len(legend_names) < len(histos):
             raise Exception("WARNING:: size of legends doesn't match the size of histos")
 
@@ -142,7 +157,14 @@ class BasePlotter:
         return legend
 
     def set_histo_style(self, histo, ihisto, marker_size=4, line_width=5, label_size=0.05):
-        """! Set histo properties"""
+        """! Set histo properties
+
+        @param histo histogram
+        @param ihisto index of the histogram in list of histos
+        @param marker_size marker size
+        @param line_width line width
+        @param label_size label size
+        """
         histo.SetMarkerStyle(self.markers[ihisto])
         histo.SetMarkerColor(self.colors[ihisto])
         histo.SetMarkerSize(marker_size)

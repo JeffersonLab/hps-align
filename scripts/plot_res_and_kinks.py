@@ -1,21 +1,21 @@
 import json
-from fee_momentum_plots import FeeMomentumPlots
-from track_plots import TrackPlots
-from residual_plots import ResidualPlots
-from kink_plots import KinkPlots
-from profile_plots import ProfilePlots
-from vertex_plots import VertexPlots
-from derivative_plots import DerivativePlots
-from tanL_plots import TanLambdaPlots
-import alignment_utils as alignUtils
+from tools.analysis.fee_momentum_plots import FeeMomentumPlots
+from tools.analysis.track_plots import TrackPlots
+from tools.analysis.residual_plots import ResidualPlots
+from tools.analysis.kink_plots import KinkPlots
+from tools.analysis.profile_plots import ProfilePlots
+from tools.analysis.vertex_plots import VertexPlots
+from tools.analysis.derivative_plots import DerivativePlots
+from tools.analysis.tanL_plots import TanLambdaPlots
+import tools.analysis.alignment_utils as alignUtils
 
 
 def main():
 
-    doTrackPlots = False
-    doFEEs = False
+    doTrackPlots = True
+    doFEEs = True
     doResiduals = True
-    doSummaryPlots = False
+    doSummaryPlots = True
     doDerivatives = False  # note: this only works if root file has gbl_derivatives/
     doEoPPlots = False  # note: this only works if root file has EoP/
     is2016 = False

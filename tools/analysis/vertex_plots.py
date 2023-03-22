@@ -1,19 +1,28 @@
 import os
 import ROOT as r
 import utilities as utils
-from base_plotter import BasePlotter
-from index_page import htmlWriter
+from tools.analysis.base_plotter import BasePlotter
+from tools.analysis.index_page import htmlWriter
 
 
 class VertexPlots(BasePlotter):
+    """! Class for plotting vertex distributions"""
 
     def __init__(self):
         super().__init__()
-        self.outdir = self.outdir + "/MultiVtx_plots/"
+        self.outdir = self.outdir + "/MultiVtx_plots/"  ## add /MultiVtx_plots/ to output directory
 
     def do_legend(self, histos, legend_names, location=1, plot_properties=[], leg_location=[]):
-        """! Create legend"""
-        # leg = super().do_legend(histos, legend_names, location, leg_location)
+        """! Create legend
+
+        @param histos list of histograms
+        @param legend_names list of names for legend entries
+        @param location location of the legend
+        @param plot_properties list of properties for legend entries
+        @param leg_location more precise location of the legend overwriting simple location
+
+        @return legend
+        """
         if len(legend_names) < len(histos):
             raise Exception("WARNING:: size of legends doesn't match the size of histos")
 
@@ -44,6 +53,10 @@ class VertexPlots(BasePlotter):
         return leg
 
     def plot_multi_vtx(self):
+        """! Plot multi vertex distributions
+
+        input root file has to contain the /MultiEventVtx/ directory
+        """
 
         print("--- MultiVtxPlots --- ")
         histos_top = []
@@ -56,9 +69,9 @@ class VertexPlots(BasePlotter):
             histos_bot.append(infile.Get("MultiEventVtx/vtx_z_bottom"))
             histos.append(infile.Get("MultiEventVtx/vtx_z"))
 
-        c = r.TCanvas("c1", "c1", 2200, 2000)
-        c.SetGridx()
-        c.SetGridy()
+        canv = r.TCanvas("c1", "c1", 2200, 2000)
+        canv.SetGridx()
+        canv.SetGridy()
 
         if (not os.path.exists(self.outdir)):
             os.mkdir(self.outdir)
@@ -70,7 +83,6 @@ class VertexPlots(BasePlotter):
             histos[ihisto].Rebin(1)
 
             if (ihisto == 0):
-                # histos[ihisto].GetYaxis().SetRangeUser(0.,1.)
                 histos[ihisto].Draw("P")
                 histos[ihisto].GetXaxis().SetRangeUser(-15, 0)
                 histos[ihisto].SetMaximum(maximum*5)
@@ -86,18 +98,17 @@ class VertexPlots(BasePlotter):
         leg = self.do_legend(histos, self.legend_names, 4)
         if (leg is not None):
             leg.Draw()
-        c.SaveAs(self.outdir + "MultiEventVtx_z" + self.oFext)
+        canv.SaveAs(self.outdir + "MultiEventVtx_z" + self.oFext)
 
-        c = r.TCanvas("c1", "c1", 2200, 2000)
-        c.SetGridx()
-        c.SetGridy()
+        canv = r.TCanvas("c1", "c1", 2200, 2000)
+        canv.SetGridx()
+        canv.SetGridy()
 
         for ihisto in range(len(histos_top)):
             self.set_histo_style(histos_top[ihisto], ihisto, line_width=2)
             histos_top[ihisto].Rebin(1)
 
             if (ihisto == 0):
-                # histos[ihisto].GetYaxis().SetRangeUser(0.,1.)
                 histos_top[ihisto].Draw("P")
                 histos_top[ihisto].GetXaxis().SetRangeUser(-10, 0)
                 histos_top[ihisto].SetMaximum(maximum)
@@ -121,7 +132,7 @@ class VertexPlots(BasePlotter):
         leg = self.do_legend(histos, self.legend_names, 4)
         if (leg is not None):
             leg.Draw()
-        c.SaveAs(self.outdir + "MultiEventVtx_z_tb" + self.oFext)
+        canv.SaveAs(self.outdir + "MultiEventVtx_z_tb" + self.oFext)
 
         print("--- multi vtx for top/bottom X-Y ---")
 
@@ -129,7 +140,6 @@ class VertexPlots(BasePlotter):
         names = [leg+"_x_y_top" for leg in self.legend_names]
         for infile in self.input_files:
             histos2d_top.append(infile.Get(f_path + "/vtx_x_y_top"))
-            # names.append("MultiEventVtx_x_y_top" + iF.GetName().strip(".root"))
 
         utils.Make2DPlots(names, self.outdir, histos2d_top, legends=self.legend_names, xtitle="MultiEvt Vtx V_{x} [mm]", ytitle="MultiEvt Vtx V_{y} [mm]", colors2d=self.colors)
 
@@ -157,6 +167,7 @@ class VertexPlots(BasePlotter):
         utils.Make2DPlots(names, self.outdir, histos2d, legends=self.legend_names, xtitle="MultiEvt Vtx V_{x} [mm]", ytitle="MultiEvt Vtx V_{y} [mm]", colors2d=self.colors)
 
         if self.do_HTML:
-            hw = htmlWriter(self.outdir)
+            img_type = self.oFext.strip(".")
+            hw = htmlWriter(self.outdir, img_type=img_type)
             hw.add_images(self.outdir)
             hw.close_html()
