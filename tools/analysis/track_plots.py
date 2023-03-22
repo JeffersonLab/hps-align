@@ -1,17 +1,22 @@
 import os
 import ROOT as r
-from base_plotter import BasePlotter
-from index_page import htmlWriter
+from tools.analysis.base_plotter import BasePlotter
+from tools.analysis.index_page import htmlWriter
 
 r.gROOT.SetBatch(1)
 
 
 class TrackPlots(BasePlotter):
+    """! Class for plotting track plots"""
 
     def __init__(self):
         super().__init__()
 
     def plot_histos(self):
+        """! Plot the track histograms
+
+        The input root files must contain the trk_params directory.
+        """
         if not os.path.exists(self.outdir + "/TrackPlots"):
             os.makedirs(self.outdir + "/TrackPlots")
 
@@ -40,7 +45,7 @@ class TrackPlots(BasePlotter):
         for crg in charges:
             for vol in vols:
                 for var in variables:
-                    hname = plotFolder+var+vol+crg
+                    hname = plotFolder + var + vol + crg
 
                     if ("pos" in crg):
                         corrcrg = "q-"
@@ -55,10 +60,11 @@ class TrackPlots(BasePlotter):
                         histo_u = inputFiles[i_f].Get(hname)
                         histos.append(histo_u)
 
-                    self.Make1Dplots(var+vol+crg, histos, xtitle=var+" "+vol+" "+corrcrg, RebinFactor=1, ymax=0.05)
+                    self.Make1Dplots(var + vol + crg, histos, xtitle=var + " " + vol + " " + corrcrg, RebinFactor=1, ymax=0.05)
 
         if self.do_HTML:
-            hw = htmlWriter(self.outdir)
+            img_type = self.oFext.strip(".")
+            hw = htmlWriter(self.outdir, img_type=img_type)
             hw.add_images(self.outdir)
             hw.close_html()
 
@@ -108,8 +114,16 @@ class TrackPlots(BasePlotter):
         can.SaveAs(self.outdir + "/TrackPlots/" + name + self.oFext)
 
     def do_legend(self, histos, legend_names, location=1, plot_properties=[], leg_location=[]):
-        """! Create legend"""
-        # leg = super().do_legend(histos, legend_names, location, leg_location)
+        """! Create legend
+
+        @param histos list of histograms
+        @param legend_names list of names for legend entries
+        @param location location of the legend
+        @param plot_properties list of properties for legend entries
+        @param leg_location more precise location of the legend overwriting simple location
+
+        @return legend
+        """
         if len(legend_names) < len(histos):
             raise Exception("WARNING:: size of legends doesn't match the size of histos")
 

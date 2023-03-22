@@ -1,17 +1,26 @@
 import ROOT as r
-from base_plotter import BasePlotter
-import alignment_utils as alignUtils
-from index_page import htmlWriter
+from tools.analysis.base_plotter import BasePlotter
+import tools.analysis.alignment_utils as alignUtils
+from tools.analysis.index_page import htmlWriter
 
 
 class ProfilePlots(BasePlotter):
 
     def __init__(self, indir="res/"):
         super().__init__()
-        self.indir = indir
+        self.indir = indir  # directory  in root files with relevant histograms
 
     def do_legend(self, histos, legend_names, location=1, plot_properties=[], leg_location=[]):
-        """! Create legend"""
+        """! Create legend
+
+        @param histos list of histograms
+        @param legend_names list of names for legend entries
+        @param location location of the legend
+        @param plot_properties list of properties for legend entries
+        @param leg_location more precise location of the legend overwriting simple location
+
+        @return legend
+        """
         # leg = super().do_legend(histos, legend_names, location, leg_location)
         if len(legend_names) < len(histos):
             raise Exception("WARNING:: size of legends doesn't match the size of histos")
@@ -45,8 +54,23 @@ class ProfilePlots(BasePlotter):
     def plot_profileY(self, name,
                       xtitle="hit position [mm]",
                       ytitle="<ures> [mm]",
-                      rangeX=[], rangeY=[], fitrange=[-2e5, 2e5],
-                      fit="[0]*x + [1]", num_bins=1, rebin=1):
+                      rangeX=[], rangeY=[], do_fit=False,
+                      fitrange=[-2e5, 2e5], fit="[0]*x + [1]",
+                      num_bins=1, rebin=1, do_sigma_profile=False):
+        """! Plot y profile of distribution
+
+        @param name name of the histogram
+        @param xtitle x axis title
+        @param ytitle y axis title
+        @param rangeX x axis range
+        @param rangeY y axis range
+        @param do_fitif true, fit is performed
+        @param fitrange range for fit
+        @param fit fit function
+        @param num_bins number of bins for profile
+        @param rebin rebinning factor
+        @param do_sigma_profile if true, sigma profile plots are added
+        """
 
         histos = []
         histos_mu = []
@@ -58,23 +82,20 @@ class ProfilePlots(BasePlotter):
 
             histos.append(infile.Get(self.indir+name))
 
-        c = r.TCanvas("c1", "c1", 2200, 2000)
-        c.SetGridx()
-        c.SetGridy()
+        canv = r.TCanvas("c1", "c1", 2200, 2000)
+        canv.SetGridx()
+        canv.SetGridy()
 
         plotProperties = []
-        fits = []
-        for ihisto in range(0, len(histos)):
 
+        for ihisto in range(0, len(histos)):
             histos[ihisto].Rebin(rebin)
 
-            histos_mu.append(r.TH1F(histos[ihisto].GetName()+"_mu"+str(ihisto), histos[ihisto].GetName()+"_mu"+str(ihisto), histos[ihisto].GetXaxis().GetNbins(), histos[ihisto].GetXaxis().GetXmin(), histos[ihisto].GetXaxis().GetXmax()))
-            histos_sigma.append(r.TH1F(histos[ihisto].GetName()+"_sigma"+str(ihisto), histos[ihisto].GetName()+"_sigma"+str(ihisto), histos[ihisto].GetXaxis().GetNbins(), histos[ihisto].GetXaxis().GetXmin(), histos[ihisto].GetXaxis().GetXmax()))
+            histos_mu.append(r.TH1F(histos[ihisto].GetName() + "_mu" + str(ihisto), histos[ihisto].GetName() + "_mu" + str(ihisto), histos[ihisto].GetXaxis().GetNbins(), histos[ihisto].GetXaxis().GetXmin(), histos[ihisto].GetXaxis().GetXmax()))
+            histos_sigma.append(r.TH1F(histos[ihisto].GetName() + "_sigma" + str(ihisto), histos[ihisto].GetName() + "_sigma" + str(ihisto), histos[ihisto].GetXaxis().GetNbins(), histos[ihisto].GetXaxis().GetXmin(), histos[ihisto].GetXaxis().GetXmax()))
             alignUtils.profile_y_with_iterative_gauss_fit(histos[ihisto], histos_mu[ihisto], histos_sigma[ihisto], num_bins, fitrange=fitrange)
-            # alignUtils.profile_y_with_iterative_gauss_fit(histos[ihisto],histos_sigma[ihisto] ,histos_mu[ihisto], num_bins,fitrange=fitrange)
 
             self.set_histo_style(histos_mu[ihisto], ihisto)
-            self.set_histo_style(histos_sigma[ihisto], ihisto)
 
             hist = histos_mu[ihisto]
             hmin = hist.GetBinLowEdge(1)
@@ -82,16 +103,15 @@ class ProfilePlots(BasePlotter):
 
             fitPars = []
 
-            fitF = r.TF1("fit"+str(ihisto), fit, hmin, hmax)
-            histos_mu[ihisto].Fit("fit"+str(ihisto), "QNR")
+            if do_fit:
+                fitF = r.TF1("fit" + str(ihisto), fit, hmin, hmax)
+                string = ""
+                for i in range(fitF.GetNpar()):
+                    fitPars.append(fitF.GetParameter(i))
+                    string += str(round(fitPars[i], 4)) + ","
+                plotProperties.append(string)
 
-            string = ""
-            for i in range(fitF.GetNpar()):
-                fitPars.append(fitF.GetParameter(i))
-                string += str(round(fitPars[i], 4)) + ","
-
-            plotProperties.append(string)
-            fits.append(fitF)
+            histos_mu[ihisto].Fit("fit" + str(ihisto), "QNR")
 
             if (ihisto == 0):
                 histos_mu[ihisto].GetXaxis().SetTitle(xtitle)
@@ -108,8 +128,9 @@ class ProfilePlots(BasePlotter):
             else:
                 histos_mu[ihisto].Draw("P SAME")
 
-            fitF.SetLineColor(self.colors[ihisto])
-            # fitF.Draw("SAME")
+            if do_fit:
+                fitF.SetLineColor(self.colors[ihisto])
+                fitF.Draw("SAME")
 
         leg = self.do_legend(histos_mu, self.legend_names, 2, plotProperties)
 
@@ -123,39 +144,39 @@ class ProfilePlots(BasePlotter):
         text.SetTextColor(r.kBlack)
         text.DrawLatex(0.66, 0.89, '#bf{#it{HPS}} Work In Progress')
 
-        c.SaveAs(self.outdir + "/" + name + "_profiled" + self.oFext)
+        canv.SaveAs(self.outdir + "/" + name + "_profiled" + self.oFext)
 
-        c1 = r.TCanvas("c1", "c1", 2200, 2000)
-        c1.SetGridx()
-        c1.SetGridy()
-        c1.cd()
+        if do_sigma_profile:
+            canv_sigma = r.TCanvas("c1", "c1", 2200, 2000)
+            canv_sigma.SetGridx()
+            canv_sigma.SetGridy()
+            canv_sigma.cd()
 
-        if (ihisto == 0):
-            histos_sigma[ihisto].GetXaxis().SetTitle(xtitle)
-            histos_sigma[ihisto].GetYaxis().SetTitle(ytitle)
-            histos_sigma[ihisto].GetYaxis().SetTitleSize(histos[ihisto].GetYaxis().GetTitleSize()*0.7)
-            histos_sigma[ihisto].GetYaxis().SetTitleOffset(histos[ihisto].GetYaxis().GetTitleOffset()*1.35)
-            histos_sigma[ihisto].GetYaxis().SetRangeUser(-0.2, 0.2)
-            if len(rangeY) > 1:
-                histos_sigma[ihisto].GetYaxis().SetRangeUser(rangeY[0], rangeY[1])
-            histos_sigma[ihisto].Draw("P")
-            if len(rangeX) > 1:
-                histos_sigma[ihisto].GetXaxis().SetRangeUser(rangeX[0], rangeX[1])
-            else:
-                histos_sigma[ihisto].Draw("P SAME")
-                pass
+            for ihisto in range(0, len(histos_sigma)):
+                self.set_histo_style(histos_sigma[ihisto], ihisto)
+                if (ihisto == 0):
+                    histos_sigma[ihisto].GetXaxis().SetTitle(xtitle)
+                    histos_sigma[ihisto].GetYaxis().SetTitle(ytitle)
+                    histos_sigma[ihisto].GetYaxis().SetTitleSize(histos[ihisto].GetYaxis().GetTitleSize()*0.7)
+                    histos_sigma[ihisto].GetYaxis().SetTitleOffset(histos[ihisto].GetYaxis().GetTitleOffset()*1.35)
+                    histos_sigma[ihisto].GetYaxis().SetRangeUser(-0.2, 0.2)
+                    if len(rangeY) > 1:
+                        histos_sigma[ihisto].GetYaxis().SetRangeUser(rangeY[0], rangeY[1])
+                    histos_sigma[ihisto].Draw("P")
+                    if len(rangeX) > 1:
+                        histos_sigma[ihisto].GetXaxis().SetRangeUser(rangeX[0], rangeX[1])
+                else:
+                    histos_sigma[ihisto].Draw("P SAME")
 
-            fitF.SetLineColor(self.colors[ihisto])
-            # fitF.Draw("SAME")
+            leg = self.do_legend(histos_sigma, self.legend_names, 2, plotProperties)
 
-        leg = self.do_legend(histos_sigma, self.legend_names, 2, plotProperties)
+            if (leg is not None):
+                leg.Draw()
 
-        if (leg is not None):
-            leg.Draw()
-
-        c1.SaveAs(self.outdir + "/" + name + "_sigma_profiled" + self.oFext)
+            canv_sigma.SaveAs(self.outdir + "/" + name + "_sigma_profiled" + self.oFext)
 
         if self.do_HTML:
-            hw = htmlWriter(self.outdir)
+            img_type = self.oFext.strip(".")
+            hw = htmlWriter(self.outdir, img_type=img_type)
             hw.add_images(self.outdir)
             hw.close_html()

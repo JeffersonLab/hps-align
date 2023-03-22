@@ -1,18 +1,26 @@
 import ROOT as r
-import alignment_utils as alignUtils
-from base_plotter import BasePlotter
-from index_page import htmlWriter
+import tools.analysis.alignment_utils as alignUtils
+from tools.analysis.base_plotter import BasePlotter
+from tools.analysis.index_page import htmlWriter
 
 
 class FeeMomentumPlots(BasePlotter):
-    """! Plot the FEE momentum plots"""
+    """! Class for plotting the FEE track parameters"""
 
     def __init__(self):
         super().__init__()
 
     def plot_histos(self, histopath, do_fit=True, xtitle="", ytitle="", scale_histos=False):
+        """! Plot the FEE track parameters histograms
 
-        c = r.TCanvas("c", "c", 2400, 2000)
+        @param histopath path to the histogram in the root file
+        @param do_fit do a fit to the histogram
+        @param xtitle x-axis title
+        @param ytitle y-axis title
+        @param scale_histos scale the histograms to unity
+        """
+
+        canv = r.TCanvas("c", "c", 2400, 2000)
 
         histos = []
         for infile in self.input_files:
@@ -57,8 +65,7 @@ class FeeMomentumPlots(BasePlotter):
                 plotProperties.append((" #mu=%.3f" % round(mu, 3)) + ("+/- %.3f" % round(mu_err, 3))
                                       + (" #sigma=%.3f" % round(sigma, 3)) + ("+/- %.3f" % round(sigma_err, 3)))
 
-        leg = self.do_legend(histos, self.legend_names, 3, plotProperties)
-        #  , legLocation=[0.6, 0.80]) ## \todo: FIXME add this to do_legend
+        leg = self.do_legend(histos, self.legend_names, 3, plotProperties, leg_location=[0.6, 0.80])
 
         leg.Draw("same")
 
@@ -71,16 +78,25 @@ class FeeMomentumPlots(BasePlotter):
 
         saveName = self.outdir + "/" + histopath.split("/")[-1] + self.oFext
 
-        c.SaveAs(saveName)
+        canv.SaveAs(saveName)
 
         if self.do_HTML:
-            hw = htmlWriter(self.outdir)
+            img_type = self.oFext.strip(".")
+            hw = htmlWriter(self.outdir, img_type=img_type)
             hw.add_images(self.outdir)
             hw.close_html()
 
     def do_legend(self, histos, legend_names, location=1, plot_properties=[], leg_location=[]):
-        """! Create legend"""
-        # leg = super().do_legend(histos, legend_names, location, leg_location)
+        """! Create legend
+
+        @param histos list of histograms
+        @param legend_names list of names for legend entries
+        @param location location of the legend
+        @param plot_properties list of properties for legend entries
+        @param leg_location more precise location of the legend overwriting simple location
+
+        @return legend
+        """
         if len(legend_names) < len(histos):
             raise Exception("WARNING:: size of legends doesn't match the size of histos")
 
