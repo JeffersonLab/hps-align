@@ -8,16 +8,17 @@ class ProfilePlots(BasePlotter):
 
     def __init__(self, indir="res/"):
         super().__init__()
-        self.indir = indir  ## directory  in root files with relevant histograms
+        ## directory  in root files with relevant histograms
+        self.indir = indir
 
     def do_legend(self, histos, legend_names, location=1, plot_properties=[], leg_location=[]):
         """! Create legend
 
-        @param histos list of histograms
-        @param legend_names list of names for legend entries
-        @param location location of the legend
-        @param plot_properties list of properties for legend entries
-        @param leg_location more precise location of the legend overwriting simple location
+        @param histos  list of histograms
+        @param legend_names  list of names for legend entries
+        @param location  location of the legend
+        @param plot_properties  list of properties for legend entries
+        @param leg_location  more precise location of the legend overwriting simple location
 
         @return legend
         """
@@ -58,17 +59,17 @@ class ProfilePlots(BasePlotter):
                       num_bins=1, rebin=1, do_sigma_profile=False):
         """! Plot y profile of distribution
 
-        @param name name of the histogram
-        @param xtitle x axis title
-        @param ytitle y axis title
-        @param rangeX x axis range
-        @param rangeY y axis range
-        @param do_fitif true, fit is performed
-        @param fitrange range for fit
-        @param fit fit function
-        @param num_bins number of bins for profile
-        @param rebin rebinning factor
-        @param do_sigma_profile if true, sigma profile plots are added
+        @param name  name of the histogram
+        @param xtitle  x axis title
+        @param ytitle  y axis title
+        @param rangeX  x axis range
+        @param rangeY  y axis range
+        @param do_fitif  true, fit is performed
+        @param fitrange  range for fit
+        @param fit  fit function
+        @param num_bins  number of bins for profile
+        @param rebin  rebinning factor
+        @param do_sigma_profile  if true, sigma profile plots are added
         """
 
         histos = []

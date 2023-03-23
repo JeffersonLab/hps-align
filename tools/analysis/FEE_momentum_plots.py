@@ -13,11 +13,11 @@ class FeeMomentumPlots(BasePlotter):
     def plot_histos(self, histopath, do_fit=True, xtitle="", ytitle="", scale_histos=False):
         """! Plot the FEE track parameters histograms
 
-        @param histopath path to the histogram in the root file
-        @param do_fit do a fit to the histogram
-        @param xtitle x-axis title
-        @param ytitle y-axis title
-        @param scale_histos scale the histograms to unity
+        @param histopath  path to the histogram in the root file
+        @param do_fit  do a fit to the histogram
+        @param xtitle  x-axis title
+        @param ytitle  y-axis title
+        @param scale_histos  scale the histograms to unity
         """
 
         canv = r.TCanvas("c", "c", 2400, 2000)
@@ -89,11 +89,11 @@ class FeeMomentumPlots(BasePlotter):
     def do_legend(self, histos, legend_names, location=1, plot_properties=[], leg_location=[]):
         """! Create legend
 
-        @param histos list of histograms
-        @param legend_names list of names for legend entries
-        @param location location of the legend
-        @param plot_properties list of properties for legend entries
-        @param leg_location more precise location of the legend overwriting simple location
+        @param histos  list of histograms
+        @param legend_names  list of names for legend entries
+        @param location  location of the legend
+        @param plot_properties  list of properties for legend entries
+        @param leg_location  more precise location of the legend overwriting simple location
 
         @return legend
         """

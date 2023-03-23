@@ -12,11 +12,11 @@ class KinkPlots(BasePlotter):
     def do_legend(self, histos, legend_names, location=1, plot_properties=[], leg_location=[]):
         """! Create legend
 
-        @param histos list of histograms
-        @param legend_names list of names for legend entries
-        @param location location of the legend
-        @param plot_properties list of properties for legend entries
-        @param leg_location more precise location of the legend overwriting simple location
+        @param histos  list of histograms
+        @param legend_names  list of names for legend entries
+        @param location  location of the legend
+        @param plot_properties  list of properties for legend entries
+        @param leg_location  more precise location of the legend overwriting simple location
 
         @return legend
         """
