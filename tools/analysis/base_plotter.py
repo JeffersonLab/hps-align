@@ -49,13 +49,20 @@ class BasePlotter:
                           "L6bSh", "L6bAs", "L6bSs", "L7bAh", "L7bSh",
                           "L7bAs", "L7bSs", "", "", "", "", "", "", "", "", "", "", "", ""]
 
-        self.legend_names = []  ## legend names
-        self.infile_names = []  ## input file names
-        self.outdir = ""  ## output directory
-        self.do_HTML = False  ## create html page
-        self.oFext = ".png"  ## extension of output files
-        self.config_file = ""  ## configuration file
-        self.input_files = []  ## input TFiles
+        ## legend names
+        self.legend_names = []
+        ## input file names
+        self.infile_names = []
+        ## output directory
+        self.outdir = ""
+        ## create html page
+        self.do_HTML = False
+        ## extension of output files
+        self.oFext = ".png"
+        ## configuration file
+        self.config_file = ""
+        ## input TFiles
+        self.input_files = []
 
         self.parse_args()
 
@@ -129,10 +136,10 @@ class BasePlotter:
     def do_legend(histos, legend_names, location=1, leg_location=[]):
         """! Create legend
 
-        @param histos list of histograms
-        @param legend_names list of legend names
-        @param location location of the legend
-        @param leg_location location of the legend
+        @param histos  list of histograms
+        @param legend_names  list of legend names
+        @param location  location of the legend
+        @param leg_location  location of the legend
         """
 
         if len(legend_names) < len(histos):
@@ -159,11 +166,11 @@ class BasePlotter:
     def set_histo_style(self, histo, ihisto, marker_size=4, line_width=5, label_size=0.05):
         """! Set histo properties
 
-        @param histo histogram
-        @param ihisto index of the histogram in list of histos
-        @param marker_size marker size
-        @param line_width line width
-        @param label_size label size
+        @param histo  histogram
+        @param ihisto  index of the histogram in list of histos
+        @param marker_size  marker size
+        @param line_width  line width
+        @param label_size  label size
         """
         histo.SetMarkerStyle(self.markers[ihisto])
         histo.SetMarkerColor(self.colors[ihisto])

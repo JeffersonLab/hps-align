@@ -9,16 +9,17 @@ class ResidualPlots(BasePlotter):
 
     def __init__(self, indir="res/"):
         super().__init__()
-        self.indir = indir  ## input directory
+        ## input directory
+        self.indir = indir
 
     def do_legend(self, histos, legend_names, location=1, plot_properties=[], leg_location=[]):
         """! Create legend
 
-        @param histos list of histograms
-        @param legend_names list of names for legend entries
-        @param location location of the legend
-        @param plot_properties list of properties for legend entries
-        @param leg_location more precise location of the legend overwriting simple location
+        @param histos  list of histograms
+        @param legend_names  list of names for legend entries
+        @param location  location of the legend
+        @param plot_properties  list of properties for legend entries
+        @param leg_location  more precise location of the legend overwriting simple location
 
         @return legend
         """
@@ -54,8 +55,8 @@ class ResidualPlots(BasePlotter):
     def plot_1D_residuals(self, histo_name, title=""):
         """! Plot the 1D residuals for a given sensor
 
-        @param histo_name name of the histogram
-        @param title title of the x-axis
+        @param histo_name  name of the histogram
+        @param title  title of the x-axis
         """
 
         histos = []

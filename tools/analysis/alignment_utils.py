@@ -6,8 +6,8 @@ import ROOT as r
 def find_max(histos):
     """! Find the maximum entry in a list of histograms
 
-    @param histos list of histograms
-    @return maximum entry
+    @param histos  list of histograms
+    @return maximum  entry
     """
 
     maximum = -1
@@ -21,10 +21,10 @@ def find_max(histos):
 def make_fit(histoGram, fitType, range=[], color=None):
     """! Make a fit to a histogram
 
-    @param histoGram histogram to fit
-    @param fitType type of fit to make
-    @param range range of fit
-    @param color color of fit graph
+    @param histoGram  histogram to fit
+    @param fitType  type of fit to make
+    @param range  range of fit
+    @param color  color of fit graph
     """
 
     # no Fit
@@ -39,12 +39,12 @@ def make_fit(histoGram, fitType, range=[], color=None):
 def profile_y_with_iterative_gauss_fit(hist, mu_graph, sigma_graph, num_bins, fitrange=[-2e5, 2e5], color=None):
     """! Profile a histogram in y with an iterative Gaussian fit
 
-    @param hist histogram to profile
-    @param mu_graph graph to store the mean values
-    @param sigma_graph graph to store the sigma values
-    @param num_bins number of bins to use for the profile
-    @param fitrange range of the fit
-    @param color color of the fit graph
+    @param hist  histogram to profile
+    @param mu_graph  graph to store the mean values
+    @param sigma_graph  graph to store the sigma values
+    @param num_bins  number of bins to use for the profile
+    @param fitrange  range of the fit
+    @param color  color of the fit graph
     """
 
     if (num_bins < 1):
@@ -138,10 +138,10 @@ def profile_y_with_iterative_gauss_fit(hist, mu_graph, sigma_graph, num_bins, fi
 def single_gauss_iterative(hist, sigmaRange, range=[], color=None):
     """! Perform a single Gaussian fit to a histogram
 
-    @param hist histogram to fit
-    @param sigmaRange range of the fit
-    @param range range of the fit
-    @param color color of the fit graph
+    @param hist  histogram to fit
+    @param sigmaRange  range of the fit
+    @param range  range of the fit
+    @param color  color of the fit graph
     """
 
     debug = False
