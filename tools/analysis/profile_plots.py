@@ -12,7 +12,8 @@ class ProfilePlots(BasePlotter):
         self.indir = indir
 
     def do_legend(self, histos, legend_names, location=1, plot_properties=[], leg_location=[]):
-        """! Create legend
+        """!
+        Create legend
 
         @param histos  list of histograms
         @param legend_names  list of names for legend entries
@@ -57,7 +58,8 @@ class ProfilePlots(BasePlotter):
                       rangeX=[], rangeY=[], do_fit=False,
                       fitrange=[-2e5, 2e5], fit="[0]*x + [1]",
                       num_bins=1, rebin=1, do_sigma_profile=False):
-        """! Plot y profile of distribution
+        """!
+        Plot y profile of distribution
 
         @param name  name of the histogram
         @param xtitle  x axis title

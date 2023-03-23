@@ -14,7 +14,8 @@ class VertexPlots(BasePlotter):
         self.outdir = self.outdir + "/MultiVtx_plots/"
 
     def do_legend(self, histos, legend_names, location=1, plot_properties=[], leg_location=[]):
-        """! Create legend
+        """!
+        Create legend
 
         @param histos  list of histograms
         @param legend_names  list of names for legend entries
@@ -54,7 +55,8 @@ class VertexPlots(BasePlotter):
         return leg
 
     def plot_multi_vtx(self):
-        """! Plot multi vertex distributions
+        """!
+        Plot multi vertex distributions
 
         input root file has to contain the /MultiEventVtx/ directory
         """

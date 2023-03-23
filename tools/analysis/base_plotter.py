@@ -134,7 +134,8 @@ class BasePlotter:
             self.legend_names = config['legend']
 
     def do_legend(histos, legend_names, location=1, leg_location=[]):
-        """! Create legend
+        """!
+        Create legend
 
         @param histos  list of histograms
         @param legend_names  list of legend names
@@ -164,13 +165,14 @@ class BasePlotter:
         return legend
 
     def set_histo_style(self, histo, ihisto, marker_size=4, line_width=5, label_size=0.05):
-        """! Set histo properties
+        """!
+        Set histo properties.
 
-        @param histo  histogram
-        @param ihisto  index of the histogram in list of histos
+        @param histo        histogram
+        @param ihisto       index of the histogram in list of histos
         @param marker_size  marker size
-        @param line_width  line width
-        @param label_size  label size
+        @param line_width   line width
+        @param label_size   label size
         """
         histo.SetMarkerStyle(self.markers[ihisto])
         histo.SetMarkerColor(self.colors[ihisto])

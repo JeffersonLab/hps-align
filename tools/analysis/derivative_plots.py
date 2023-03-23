@@ -5,7 +5,8 @@ from tools.analysis.index_page import htmlWriter
 
 
 class DerivativePlots(BasePlotter):
-    """! Class for plotting derivative plots
+    """!
+    Class for plotting derivative plots
 
     The input root files must contain the gbl_derivatives directory.
     """
@@ -16,7 +17,8 @@ class DerivativePlots(BasePlotter):
         self.outdir = self.outdir + "/derivatives/"
 
     def do_legend(self, histos, legend_names, location=1, plot_properties=[], leg_location=[]):
-        """! Create legend
+        """!
+        Create legend
 
         @param histos  list of histograms
         @param legend_names  list of names for legend entries
@@ -56,7 +58,8 @@ class DerivativePlots(BasePlotter):
         return leg
 
     def plot_derivatives(self, name):
-        """! Plot the derivatives
+        """!
+        Plot the derivatives
 
         The input root files must contain the gbl_derivatives directory.
 

@@ -10,7 +10,8 @@ class KinkPlots(BasePlotter):
         super().__init__()
 
     def do_legend(self, histos, legend_names, location=1, plot_properties=[], leg_location=[]):
-        """! Create legend
+        """!
+        Create legend
 
         @param histos  list of histograms
         @param legend_names  list of names for legend entries
