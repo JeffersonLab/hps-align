@@ -13,7 +13,8 @@ class TrackPlots(BasePlotter):
         super().__init__()
 
     def plot_histos(self):
-        """! Plot the track histograms
+        """!
+        Plot the track histograms
 
         The input root files must contain the trk_params directory.
         """
@@ -114,7 +115,8 @@ class TrackPlots(BasePlotter):
         can.SaveAs(self.outdir + "/TrackPlots/" + name + self.oFext)
 
     def do_legend(self, histos, legend_names, location=1, plot_properties=[], leg_location=[]):
-        """! Create legend
+        """!
+        Create legend
 
         @param histos  list of histograms
         @param legend_names  list of names for legend entries

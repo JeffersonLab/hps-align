@@ -13,7 +13,8 @@ class ResidualPlots(BasePlotter):
         self.indir = indir
 
     def do_legend(self, histos, legend_names, location=1, plot_properties=[], leg_location=[]):
-        """! Create legend
+        """!
+        Create legend
 
         @param histos  list of histograms
         @param legend_names  list of names for legend entries
@@ -53,7 +54,8 @@ class ResidualPlots(BasePlotter):
         return leg
 
     def plot_1D_residuals(self, histo_name, title=""):
-        """! Plot the 1D residuals for a given sensor
+        """!
+        Plot the 1D residuals for a given sensor
 
         @param histo_name  name of the histogram
         @param title  title of the x-axis
@@ -132,7 +134,8 @@ class ResidualPlots(BasePlotter):
             hw.close_html()
 
     def plot_summary(self, out_dir_ext=""):
-        """! Plot the summary of residuals for all sensors
+        """!
+        Plot the summary of residuals for all sensors
 
         @param out_dir_ext extension of the output directory, has to end in /
         """

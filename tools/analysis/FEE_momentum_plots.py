@@ -5,13 +5,15 @@ from tools.analysis.index_page import htmlWriter
 
 
 class FeeMomentumPlots(BasePlotter):
-    """! Class for plotting the FEE track parameters"""
+    """!
+    Class for plotting the FEE track parameters"""
 
     def __init__(self):
         super().__init__()
 
     def plot_histos(self, histopath, do_fit=True, xtitle="", ytitle="", scale_histos=False):
-        """! Plot the FEE track parameters histograms
+        """!
+        Plot the FEE track parameters histograms
 
         @param histopath  path to the histogram in the root file
         @param do_fit  do a fit to the histogram
@@ -87,7 +89,8 @@ class FeeMomentumPlots(BasePlotter):
             hw.close_html()
 
     def do_legend(self, histos, legend_names, location=1, plot_properties=[], leg_location=[]):
-        """! Create legend
+        """!
+        Create legend
 
         @param histos  list of histograms
         @param legend_names  list of names for legend entries

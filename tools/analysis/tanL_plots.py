@@ -10,7 +10,8 @@ class TanLambdaPlots(BasePlotter):
         super().__init__()
 
     def do_legend(self, histos, legend_names, location=1, plot_properties=[], leg_location=[]):
-        """! Create legend
+        """!
+        Create legend
 
         @param histos  list of histograms
         @param legend_names  list of names for legend entries
@@ -50,7 +51,9 @@ class TanLambdaPlots(BasePlotter):
         return leg
 
     def plot_z0_vs_tanL_fit(self, name):
-        """! Plot z0 vs tanL and fit it
+        """!
+        Plot z0 vs tanL and fit it
+
         root file has to contain directory "trk_params/"
 
         @param name  name of the histogram

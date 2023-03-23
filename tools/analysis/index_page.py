@@ -21,7 +21,8 @@ class htmlWriter:
             self.index_html = open(dir + "/" + html_name, 'r+')
 
     def wline(self, line):
-        """! Write line to html file
+        """!
+        Write line to html file
 
         @param line  line to be written
         """
@@ -34,7 +35,8 @@ class htmlWriter:
         self.index_html.close()
 
     def add_images(self, folder=""):
-        """! Add images to html file
+        """!
+        Add images to html file
 
         @param folder  folder where the images are stored
         """
