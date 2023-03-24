@@ -83,7 +83,7 @@ def main():
         vertex_plotter = VertexPlots()
         vertex_plotter.plot_multi_vtx()
 
-    trk_profile_plotter = ProfilePlots("trk_params/")
+    trk_profile_plotter = ProfilePlots(indir="trk_params/")
     trk_profile_plotter.plot_profileY("p_vs_tanLambda_top", xtitle="tan(#lambda)", ytitle="p [GeV]", rangeY=[0., 5.], fit="[0] + [1]*x")
     trk_profile_plotter.plot_profileY("p_vs_tanLambda_bottom", xtitle="tan(#lambda)", ytitle="p [GeV]", rangeY=[0., 5.], fit="[0] + [1]*x")
 
@@ -97,7 +97,7 @@ def main():
     trk_profile_plotter.plot_profileY("p_vs_phi_bottom", xtitle="#phi", ytitle="p [GeV]", rangeY=[0., 5.], fit="[0] + [1]*x")
 
     if (doEoPPlots):
-        eop_profile_plotter = ProfilePlots("EoP/")
+        eop_profile_plotter = ProfilePlots(indir="EoP/")
         eop_profile_plotter.plot_profileY("EoP_vs_trackP_top_fid", xtitle="Top track P [GeV]", rangeY=[0.7, 1.3], fit="[0]")
 
         eop_profile_plotter.plot_profileY("EoP_vs_trackP_ele_top_fid", xtitle="Top ele track P [GeV]", rangeY=[0.7, 1.3], fit="[0]", fitrange=[0.7, 1.2])
@@ -153,32 +153,9 @@ def main():
         # fee_plots.plot_histos("trk_params/p7h_bottom")
 
     if (doDerivatives):
-        print("doDerivatives")
         deriv_plotter = DerivativePlots()
-
-        # deriv_plotter.plot_derivatives("12101")
-        # deriv_plotter.plot_derivatives("12201")
-        deriv_plotter.plot_derivatives("12301")
-
-        # deriv_plotter.plot_derivatives("22101")
-        # deriv_plotter.plot_derivatives("22201")
-        deriv_plotter.plot_derivatives("22301")
-
-        # deriv_plotter.plot_derivatives("12105")
-        # deriv_plotter.plot_derivatives("12205")
-        deriv_plotter.plot_derivatives("12305")
-
-        # deriv_plotter.plot_derivatives("22105")
-        # deriv_plotter.plot_derivatives("22205")
-        deriv_plotter.plot_derivatives("22305")
-
-        # deriv_plotter.plot_derivatives("12110")
-        # deriv_plotter.plot_derivatives("12210")
-        deriv_plotter.plot_derivatives("12310")
-
-        # deriv_plotter.plot_derivatives("22110")
-        # deriv_plotter.plot_derivatives("22210")
-        deriv_plotter.plot_derivatives("22310")
+        for deriv in plot_list_config['derivatives']:
+            deriv_plotter.plot_derivatives(deriv)
 
 
 if __name__ == "__main__":
