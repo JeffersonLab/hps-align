@@ -269,3 +269,58 @@ class BasePlotter:
         text.DrawLatex(0.16, 0.89, '#bf{#it{HPS}} Work In Progress')
 
         can.SaveAs(self.outdir + "/" + out_name + self.oFext)
+
+    def make_1D_plots(self, histolist, out_name="output", xtitle="", ytitle="", yrange=[], logy=False, RebinFactor=0):
+        """! Make 1D plots
+
+        @param histolist    List of histograms to plot
+        @param out_name     Name of the plot
+        @param xtitle       X-axis title
+        @param ytitle       Y-axis title
+        @param yrange       Y-axis range
+        @param logy         Set the Y-axis to log scale
+        @param RebinFactor  Rebin factor
+        """
+        can = r.TCanvas("c1", "c1", 2200, 2000)
+        if logy:
+            can.SetLogy(1)
+
+        means = []
+        meansErr = []
+
+        for ih in range(len(histolist)):
+            means.append(histolist[ih].GetMean(2))
+            meansErr.append(histolist[ih].GetMeanError(2))
+
+            self.set_histo_style(histolist[ih], ih)
+            if len(yrange) == 2:
+                histolist[ih].GetYaxis().SetRangeUser(yrange[0], yrange[1])
+            histolist[ih].GetXaxis().CenterTitle()
+            histolist[ih].GetYaxis().CenterTitle()
+
+            if ("pT" in out_name or "pt" in out_name):
+                histolist[ih].GetXaxis().SetRangeUser(1., 20.)
+            if RebinFactor > 0:
+                histolist[ih].Rebin(RebinFactor)
+
+            if ih == 0:
+                histolist[ih].Draw()
+                if xtitle:
+                    histolist[ih].GetXaxis().SetTitle(xtitle)
+                if ytitle:
+                    histolist[ih].GetYaxis().SetTitle(ytitle)
+            else:
+                histolist[ih].Draw("same")
+
+        text = r.TLatex()
+        text.SetNDC()
+        text.SetTextFont(42)
+        text.SetTextSize(0.04)
+        text.SetTextColor(r.kBlack)
+        text.DrawLatex(0.52, 0.87, '#bf{#it{HPS} Work In Progress}')
+
+        leg = self.do_legend(histolist, self.legend_names, 2)
+        if (leg is not None):
+            leg.Draw()
+
+        can.SaveAs(self.outdir + "/TrackPlots/" + out_name + self.oFext)
