@@ -77,7 +77,8 @@ class BasePlotter:
         print("STORING RESULTS IN::", self.outdir)
 
     def parse_args(self):
-        """! Parse command line arguments
+        """!
+        Parse command line arguments
 
         Possible arguments:
         - -i, --inputFiles: input files
@@ -128,7 +129,8 @@ class BasePlotter:
             self.legend_names.append(legName)
 
     def read_config(self):
-        """! Read configuration file
+        """!
+        Read configuration file
 
         Possible options:
         - inputFiles: input files
@@ -271,7 +273,8 @@ class BasePlotter:
         can.SaveAs(self.outdir + "/" + out_name + self.oFext)
 
     def make_1D_plots(self, histolist, out_name="output", xtitle="", ytitle="", yrange=[], logy=False, RebinFactor=0):
-        """! Make 1D plots
+        """!
+        Make 1D plots
 
         @param histolist    List of histograms to plot
         @param out_name     Name of the plot
