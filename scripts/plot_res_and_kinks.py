@@ -1,5 +1,5 @@
 import json
-from tools.analysis.fee_momentum_plots import FeeMomentumPlots
+from tools.analysis.FEE_momentum_plots import FeeMomentumPlots
 from tools.analysis.track_plots import TrackPlots
 from tools.analysis.residual_plots import ResidualPlots
 from tools.analysis.kink_plots import KinkPlots
