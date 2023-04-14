@@ -1,5 +1,2 @@
-build/
-install/
-tools/analysis/AlignmentResults/
-tools/analysis/__pycache__/
+__pycache__
 .DS_Store
