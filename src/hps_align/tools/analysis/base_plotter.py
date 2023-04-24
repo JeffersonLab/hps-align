@@ -18,7 +18,14 @@ class BasePlotter:
     - oFext: extension of the output files
     """
 
-    def __init__(self, legend_names=[], infile_names=[], outdir="", do_HTML=False, oFext=".png", config_file="", indir=""):
+    def __init__(self, 
+            legend_names=[], 
+            infile_names=[], 
+            outdir="", 
+            do_HTML=False, 
+            oFext=".png", 
+            indir = "",
+            ):
         ## ROOT plot colors
         self.colors = [r.kBlue+2, r.kCyan+2, r.kRed+2, r.kOrange+10,
                        r.kYellow+2, r.kGreen-1, r.kAzure-2, r.kGreen-8,
@@ -59,12 +66,8 @@ class BasePlotter:
         self.do_HTML = do_HTML
         ## extension of output files
         self.oFext = oFext
-        ## configuration file
-        self.config_file = config_file
-        ## input dir in root file
+        ## internal directory histograms are in
         self.indir = indir
-
-        self.parse_args()
 
         ## input TFiles
         self.input_files = []
@@ -75,84 +78,6 @@ class BasePlotter:
             os.mkdir(self.outdir)
 
         print("STORING RESULTS IN::", self.outdir)
-
-    def parse_args(self):
-        """!
-        Parse command line arguments
-
-        Possible arguments:
-        - -i, --inputFiles: input files
-        - -o, --outdir: output directory
-        - -t, --html: create html page
-        - -l, --legend: names displayed in legend
-        - -e, --oFext: extension of output files; default .png
-        - -c, --config: configuration file
-        """
-        parser = ArgumentParser()
-        parser.add_argument('-i', '--inputFiles', dest='input_files', help='input files', nargs='*')
-        parser.add_argument("-o", "--outdir", dest="outdir", help="output directory", default="AlignmentResults")
-        parser.add_argument("-t", "--html", dest="do_HTML", help="create html page", action='store_true')
-        parser.add_argument("-l", "--legend", dest="legend", help="names displayed in legend", nargs='*')
-        parser.add_argument("-e", "--oFext", dest="oFext", help="extension of output files; default .png", default=".png")
-        parser.add_argument("-c", "--config", dest="config", help="configuration file", default="")
-
-        args = parser.parse_args()
-
-        if args.config:
-            self.config_file = args.config
-            self.read_config()
-        else:
-            self.infile_names = args.input_files
-            self.outdir = args.outdir
-            self.legend_names = args.legend
-            self.do_HTML = args.do_HTML
-            self.oFext = args.oFext
-
-        if self.infile_names == []:
-            raise Exception("No input files given")
-
-        if not len(self.legend_names) == len(self.infile_names):
-            self.generate_legend_names()
-
-    def generate_legend_names(self):
-        """! Generate legend names from input file names"""
-
-        print("SETUP:: Generating legend names from input names.")
-        for file in self.infile_names:
-            pos1 = file.find('HPS')
-            pos2 = file.find('iter') + 5
-
-            if pos1 == -1 or pos2 == -1:
-                raise Exception("Detector naming pattern deviates from default; the legend names have to be entered manually")
-
-            legName = file[pos1:pos2]
-            self.legend_names.append(legName)
-
-    def read_config(self):
-        """!
-        Read configuration file
-
-        Possible options:
-        - inputFiles: input files
-        - outdir: output directory
-        - do_HTML: create html page
-        - oFext: extension of output files; default .png
-        - legend: names displayed in legend
-        """
-
-        f = open(self.config_file, 'r')
-        config = json.load(f)
-
-        if config['inputFiles']:
-            self.infile_names = config['inputFiles']
-        if config['outdir']:
-            self.outdir = config['outdir']
-        if config['do_HTML']:
-            self.do_HTML = config['do_HTML']
-        if config['oFext']:
-            self.oFext = config['oFext']
-        if config['legend']:
-            self.legend_names = config['legend']
 
     def do_legend(self, histos, legend_names, location=1, plot_properties=[], leg_location=[]):
         """!

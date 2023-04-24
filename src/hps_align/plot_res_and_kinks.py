@@ -44,16 +44,16 @@ def plot_res_and_kinks(
     alignment_utils.set_style()
 
     if doSummaryPlots:
-        kink_plotter = KinkPlots()
+        kink_plotter = cfg.make_plotter(KinkPlots)
         kink_plotter.plot_lambda_kinks()
         kink_plotter.plot_phi_kinks()
 
-    tanL_plotter = TanLambdaPlots()
+    tanL_plotter = cfg.make_plotter(TanLambdaPlots)
     tanL_plotter.plot_z0_vs_tanL_fit("z0_vs_tanLambda_top")
     tanL_plotter.plot_z0_vs_tanL_fit("z0_vs_tanLambda_bottom")
 
     if (doResiduals):
-        res_plotter = ResidualPlots()
+        res_plotter = cfg.make_plotter(ResidualPlots)
         res_plotter.plot_summary()
         res_plot_list = []
         if not is2016:
@@ -70,7 +70,7 @@ def plot_res_and_kinks(
         for plot_name in res_plot_list:
             res_plotter.plot_1D_residuals(plot_name)
 
-        profile_plotter = ProfilePlots()
+        profile_plotter = cfg.make_plotter(ProfilePlots)
 
         for vol in ["top", "bottom"]:
             if not is2016:
@@ -96,7 +96,7 @@ def plot_res_and_kinks(
                     profile_plotter.plot_profileY(ures_vs_v_plot_list[ipl], xtitle=ures_vs_v_title_list[ipl], rangeY=[-0.15, 0.15])
 
     if do_vertex_plots:
-        vertex_plotter = VertexPlots()
+        vertex_plotter = cfg.make_plotter(VertexPlots)
         vertex_plotter.plot_multi_vtx()
 
     trk_profile_plotter = ProfilePlots(indir="trk_params/")
@@ -113,7 +113,7 @@ def plot_res_and_kinks(
     trk_profile_plotter.plot_profileY("p_vs_phi_bottom", xtitle="#phi", ytitle="p [GeV]", rangeY=[0., 5.], fit="[0] + [1]*x")
 
     if (doEoPPlots):
-        eop_profile_plotter = ProfilePlots(indir="EoP/")
+        eop_profile_plotter = cfg.make_plotter(ProfilePlots, indir="EoP/")
         eop_profile_plotter.plot_profileY("EoP_vs_trackP_top_fid", xtitle="Top track P [GeV]", rangeY=[0.7, 1.3], fit="[0]")
 
         eop_profile_plotter.plot_profileY("EoP_vs_trackP_ele_top_fid", xtitle="Top ele track P [GeV]", rangeY=[0.7, 1.3], fit="[0]", fitrange=[0.7, 1.2])
@@ -135,10 +135,10 @@ def plot_res_and_kinks(
         eop_profile_plotter.plot_profileY("EoP_vs_phi_bottom_fid", xtitle="Bottom track #phi [GeV]", rangeY=[0.5, 1.3], fit="[0]*x*x*x + [1]*x*x + [2]*x + [3]")
 
     if (doTrackPlots):
-        tp = TrackPlots()
+        tp = cfg.make_plotter(TrackPlots)
         tp.plot_histos()
 
-        fee_plots = FeeMomentumPlots()
+        fee_plots = cfg.make_plotter(FeeMomentumPlots)
         fee_plots.plot_histos("trk_params/z0_top")
 
         fee_plots.plot_histos("trk_params/z0_bottom")
@@ -150,7 +150,7 @@ def plot_res_and_kinks(
         fee_plots.plot_histos("trk_params/trk_extr_bs_y_bottom")
 
     if (doFEEs):
-        fee_plots = FeeMomentumPlots()
+        fee_plots = cfg.make_plotter(FeeMomentumPlots)
         fee_plots.plot_histos("trk_params/Chi2_top_neg", do_fit=False)
         fee_plots.plot_histos("trk_params/Chi2_top_pos", do_fit=False)
         fee_plots.plot_histos("trk_params/Chi2_bottom_neg", do_fit=False)
@@ -169,6 +169,6 @@ def plot_res_and_kinks(
         # fee_plots.plot_histos("trk_params/p7h_bottom")
 
     if (doDerivatives):
-        deriv_plotter = DerivativePlots()
+        deriv_plotter = cfg.make_plotter(DerivativePlots)
         for deriv in plot_list_config['derivatives']:
             deriv_plotter.plot_derivatives(deriv)
