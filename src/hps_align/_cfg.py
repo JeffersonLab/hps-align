@@ -35,11 +35,11 @@ class cfg :
         if cfg.__instance is None :
             raise ValueError('Attempting to access value before configuration.')
         return cls(
-                infile_names = self.input_files,
-                legend_names = self.legend_labels,
-                outdir = self.out_dir,
-                do_HTML = html,
-                oFext = ext,
+                infile_names = cfg.cfg().input_files,
+                legend_names = cfg.cfg().legend_labels,
+                outdir = cfg.cfg().out_dir,
+                do_HTML = cfg.cfg().html,
+                oFext = cfg.cfg().ext,
                 **kwargs
                 )
 

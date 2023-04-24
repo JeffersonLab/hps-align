@@ -6,8 +6,8 @@ from .index_page import htmlWriter
 
 class TanLambdaPlots(BasePlotter):
 
-    def __init__(self, legend_names=[], infile_names=[], outdir="", do_HTML=False, oFext=".png", config_file="", indir=""):
-        super().__init__(legend_names=legend_names, infile_names=infile_names, outdir=outdir, do_HTML=do_HTML, oFext=oFext, config_file=config_file, indir=indir)
+    def __init__(self, **kwargs) :
+        super().__init__(**kwargs)
 
     def plot_z0_vs_tanL_fit(self, name):
         """!

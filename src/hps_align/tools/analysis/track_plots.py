@@ -9,8 +9,8 @@ r.gROOT.SetBatch(1)
 class TrackPlots(BasePlotter):
     """! Class for plotting track plots"""
 
-    def __init__(self, legend_names=[], infile_names=[], outdir="", do_HTML=False, oFext=".png", config_file="", indir=""):
-        super().__init__(legend_names=legend_names, infile_names=infile_names, outdir=outdir, do_HTML=do_HTML, oFext=oFext, config_file=config_file, indir=indir)
+    def __init__(self, **kwargs) :
+        super().__init__(**kwargs)
 
     def plot_histos(self):
         """!

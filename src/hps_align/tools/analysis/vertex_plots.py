@@ -7,10 +7,11 @@ from .index_page import htmlWriter
 class VertexPlots(BasePlotter):
     """! Class for plotting vertex distributions"""
 
-    def __init__(self, legend_names=[], infile_names=[], outdir="", do_HTML=False, oFext=".png", config_file="", indir=""):
-        super().__init__(legend_names=legend_names, infile_names=infile_names, outdir=outdir, do_HTML=do_HTML, oFext=oFext, config_file=config_file, indir="MultiVtx_plots/")
-        ## add /MultiVtx_plots/ to output directory
-        self.outdir = self.outdir + "/MultiVtx_plots/"
+    def __init__(self, **kwargs) :
+        if 'indir' not in kwargs or kwargs['indir'] is None :
+            kwargs['indir'] = 'MultiVtx_plots/'
+        kwargs['outdir'] += '/MultiVtx_plots/'
+        super().__init__(**kwargs)
 
     def plot_multi_vtx(self):
         """!

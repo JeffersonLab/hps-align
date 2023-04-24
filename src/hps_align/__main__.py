@@ -39,9 +39,9 @@ def main(
             (Path(__file__).parent.resolve() / "data" / "plot_list.json"),
             help='JSON plot config file'
             ),
-        input_files : List[str] = typer.Option(None,
+        input_files : List[str] = typer.Option([],
             help='Input files for plotting'),
-        legend : List[str]  = typer.Option(None,
+        legend : List[str]  = typer.Option([],
             help='Labels for legend if not deduced from input file names'),
         out_dir : str = typer.Option(os.getcwd(),
             help='output directory to put plots'),

@@ -11,10 +11,9 @@ class DerivativePlots(BasePlotter):
     The input root files must contain the gbl_derivatives directory.
     """
 
-    def __init__(self, legend_names=[], infile_names=[], outdir="", do_HTML=False, oFext=".png", config_file="", indir=""):
-        super().__init__(legend_names=legend_names, infile_names=infile_names, outdir=outdir, do_HTML=do_HTML, oFext=oFext, config_file=config_file, indir=indir)
-        ## add /derivatives/ to output directory
-        self.outdir = self.outdir + "/derivatives/"
+    def __init__(self, **kwargs) :
+        kwargs['outdir'] += '/derivatives/'
+        super().__init__(**kwargs)
 
     def plot_derivatives(self, name):
         """!

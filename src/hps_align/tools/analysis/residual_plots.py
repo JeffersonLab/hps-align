@@ -7,8 +7,10 @@ from .index_page import htmlWriter
 class ResidualPlots(BasePlotter):
     """! Class for residual plots"""
 
-    def __init__(self, legend_names=[], infile_names=[], outdir="", do_HTML=False, oFext=".png", config_file="", indir="res/"):
-        super().__init__(legend_names=legend_names, infile_names=infile_names, outdir=outdir, do_HTML=do_HTML, oFext=oFext, config_file=config_file, indir=indir)
+    def __init__(self, **kwargs) :
+        if 'indir' not in kwargs or kwargs['indir'] is None :
+            kwargs['indir'] = 'res/'
+        super().__init__(**kwargs)
 
     def plot_1D_residuals(self, histo_name, title=""):
         """!
