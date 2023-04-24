@@ -1,31 +1,47 @@
 import json
-from tools.analysis.FEE_momentum_plots import FeeMomentumPlots
-from tools.analysis.track_plots import TrackPlots
-from tools.analysis.residual_plots import ResidualPlots
-from tools.analysis.kink_plots import KinkPlots
-from tools.analysis.profile_plots import ProfilePlots
-from tools.analysis.vertex_plots import VertexPlots
-from tools.analysis.derivative_plots import DerivativePlots
-from tools.analysis.tanL_plots import TanLambdaPlots
-import tools.analysis.alignment_utils as alignUtils
 
+import typer
 
-def main():
+from ._cli import app, typer_unpacker
+from ._cfg import cfg
+from .tools.analysis.FEE_momentum_plots import FeeMomentumPlots
+from .tools.analysis.track_plots import TrackPlots
+from .tools.analysis.residual_plots import ResidualPlots
+from .tools.analysis.kink_plots import KinkPlots
+from .tools.analysis.profile_plots import ProfilePlots
+from .tools.analysis.vertex_plots import VertexPlots
+from .tools.analysis.derivative_plots import DerivativePlots
+from .tools.analysis.tanL_plots import TanLambdaPlots
+from .tools.analysis import alignment_utils
 
-    doTrackPlots = True
-    doFEEs = True
-    doResiduals = True
-    doSummaryPlots = True
-    doDerivatives = False  # note: this only works if root file has gbl_derivatives/
-    doEoPPlots = False  # note: this only works if root file has EoP/
-    is2016 = False
-    do_vertex_plots = False  # note: this only works if root file has MultiEventVtx/
+@app.command()
+@typer_unpacker
+def plot_res_and_kinks(
+        doTrackPlots : bool = typer.Option(True,
+            help="do plots of track parameters"),
+        doFEEs : bool = typer.Option(True,
+            help="do FEE-specific plots"),
+        doResiduals : bool = typer.Option(True,
+            help="do plots of unbiased residuals"),
+        doSummaryPlots : bool = typer.Option(True,
+            help="do plots summarize residuals of all sensors"),
+        doDerivatives : bool = typer.Option(False,
+            help="include plots of derivatvies (only works if root file has gbl_derivatives/)"),
+        doEoPPlots : bool = typer.Option(False,
+            help="include EoP (Energy over Momentum) plots (only works if ROOT file has EoP/)"),
+        is2016 : bool = typer.Option(False,
+            help="we are studying 2016 detector"),
+        do_vertex_plots : bool = typer.Option(False,
+            help="plot vertex variables (only works if ROOT file has MultiEventVtx/)")
+        ):
+    """
+    general-interest alignment plots
+    """
 
-    f = open("plot_list.json", 'r')
-    plot_list_config = json.load(f)
+    plot_list_config = cfg.plot_list()
 
     # set style of histograms
-    alignUtils.set_style()
+    alignment_utils.set_style()
 
     if doSummaryPlots:
         kink_plotter = KinkPlots()
@@ -156,7 +172,3 @@ def main():
         deriv_plotter = DerivativePlots()
         for deriv in plot_list_config['derivatives']:
             deriv_plotter.plot_derivatives(deriv)
-
-
-if __name__ == "__main__":
-    main()

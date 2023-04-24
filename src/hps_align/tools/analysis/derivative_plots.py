@@ -1,7 +1,7 @@
 import os
 import ROOT as r
-from tools.analysis.base_plotter import BasePlotter
-from tools.analysis.index_page import htmlWriter
+from .base_plotter import BasePlotter
+from .index_page import htmlWriter
 
 
 class DerivativePlots(BasePlotter):

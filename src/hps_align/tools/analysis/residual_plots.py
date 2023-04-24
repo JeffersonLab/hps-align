@@ -1,7 +1,7 @@
 import ROOT as r
-from tools.analysis.base_plotter import BasePlotter
-import tools.analysis.alignment_utils as alignUtils
-from tools.analysis.index_page import htmlWriter
+from .base_plotter import BasePlotter
+from . import alignment_utils 
+from .index_page import htmlWriter
 
 
 class ResidualPlots(BasePlotter):
@@ -50,7 +50,7 @@ class ResidualPlots(BasePlotter):
             self.set_histo_style(histos[ihisto], ihisto)
 
             # Fitting
-            fitList.append(alignUtils.make_fit(histos[ihisto], "singleGausIterative", [], self.colors[ihisto]))
+            fitList.append(alignment_utils.make_fit(histos[ihisto], "singleGausIterative", [], self.colors[ihisto]))
 
             if (ihisto == 0):
                 histos[ihisto].GetXaxis().SetTitle(title)

@@ -1,7 +1,7 @@
 import ROOT as r
-from tools.analysis.base_plotter import BasePlotter
-import tools.analysis.alignment_utils as alignUtils
-from tools.analysis.index_page import htmlWriter
+from .base_plotter import BasePlotter
+from . import alignment_utils
+from .index_page import htmlWriter
 
 
 class KinkPlots(BasePlotter):
@@ -92,7 +92,7 @@ class KinkPlots(BasePlotter):
         for ihisto in range(len(histos)):
             histos_mu.append(r.TH1F(histos[ihisto].GetName() + "_mu" + str(ihisto), histos[ihisto].GetName() + "_mu" + str(ihisto), histos[ihisto].GetXaxis().GetNbins(), histos[ihisto].GetXaxis().GetXmin(), histos[ihisto].GetXaxis().GetXmax()))
             sigma_graph = r.TH1F(histos[ihisto].GetName() + "_sigma" + str(ihisto), histos[ihisto].GetName() + "_sigma" + str(ihisto), histos[ihisto].GetXaxis().GetNbins(), histos[ihisto].GetXaxis().GetXmin(), histos[ihisto].GetXaxis().GetXmax())
-            alignUtils.profile_y_with_iterative_gauss_fit(histos[ihisto], histos_mu[ihisto], sigma_graph, 1)
+            alignment_utils.profile_y_with_iterative_gauss_fit(histos[ihisto], histos_mu[ihisto], sigma_graph, 1)
 
             self.set_histo_style(histos_mu[ihisto], ihisto)
 
