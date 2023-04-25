@@ -18,15 +18,15 @@ class BasePlotter:
     - oFext: extension of the output files
     """
 
-    def __init__(self, 
-            legend_names=[], 
-            infile_names=[], 
-            outdir="", 
-            do_HTML=False, 
-            oFext=".png", 
-            indir = "",
-            ):
-        ## ROOT plot colors
+    def __init__(self,
+                 legend_names=[],
+                 infile_names=[],
+                 outdir="",
+                 do_HTML=False,
+                 oFext=".png",
+                 indir="",
+                 ):
+        # ROOT plot colors
         self.colors = [r.kBlue+2, r.kCyan+2, r.kRed+2, r.kOrange+10,
                        r.kYellow+2, r.kGreen-1, r.kAzure-2, r.kGreen-8,
                        r.kOrange+3, r.kYellow+2, r.kRed+2, r.kBlue+2,
@@ -35,7 +35,7 @@ class BasePlotter:
                        r.kRed+2, r.kBlue+2, r.kGreen-8, r.kOrange+3,
                        r.kYellow+2, r.kRed+2, r.kBlue+2, r.kGreen-8,
                        r.kOrange+3]
-        ## ROOT markers
+        # ROOT markers
         self.markers = [r.kFullCircle, r.kFullTriangleUp, r.kFullSquare,
                         r.kOpenSquare, r.kOpenTriangleUp, r.kOpenCircle,
                         r.kFullCircle, r.kOpenSquare, r.kFullSquare,
@@ -46,7 +46,7 @@ class BasePlotter:
                         r.kFullCircle, r.kOpenSquare, r.kFullSquare,
                         r.kOpenTriangleUp, r.kOpenCircle, r.kFullCircle,
                         r.kOpenSquare, r.kFullSquare, r.kOpenTriangleUp]
-        ## bin labels for kink and ures summary plots
+        # bin labels for kink and ures summary plots
         self.binLabels = ["", "L1tA", "L1tS", "L2tA", "L2tS", "L3tA", "L3tS",
                           "L4tA", "L4tS", "L5tAh", "L5tSh", "L5tAs", "L5tSs",
                           "L6tAh", "L6tSh", "L6tAs", "L6tSs", "L7tAh", "L7tSh",
@@ -56,20 +56,20 @@ class BasePlotter:
                           "L6bSh", "L6bAs", "L6bSs", "L7bAh", "L7bSh",
                           "L7bAs", "L7bSs", "", "", "", "", "", "", "", "", "", "", "", ""]
 
-        ## legend names
+        # legend names
         self.legend_names = legend_names
-        ## input file names
+        # input file names
         self.infile_names = infile_names
-        ## output directory
+        # output directory
         self.outdir = outdir
-        ## create html page
+        # create html page
         self.do_HTML = do_HTML
-        ## extension of output files
+        # extension of output files
         self.oFext = oFext
-        ## internal directory histograms are in
+        # internal directory histograms are in
         self.indir = indir
 
-        ## input TFiles
+        # input TFiles
         self.input_files = []
         for inFile in self.infile_names:
             self.input_files.append(r.TFile(inFile))
@@ -92,7 +92,8 @@ class BasePlotter:
         @return legend
         """
         if len(legend_names) < len(histos):
-            raise Exception("WARNING:: size of legends doesn't match the size of histos")
+            raise Exception(
+                "WARNING:: size of legends doesn't match the size of histos")
 
         leg = None
         xshift = 0.3
@@ -108,13 +109,15 @@ class BasePlotter:
             leg = r.TLegend(xmin, 0.90, xmin+xshift, 0.90-yshift)
 
         if len(leg_location) == 2:
-            leg = r.TLegend(leg_location[0], leg_location[1], leg_location[0]+xshift, leg_location[1]-yshift*0.6)
+            leg = r.TLegend(leg_location[0], leg_location[1],
+                            leg_location[0]+xshift, leg_location[1]-yshift*0.6)
         for ihist in range(len(histos)):
             if (len(plot_properties) != len(histos)):
                 leg.AddEntry(histos[ihist], legend_names[ihist], 'lpf')
             else:
                 # splitline{The Data }{slope something }
-                entry = "#splitline{" + legend_names[ihist] + "}{" + plot_properties[ihist] + "}"
+                entry = "#splitline{" + \
+                    legend_names[ihist] + "}{" + plot_properties[ihist] + "}"
                 leg.AddEntry(histos[ihist], entry, 'lpf')
         leg.SetBorderSize(0)
 

@@ -1,14 +1,14 @@
 import ROOT as r
 from .base_plotter import BasePlotter
-from . import alignment_utils 
+from . import alignment_utils
 from .index_page import htmlWriter
 
 
 class ResidualPlots(BasePlotter):
     """! Class for residual plots"""
 
-    def __init__(self, **kwargs) :
-        if 'indir' not in kwargs or kwargs['indir'] is None :
+    def __init__(self, **kwargs):
+        if 'indir' not in kwargs or kwargs['indir'] is None:
             kwargs['indir'] = 'res/'
         super().__init__(**kwargs)
 
@@ -52,7 +52,8 @@ class ResidualPlots(BasePlotter):
             self.set_histo_style(histos[ihisto], ihisto)
 
             # Fitting
-            fitList.append(alignment_utils.make_fit(histos[ihisto], "singleGausIterative", [], self.colors[ihisto]))
+            fitList.append(alignment_utils.make_fit(
+                histos[ihisto], "singleGausIterative", [], self.colors[ihisto]))
 
             if (ihisto == 0):
                 histos[ihisto].GetXaxis().SetTitle(title)
@@ -111,21 +112,26 @@ class ResidualPlots(BasePlotter):
 
             if (ihisto == 0):
                 for ibin in range(0, histos[ihisto].GetXaxis().GetNbins()):
-                    histos[ihisto].GetXaxis().SetBinLabel(ibin+1, self.binLabels[ibin])
+                    histos[ihisto].GetXaxis().SetBinLabel(
+                        ibin+1, self.binLabels[ibin])
                     histos[ihisto].GetXaxis().SetLabelSize(0.04)
                     histos[ihisto].GetXaxis().ChangeLabel(ibin+1, 270)
 
                 histos[ihisto].GetYaxis().SetRangeUser(-0.2, 0.2)
                 histos[ihisto].GetYaxis().SetLabelSize(0.05)
-                histos[ihisto].GetYaxis().SetTitle("<unbiased local X residual> [mm]")
-                histos[ihisto].GetYaxis().SetTitleSize(histos[ihisto].GetYaxis().GetTitleSize()*0.7)
-                histos[ihisto].GetYaxis().SetTitleOffset(histos[ihisto].GetYaxis().GetTitleOffset()*1.65)
+                histos[ihisto].GetYaxis().SetTitle(
+                    "<unbiased local X residual> [mm]")
+                histos[ihisto].GetYaxis().SetTitleSize(
+                    histos[ihisto].GetYaxis().GetTitleSize()*0.7)
+                histos[ihisto].GetYaxis().SetTitleOffset(
+                    histos[ihisto].GetYaxis().GetTitleOffset()*1.65)
 
                 histos[ihisto].Draw("P")
             else:
                 histos[ihisto].Draw("P SAME")
 
-        leg = self.do_legend(histos, self.legend_names, leg_location=[0.5, 0.85])
+        leg = self.do_legend(histos, self.legend_names,
+                             leg_location=[0.5, 0.85])
         if (leg is not None):
             leg.Draw()
 
@@ -136,7 +142,8 @@ class ResidualPlots(BasePlotter):
         text.SetTextColor(r.kBlack)
         text.DrawLatex(0.52, 0.87, '#bf{#it{HPS} Work In Progress}')
 
-        canv.SaveAs(self.outdir + "/" + out_dir_ext + "uresiduals" + self.oFext)
+        canv.SaveAs(self.outdir + "/" + out_dir_ext +
+                    "uresiduals" + self.oFext)
 
         if self.do_HTML:
             img_type = self.oFext.strip(".")

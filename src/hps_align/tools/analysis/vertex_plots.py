@@ -7,8 +7,8 @@ from .index_page import htmlWriter
 class VertexPlots(BasePlotter):
     """! Class for plotting vertex distributions"""
 
-    def __init__(self, **kwargs) :
-        if 'indir' not in kwargs or kwargs['indir'] is None :
+    def __init__(self, **kwargs):
+        if 'indir' not in kwargs or kwargs['indir'] is None:
             kwargs['indir'] = 'MultiVtx_plots/'
         kwargs['outdir'] += '/MultiVtx_plots/'
         super().__init__(**kwargs)
@@ -39,7 +39,8 @@ class VertexPlots(BasePlotter):
         maximum = 150
 
         hist_arr = [histos_total, histos_top, histos_bot]
-        save_names = ["MultiEventVtx_z", "MultiEventVtx_z_top", "MultiEventVtx_z_bottom"]
+        save_names = ["MultiEventVtx_z",
+                      "MultiEventVtx_z_top", "MultiEventVtx_z_bottom"]
         for iarr in range(len(hist_arr)):
             histos = hist_arr[iarr]
             for ihisto in range(len(histos)):
@@ -51,7 +52,8 @@ class VertexPlots(BasePlotter):
                     title_offset = histos[ihisto].GetYaxis().GetTitleOffset()
                     histos[ihisto].GetXaxis().SetRangeUser(-15, 0)
                     histos[ihisto].SetMaximum(maximum*5)
-                    histos[ihisto].GetXaxis().SetTitle("Multi Evt Vtx_{z} [mm]")
+                    histos[ihisto].GetXaxis().SetTitle(
+                        "Multi Evt Vtx_{z} [mm]")
                     histos[ihisto].GetXaxis().SetTitleSize(title_size*0.6)
                     histos[ihisto].GetXaxis().SetTitleOffset(title_offset*1.35)
                     histos[ihisto].Draw("P")
@@ -66,12 +68,14 @@ class VertexPlots(BasePlotter):
         histos2d_top = []
         for infile in self.input_files:
             histos2d_top.append(infile.Get(self.indir + "vtx_x_y_top"))
-        self.make_2D_plots(histos2d_top, out_name="vtx_x_y_top", xtitle="MultiEvt Vtx V_{x} [mm]", ytitle="MultiEvt Vtx V_{y} [mm]")
+        self.make_2D_plots(histos2d_top, out_name="vtx_x_y_top",
+                           xtitle="MultiEvt Vtx V_{x} [mm]", ytitle="MultiEvt Vtx V_{y} [mm]")
 
         histos2d_bot = []
         for infile in self.input_files:
             histos2d_bot.append(infile.Get(self.indir + "/vtx_x_y_bottom"))
-        self.make_2D_plots(histos2d_bot, out_name="vtx_x_y_bottom", xtitle="Multi Vtx FEE V_{x} [mm]", ytitle="Multi Vtx FEE V_{y} [mm]")
+        self.make_2D_plots(histos2d_bot, out_name="vtx_x_y_bottom",
+                           xtitle="Multi Vtx FEE V_{x} [mm]", ytitle="Multi Vtx FEE V_{y} [mm]")
 
         histos2d = []
         for infile in self.input_files:
@@ -79,13 +83,15 @@ class VertexPlots(BasePlotter):
             histos2 = infile.Get(self.indir + "/vtx_x_y_bottom")
             histos1.Add(histos2)
             histos2d.append(histos1)
-        self.make_2D_plots(histos2d, out_name="vtx_x_y_top_bot", xtitle="MultiEvt Vtx V_{x} [mm]", ytitle="MultiEvt Vtx V_{y} [mm]")
+        self.make_2D_plots(histos2d, out_name="vtx_x_y_top_bot",
+                           xtitle="MultiEvt Vtx V_{x} [mm]", ytitle="MultiEvt Vtx V_{y} [mm]")
 
         histos2d = []
         for infile in self.input_files:
             histo = infile.Get(self.indir + "/vtx_x_y")
             histos2d.append(histo)
-        self.make_2D_plots(histos2d, out_name="vtx_x_y_combined", xtitle="MultiEvt Vtx V_{x} [mm]", ytitle="MultiEvt Vtx V_{y} [mm]")
+        self.make_2D_plots(histos2d, out_name="vtx_x_y_combined",
+                           xtitle="MultiEvt Vtx V_{x} [mm]", ytitle="MultiEvt Vtx V_{y} [mm]")
 
         if self.do_HTML:
             img_type = self.oFext.strip(".")

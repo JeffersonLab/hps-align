@@ -9,7 +9,8 @@ class FeeMomentumPlots(BasePlotter):
     Class for plotting the FEE track parameters"""
 
     def __init__(self, legend_names=[], infile_names=[], outdir="", do_HTML=False, oFext=".png", indir=""):
-        super().__init__(legend_names=legend_names, infile_names=infile_names, outdir=outdir, do_HTML=do_HTML, oFext=oFext, indir=indir)
+        super().__init__(legend_names=legend_names, infile_names=infile_names,
+                         outdir=outdir, do_HTML=do_HTML, oFext=oFext, indir=indir)
 
     def plot_histos(self, histopath, do_fit=True, xtitle="", ytitle="", scale_histos=False):
         """!
@@ -40,7 +41,8 @@ class FeeMomentumPlots(BasePlotter):
             histos[ihisto].SetLineWidth(3)
 
             if do_fit:
-                fitList.append(alignment_utils.make_fit(histos[ihisto], "singleGausIterative", color=self.colors[ihisto]))
+                fitList.append(alignment_utils.make_fit(
+                    histos[ihisto], "singleGausIterative", color=self.colors[ihisto]))
 
             if (ihisto == 0):
                 histos[ihisto].Draw("h")
@@ -67,7 +69,8 @@ class FeeMomentumPlots(BasePlotter):
                 plotProperties.append((" #mu=%.3f" % round(mu, 3)) + ("+/- %.3f" % round(mu_err, 3))
                                       + (" #sigma=%.3f" % round(sigma, 3)) + ("+/- %.3f" % round(sigma_err, 3)))
 
-        leg = self.do_legend(histos, self.legend_names, 3, plotProperties, leg_location=[0.6, 0.80])
+        leg = self.do_legend(histos, self.legend_names, 3,
+                             plotProperties, leg_location=[0.6, 0.80])
 
         leg.Draw("same")
 

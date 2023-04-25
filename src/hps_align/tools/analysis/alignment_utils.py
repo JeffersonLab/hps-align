@@ -77,7 +77,8 @@ def profile_y_with_iterative_gauss_fit(hist, mu_graph, sigma_graph, num_bins, fi
         if (num_bins == 1):
             index -= 1
 
-        current_proj = hist.ProjectionY(hist.GetName() + "_" + str(index), i, i+num_bins-1)
+        current_proj = hist.ProjectionY(
+            hist.GetName() + "_" + str(index), i, i+num_bins-1)
 
         mu = 0.
         mu_err = 0.
@@ -106,7 +107,8 @@ def profile_y_with_iterative_gauss_fit(hist, mu_graph, sigma_graph, num_bins, fi
         if (mu < min_mu or min_mu == 0):
             min_mu = mu
 
-        value_x = (hist.GetXaxis().GetBinLowEdge(i) + hist.GetXaxis().GetBinUpEdge(i+num_bins-1))/2.
+        value_x = (hist.GetXaxis().GetBinLowEdge(i) +
+                   hist.GetXaxis().GetBinUpEdge(i+num_bins-1))/2.
 
         # Important!! Use Fill to increment the graph with each iteration, or SetBinContent to replace contents...
         if (sigma_graph is not None):
@@ -152,7 +154,8 @@ def single_gauss_iterative(hist, sigmaRange, range=[], color=None):
     # first perform a single Gaus fit across full range of histogram or in a specified range
 
     min = hist.GetBinLowEdge(1)
-    max = hist.GetBinLowEdge(hist.GetNbinsX()) + hist.GetBinWidth(hist.GetNbinsX())
+    max = hist.GetBinLowEdge(hist.GetNbinsX()) + \
+        hist.GetBinWidth(hist.GetNbinsX())
 
     # if range:
     if (len(range) != 0):
@@ -194,18 +197,23 @@ def single_gauss_iterative(hist, sigmaRange, range=[], color=None):
         newFitMean = fit.GetParameter(1)
         newFitSig = fit.GetParameter(2)
         if debug:  # \todo logging analogously to Jeremy's hps-mc PR
-            print("i = ", i, " newFitMean = ", newFitMean, " newFitSig = ", newFitSig)
+            print("i = ", i, " newFitMean = ",
+                  newFitMean, " newFitSig = ", newFitSig)
         if (i > 50):
             if debug:
-                print("WARNING terminate iterative gaus fit because of convergence problems")
-                print("final mean =  ", newFitMean, ", previous iter mean = ", fitMean)
-                print("final sigma =  ", newFitSig, ", previous iter sigma = ", fitSig)
+                print(
+                    "WARNING terminate iterative gaus fit because of convergence problems")
+                print("final mean =  ", newFitMean,
+                      ", previous iter mean = ", fitMean)
+                print("final sigma =  ", newFitSig,
+                      ", previous iter sigma = ", fitSig)
             break
 
         i += 1
 
     if debug:
-        print("Final i = ", i, " finalFitMean = ", fit.GetParameter(1), " finalFitSig = ", fit.GetParameter(2))
+        print("Final i = ", i, " finalFitMean = ", fit.GetParameter(
+            1), " finalFitSig = ", fit.GetParameter(2))
 
     fit.SetLineWidth(2)
     if color:

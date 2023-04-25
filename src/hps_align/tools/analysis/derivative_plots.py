@@ -11,7 +11,7 @@ class DerivativePlots(BasePlotter):
     The input root files must contain the gbl_derivatives directory.
     """
 
-    def __init__(self, **kwargs) :
+    def __init__(self, **kwargs):
         kwargs['outdir'] += '/derivatives/'
         super().__init__(**kwargs)
 
@@ -51,7 +51,8 @@ class DerivativePlots(BasePlotter):
             self.set_histo_style(histos[ihisto], ihisto)
 
             if (ihisto == 0):
-                histos[ihisto].GetXaxis().SetTitle(titleName + " global derivative")
+                histos[ihisto].GetXaxis().SetTitle(
+                    titleName + " global derivative")
                 histos[ihisto].GetXaxis().SetTitleSize(0.05)
                 histos[ihisto].GetXaxis().SetTitleOffset(0.9)
                 histos[ihisto].SetMaximum(maximum*1.5)

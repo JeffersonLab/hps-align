@@ -9,6 +9,7 @@ from typer.models import ParameterInfo
 
 app = typer.Typer()
 
+
 def typer_unpacker(f: Callable):
     """Decorator which access typer defaults and updates the kwargs
     so that the function can be used in typer CLI and normally

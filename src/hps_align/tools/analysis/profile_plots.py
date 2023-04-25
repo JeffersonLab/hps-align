@@ -6,8 +6,8 @@ from .index_page import htmlWriter
 
 class ProfilePlots(BasePlotter):
 
-    def __init__(self, **kwargs) :
-        if 'indir' not in kwargs or kwargs['indir'] is None :
+    def __init__(self, **kwargs):
+        if 'indir' not in kwargs or kwargs['indir'] is None:
             kwargs['indir'] = 'res/'
         super().__init__(**kwargs)
 
@@ -52,15 +52,19 @@ class ProfilePlots(BasePlotter):
         for ihisto in range(0, len(histos)):
             histos[ihisto].Rebin(rebin)
 
-            histos_mu.append(r.TH1F(histos[ihisto].GetName() + "_mu" + str(ihisto), histos[ihisto].GetName() + "_mu" + str(ihisto), histos[ihisto].GetXaxis().GetNbins(), histos[ihisto].GetXaxis().GetXmin(), histos[ihisto].GetXaxis().GetXmax()))
-            histos_sigma.append(r.TH1F(histos[ihisto].GetName() + "_sigma" + str(ihisto), histos[ihisto].GetName() + "_sigma" + str(ihisto), histos[ihisto].GetXaxis().GetNbins(), histos[ihisto].GetXaxis().GetXmin(), histos[ihisto].GetXaxis().GetXmax()))
-            alignment_utils.profile_y_with_iterative_gauss_fit(histos[ihisto], histos_mu[ihisto], histos_sigma[ihisto], num_bins, fitrange=fitrange)
+            histos_mu.append(r.TH1F(histos[ihisto].GetName() + "_mu" + str(ihisto), histos[ihisto].GetName() + "_mu" + str(
+                ihisto), histos[ihisto].GetXaxis().GetNbins(), histos[ihisto].GetXaxis().GetXmin(), histos[ihisto].GetXaxis().GetXmax()))
+            histos_sigma.append(r.TH1F(histos[ihisto].GetName() + "_sigma" + str(ihisto), histos[ihisto].GetName() + "_sigma" + str(
+                ihisto), histos[ihisto].GetXaxis().GetNbins(), histos[ihisto].GetXaxis().GetXmin(), histos[ihisto].GetXaxis().GetXmax()))
+            alignment_utils.profile_y_with_iterative_gauss_fit(
+                histos[ihisto], histos_mu[ihisto], histos_sigma[ihisto], num_bins, fitrange=fitrange)
 
             self.set_histo_style(histos_mu[ihisto], ihisto)
 
             hist = histos_mu[ihisto]
             hmin = hist.GetBinLowEdge(1)
-            hmax = (hist.GetBinLowEdge(hist.GetNbinsX())) + hist.GetBinWidth(hist.GetNbinsX())
+            hmax = (hist.GetBinLowEdge(hist.GetNbinsX())) + \
+                hist.GetBinWidth(hist.GetNbinsX())
 
             fitPars = []
 
@@ -77,15 +81,19 @@ class ProfilePlots(BasePlotter):
             if (ihisto == 0):
                 histos_mu[ihisto].GetXaxis().SetTitle(xtitle)
                 histos_mu[ihisto].GetYaxis().SetTitle(ytitle)
-                histos_mu[ihisto].GetYaxis().SetTitleSize(histos[ihisto].GetYaxis().GetTitleSize()*0.7)
-                histos_mu[ihisto].GetYaxis().SetTitleOffset(histos[ihisto].GetYaxis().GetTitleOffset()*1.35)
+                histos_mu[ihisto].GetYaxis().SetTitleSize(
+                    histos[ihisto].GetYaxis().GetTitleSize()*0.7)
+                histos_mu[ihisto].GetYaxis().SetTitleOffset(
+                    histos[ihisto].GetYaxis().GetTitleOffset()*1.35)
 
                 histos_mu[ihisto].GetYaxis().SetRangeUser(-0.2, 0.2)
                 if len(rangeY) > 1:
-                    histos_mu[ihisto].GetYaxis().SetRangeUser(rangeY[0], rangeY[1])
+                    histos_mu[ihisto].GetYaxis().SetRangeUser(
+                        rangeY[0], rangeY[1])
                 histos_mu[ihisto].Draw("P")
                 if len(rangeX) > 1:
-                    histos_mu[ihisto].GetXaxis().SetRangeUser(rangeX[0], rangeX[1])
+                    histos_mu[ihisto].GetXaxis().SetRangeUser(
+                        rangeX[0], rangeX[1])
             else:
                 histos_mu[ihisto].Draw("P SAME")
 
@@ -118,23 +126,29 @@ class ProfilePlots(BasePlotter):
                 if (ihisto == 0):
                     histos_sigma[ihisto].GetXaxis().SetTitle(xtitle)
                     histos_sigma[ihisto].GetYaxis().SetTitle(ytitle)
-                    histos_sigma[ihisto].GetYaxis().SetTitleSize(histos[ihisto].GetYaxis().GetTitleSize()*0.7)
-                    histos_sigma[ihisto].GetYaxis().SetTitleOffset(histos[ihisto].GetYaxis().GetTitleOffset()*1.35)
+                    histos_sigma[ihisto].GetYaxis().SetTitleSize(
+                        histos[ihisto].GetYaxis().GetTitleSize()*0.7)
+                    histos_sigma[ihisto].GetYaxis().SetTitleOffset(
+                        histos[ihisto].GetYaxis().GetTitleOffset()*1.35)
                     histos_sigma[ihisto].GetYaxis().SetRangeUser(-0.2, 0.2)
                     if len(rangeY) > 1:
-                        histos_sigma[ihisto].GetYaxis().SetRangeUser(rangeY[0], rangeY[1])
+                        histos_sigma[ihisto].GetYaxis().SetRangeUser(
+                            rangeY[0], rangeY[1])
                     histos_sigma[ihisto].Draw("P")
                     if len(rangeX) > 1:
-                        histos_sigma[ihisto].GetXaxis().SetRangeUser(rangeX[0], rangeX[1])
+                        histos_sigma[ihisto].GetXaxis().SetRangeUser(
+                            rangeX[0], rangeX[1])
                 else:
                     histos_sigma[ihisto].Draw("P SAME")
 
-            leg = self.do_legend(histos_sigma, self.legend_names, 2, plotProperties)
+            leg = self.do_legend(
+                histos_sigma, self.legend_names, 2, plotProperties)
 
             if (leg is not None):
                 leg.Draw()
 
-            canv_sigma.SaveAs(self.outdir + "/" + name + "_sigma_profiled" + self.oFext)
+            canv_sigma.SaveAs(self.outdir + "/" + name +
+                              "_sigma_profiled" + self.oFext)
 
         if self.do_HTML:
             img_type = self.oFext.strip(".")

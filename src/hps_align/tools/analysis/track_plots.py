@@ -9,7 +9,7 @@ r.gROOT.SetBatch(1)
 class TrackPlots(BasePlotter):
     """! Class for plotting track plots"""
 
-    def __init__(self, **kwargs) :
+    def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
     def plot_histos(self):
@@ -61,7 +61,8 @@ class TrackPlots(BasePlotter):
                         histo_u = inputFiles[i_f].Get(hname)
                         histos.append(histo_u)
 
-                    self.make_1D_plots(histos, out_name=var+vol+crg, xtitle=var + " " + vol + " " + corrcrg, RebinFactor=1, yrange=[0, 0.05])
+                    self.make_1D_plots(histos, out_name=var+vol+crg, xtitle=var +
+                                       " " + vol + " " + corrcrg, RebinFactor=1, yrange=[0, 0.05])
 
         if self.do_HTML:
             img_type = self.oFext.strip(".")

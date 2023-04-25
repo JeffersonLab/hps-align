@@ -6,7 +6,7 @@ from .index_page import htmlWriter
 
 class TanLambdaPlots(BasePlotter):
 
-    def __init__(self, **kwargs) :
+    def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
     def plot_z0_vs_tanL_fit(self, name):
@@ -35,14 +35,18 @@ class TanLambdaPlots(BasePlotter):
 
         for ihisto in range(0, len(histos)):
             # Profile it
-            histos_mu.append(r.TH1F(histos[ihisto].GetName()+"_mu"+str(ihisto), histos[ihisto].GetName()+"_mu"+str(ihisto), histos[ihisto].GetXaxis().GetNbins(), histos[ihisto].GetXaxis().GetXmin(), histos[ihisto].GetXaxis().GetXmax()))
+            histos_mu.append(r.TH1F(histos[ihisto].GetName()+"_mu"+str(ihisto), histos[ihisto].GetName()+"_mu"+str(
+                ihisto), histos[ihisto].GetXaxis().GetNbins(), histos[ihisto].GetXaxis().GetXmin(), histos[ihisto].GetXaxis().GetXmax()))
 
-            histos_sigma.append(r.TH1F(histos[ihisto].GetName()+"_sigma"+str(ihisto), histos[ihisto].GetName()+"_sigma"+str(ihisto), histos[ihisto].GetXaxis().GetNbins(), histos[ihisto].GetXaxis().GetXmin(), histos[ihisto].GetXaxis().GetXmax()))
-            alignment_utils.profile_y_with_iterative_gauss_fit(histos[ihisto], histos_mu[ihisto], histos_sigma[ihisto], 1)
+            histos_sigma.append(r.TH1F(histos[ihisto].GetName()+"_sigma"+str(ihisto), histos[ihisto].GetName()+"_sigma"+str(
+                ihisto), histos[ihisto].GetXaxis().GetNbins(), histos[ihisto].GetXaxis().GetXmin(), histos[ihisto].GetXaxis().GetXmax()))
+            alignment_utils.profile_y_with_iterative_gauss_fit(
+                histos[ihisto], histos_mu[ihisto], histos_sigma[ihisto], 1)
 
             hist = histos_mu[ihisto]
             hmin = hist.GetBinLowEdge(1)
-            hmax = (hist.GetBinLowEdge(hist.GetNbinsX()))+hist.GetBinWidth(hist.GetNbinsX())
+            hmax = (hist.GetBinLowEdge(hist.GetNbinsX())) + \
+                hist.GetBinWidth(hist.GetNbinsX())
 
             fitF = r.TF1("fit"+str(ihisto), "[1]*x + [0]", hmin, hmax)
             histos_mu[ihisto].Fit("fit" + str(ihisto), "QNR")
@@ -57,8 +61,10 @@ class TanLambdaPlots(BasePlotter):
             self.set_histo_style(histos_mu[ihisto], ihisto)
             histos_mu[ihisto].GetYaxis().SetTitle("<z0> [mm]")
             histos_mu[ihisto].GetXaxis().SetTitle("tan(#lambda)")
-            histos_mu[ihisto].GetYaxis().SetTitleSize(histos[ihisto].GetYaxis().GetTitleSize()*0.7)
-            histos_mu[ihisto].GetYaxis().SetTitleOffset(histos[ihisto].GetYaxis().GetTitleOffset()*1.35)
+            histos_mu[ihisto].GetYaxis().SetTitleSize(
+                histos[ihisto].GetYaxis().GetTitleSize()*0.7)
+            histos_mu[ihisto].GetYaxis().SetTitleOffset(
+                histos[ihisto].GetYaxis().GetTitleOffset()*1.35)
 
             histos_mu[ihisto].GetYaxis().SetRangeUser(-2, 2)
             histos_mu[ihisto].GetXaxis().SetRangeUser(-2, 2)
