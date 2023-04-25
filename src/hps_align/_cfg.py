@@ -15,7 +15,7 @@ class cfg :
             legend_labels = [],
             out_dir = None,
             html = True,
-            ext = 'png',
+            ext = '.png',
             plot_list_file = None) :
         self._plot_list_file = plot_list_file
         with open(plot_list_file) as f :
