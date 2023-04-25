@@ -99,7 +99,7 @@ def plot_res_and_kinks(
         vertex_plotter = cfg.make_plotter(VertexPlots)
         vertex_plotter.plot_multi_vtx()
 
-    trk_profile_plotter = ProfilePlots(indir="trk_params/")
+    trk_profile_plotter = cfg.make_plotter(ProfilePlots,indir="trk_params/")
     trk_profile_plotter.plot_profileY("p_vs_tanLambda_top", xtitle="tan(#lambda)", ytitle="p [GeV]", rangeY=[0., 5.], fit="[0] + [1]*x")
     trk_profile_plotter.plot_profileY("p_vs_tanLambda_bottom", xtitle="tan(#lambda)", ytitle="p [GeV]", rangeY=[0., 5.], fit="[0] + [1]*x")
 
