@@ -8,8 +8,8 @@ class FeeMomentumPlots(BasePlotter):
     """!
     Class for plotting the FEE track parameters"""
 
-    def __init__(self, legend_names=[], infile_names=[], outdir="", do_HTML=False, oFext=".png", config_file="", indir=""):
-        super().__init__(legend_names=legend_names, infile_names=infile_names, outdir=outdir, do_HTML=do_HTML, oFext=oFext, config_file=config_file, indir=indir)
+    def __init__(self, legend_names=[], infile_names=[], outdir="", do_HTML=False, oFext=".png", indir=""):
+        super().__init__(legend_names=legend_names, infile_names=infile_names, outdir=outdir, do_HTML=do_HTML, oFext=oFext, indir=indir)
 
     def plot_histos(self, histopath, do_fit=True, xtitle="", ytitle="", scale_histos=False):
         """!
