@@ -5,7 +5,7 @@
 Calls into this module.
 """
 
-from . import choose
+from . import plot
 from ._cfg import cfg
 from ._cli import app
 import os
