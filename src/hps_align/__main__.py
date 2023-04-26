@@ -16,6 +16,7 @@ from ._cli import app
 from ._cfg import cfg
 
 from . import plot_res_and_kinks
+from . import choose
 
 
 def generate_legend_names(input_files):

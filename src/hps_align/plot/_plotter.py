@@ -1,11 +1,13 @@
+"""Plotter object which is passed into plotting functions"""
+
+
 import json
 import os
 import ROOT as r
-from argparse import ArgumentParser
 
 
-class BasePlotter:
-    """! Base class for plotting alignment results
+class Plotter:
+    """class for plotting alignment results
 
     This class contains the basic functionality and setup for plotting alignment results.
     It is intended to be inherited by other classes that implement specific plotting.
@@ -16,6 +18,24 @@ class BasePlotter:
     - legend_names: list of names for the legend entries
     - do_html: if True, an index page with links to the plots will be created
     - oFext: extension of the output files
+
+    This class holds the open TFiles and is then passed to future plotting functions
+    in order to provide access to the histograms within the files being held.
+
+    Parameters
+    ----------
+    legend_names : List[str]
+        list of legend names aligned with the input files
+    infile_names : List[str]
+        list of ROOT files to open
+    outdir : str
+        path to output directory to dump plots
+    do_HTML : bool
+        whether to write html file or not
+    oFext : str
+        extension to use for writing plots ('.png' or '.pdf')
+    indir : str
+        directory inside ROOT files to access plots from
     """
 
     def __init__(self,
@@ -255,3 +275,37 @@ class BasePlotter:
             leg.Draw()
 
         can.SaveAs(self.outdir + "/TrackPlots/" + out_name + self.oFext)
+
+def plotter() :
+    """decorator for registering plotters
+
+    This is the wackiest python thing in this package and is
+    used to allow the CLI to have a list of all plotters in
+    submodules. In order for this to function, a plotting function
+    needs...
+    
+    1. to be in a module imported in __init__.py. This is required
+       so that the function is imported when the parent module is
+       imported
+    2. to be decorated by the 'plotter' decorator below.
+
+    Examples
+    --------
+    Register a plotter
+
+        @plotter
+        def my_hist_plotter(d) :
+            # d will be a Plotter object
+
+    Attributes
+    ----------
+    __registry__ : dict
+        Dictionary of registered plotters
+    """
+    def plotter_decorator(func) :
+        func_name = func.__module__.replace('hps_align.plot.','')+'.'+func.__name__
+        plotter.__registry__[func_name] = func
+        return func
+    return plotter_decorator
+
+plotter.__registry__ = dict()
