@@ -2,8 +2,9 @@ import os
 from ._plotter import Plotter, plotter
 from .index_page import htmlWriter
 
+
 @plotter()
-def tracks(p : Plotter) :
+def tracks(p: Plotter):
     """
     """
     if not os.path.exists(p.outdir + "/TrackPlots"):
@@ -38,10 +39,10 @@ def tracks(p : Plotter) :
 
                 # File loop
                 histos = [f.Get(hname) for f in p.input_files]
-                p.make_1D_plots(histos, 
-                    out_name='TrackPlots/'+var+vol+crg, 
-                    xtitle=var + " " + vol + " " + corrcrg, 
-                    RebinFactor=1, yrange=[0, 0.05])
+                p.make_1D_plots(histos,
+                                out_name='TrackPlots/'+var+vol+crg,
+                                xtitle=var + " " + vol + " " + corrcrg,
+                                RebinFactor=1, yrange=[0, 0.05])
 
     if p.do_HTML:
         img_type = self.oFext.strip(".")

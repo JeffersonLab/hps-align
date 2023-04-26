@@ -4,7 +4,8 @@ from . import alignment_utils
 from .index_page import htmlWriter
 from .._cfg import cfg
 
-def single_residual_plot(p : Plotter, histo_name, title = ""):
+
+def single_residual_plot(p: Plotter, histo_name, title=""):
     """Plot a single 1D residual plot for the input sensor"""
 
     histos = [f.Get('res/'+histo_name) for f in p.input_files]
@@ -80,14 +81,15 @@ def single_residual_plot(p : Plotter, histo_name, title = ""):
 
 
 @plotter()
-def one_dim(p : Plotter) :
+def one_dim(p: Plotter):
     """Plot the 1D residuals for the sensors in the plot listing"""
 
-    for plot in cfg.plot_list('1D_residual_plots') :
-        single_residual_plot(plot) 
+    for plot in cfg.plot_list('1D_residual_plots'):
+        single_residual_plot(plot)
+
 
 @plotter()
-def summary(p : Plotter):
+def summary(p: Plotter):
     """!
     Plot the summary of residuals for all sensors
 
@@ -123,7 +125,7 @@ def summary(p : Plotter):
             histos[ihisto].Draw("P SAME")
 
     leg = p.do_legend(histos, p.legend_names,
-                         leg_location=[0.5, 0.85])
+                      leg_location=[0.5, 0.85])
     if (leg is not None):
         leg.Draw()
 

@@ -5,6 +5,9 @@
 Calls into this module.
 """
 
+from . import choose
+from ._cfg import cfg
+from ._cli import app
 import os
 import warnings
 from pathlib import Path
@@ -16,11 +19,8 @@ from typing import List
 import ROOT
 ROOT.gROOT.SetBatch(1)
 
-from ._cli import app
-from ._cfg import cfg
 
-#from . import plot_res_and_kinks
-from . import choose
+# from . import plot_res_and_kinks
 
 
 def generate_legend_names(input_files):
@@ -55,8 +55,8 @@ def main(
                                     help='output directory to put plots'),
         html: bool = typer.Option(True,
                                   help='write an HTML file for viewing plots'),
-        is2016 : bool = typer.Option(False,
-                                     help='if we are looking at 2016 plots or not'),
+        is2016: bool = typer.Option(False,
+                                    help='if we are looking at 2016 plots or not'),
         ext: str = typer.Option('png',
                                 help='plot file extension (png or pdf)'),
         config: str = typer.Option(None,
@@ -88,13 +88,13 @@ def main(
                 legend = c['legend']
 
     if len(input_files) == 0:
-        #raise ValueError('No input files given.')
+        # raise ValueError('No input files given.')
         warnings.warn('No input files given.')
 
     if legend is None or len(legend) == 0:
         legend = generate_legend_names(input_files)
     elif len(input_files) != len(legend):
-        #raise ValueError("Number of legend labels does not equal number of input files.")
+        # raise ValueError("Number of legend labels does not equal number of input files.")
         warnings.warn('Number of legend labels does not equal number of input files.')
 
     cfg.cfg(
@@ -104,7 +104,7 @@ def main(
         out_dir=out_dir,
         html=html,
         ext=ext,
-        is2016 = is2016,
+        is2016=is2016,
     )
 
 

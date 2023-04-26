@@ -30,17 +30,17 @@ class cfg:
         self.is2016 = is2016
         self.ext = ext
 
-    def plot_list(name = None):
+    def plot_list(name=None):
         if cfg.__instance is None:
             raise ValueError(
                 'Attempting to access value before configuration.')
-        if name is None :
+        if name is None:
             # provide whole plot list
             return cfg.cfg()._plot_list
-        elif name not in cfg.cfg()._plot_list :
+        elif name not in cfg.cfg()._plot_list:
             raise ValueError(
                 f'{name} not a category in plot listing.')
-        else :
+        else:
             # provide currently-configured year of that category
             year = '2016' if self.is2016 else 'not2016'
             return cfg.cfg()._plot_list[name][year]

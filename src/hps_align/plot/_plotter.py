@@ -276,14 +276,15 @@ class Plotter:
 
         can.SaveAs(self.outdir + out_name + self.oFext)
 
-def plotter() :
+
+def plotter():
     """decorator for registering plotters
 
     This is the wackiest python thing in this package and is
     used to allow the CLI to have a list of all plotters in
     submodules. In order for this to function, a plotting function
     needs...
-    
+
     1. to be in a module imported in __init__.py. This is required
        so that the function is imported when the parent module is
        imported
@@ -302,10 +303,11 @@ def plotter() :
     __registry__ : dict
         Dictionary of registered plotters
     """
-    def plotter_decorator(func) :
-        func_name = func.__module__.replace('hps_align.plot.','')+'.'+func.__name__
+    def plotter_decorator(func):
+        func_name = func.__module__.replace('hps_align.plot.', '')+'.'+func.__name__
         plotter.__registry__[func_name] = func
         return func
     return plotter_decorator
+
 
 plotter.__registry__ = dict()

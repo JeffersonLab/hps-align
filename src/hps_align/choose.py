@@ -10,11 +10,12 @@ from . import plot
 
 from enum import Enum
 
-PlotOpt = Enum('PlotOpt', { name : name for name in plotter.__registry__ })
+PlotOpt = Enum('PlotOpt', {name: name for name in plotter.__registry__})
+
 
 @app.command()
 @typer_unpacker
 def choose(
         plots: List[PlotOpt]
-        ) :
+):
     pass

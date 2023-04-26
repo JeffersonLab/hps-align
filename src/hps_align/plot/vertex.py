@@ -3,8 +3,9 @@ import ROOT as r
 from ._plotter import Plotter, plotter
 from .index_page import htmlWriter
 
+
 @plotter()
-def multi_vtx(p) :
+def multi_vtx(p):
     """plot multi-vertex distributions
 
     input ROOT files have to contain the '/MultiEventVtx/' directory
@@ -59,13 +60,13 @@ def multi_vtx(p) :
     for infile in p.input_files:
         histos2d_top.append(infile.Get("MultiEventVtx/vtx_x_y_top"))
     p.make_2D_plots(histos2d_top, out_name="vtx_x_y_top",
-                       xtitle="MultiEvt Vtx V_{x} [mm]", ytitle="MultiEvt Vtx V_{y} [mm]")
+                    xtitle="MultiEvt Vtx V_{x} [mm]", ytitle="MultiEvt Vtx V_{y} [mm]")
 
     histos2d_bot = []
     for infile in p.input_files:
         histos2d_bot.append(infile.Get("MultiEventVtx/vtx_x_y_bottom"))
     p.make_2D_plots(histos2d_bot, out_name="vtx_x_y_bottom",
-                       xtitle="Multi Vtx FEE V_{x} [mm]", ytitle="Multi Vtx FEE V_{y} [mm]")
+                    xtitle="Multi Vtx FEE V_{x} [mm]", ytitle="Multi Vtx FEE V_{y} [mm]")
 
     histos2d = []
     for infile in p.input_files:
@@ -74,14 +75,14 @@ def multi_vtx(p) :
         histos1.Add(histos2)
         histos2d.append(histos1)
     p.make_2D_plots(histos2d, out_name="vtx_x_y_top_bot",
-                       xtitle="MultiEvt Vtx V_{x} [mm]", ytitle="MultiEvt Vtx V_{y} [mm]")
+                    xtitle="MultiEvt Vtx V_{x} [mm]", ytitle="MultiEvt Vtx V_{y} [mm]")
 
     histos2d = []
     for infile in p.input_files:
         histo = infile.Get("MultiEventVtx/vtx_x_y")
         histos2d.append(histo)
     p.make_2D_plots(histos2d, out_name="vtx_x_y_combined",
-                       xtitle="MultiEvt Vtx V_{x} [mm]", ytitle="MultiEvt Vtx V_{y} [mm]")
+                    xtitle="MultiEvt Vtx V_{x} [mm]", ytitle="MultiEvt Vtx V_{y} [mm]")
 
     if p.do_HTML:
         img_type = p.oFext.strip(".")
