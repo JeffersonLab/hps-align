@@ -6,16 +6,20 @@ Calls into this module.
 """
 
 import os
+import warnings
 from pathlib import Path
 from typing import List
 
 import typer
 from typing import List
 
+import ROOT
+ROOT.gROOT.SetBatch(1)
+
 from ._cli import app
 from ._cfg import cfg
 
-from . import plot_res_and_kinks
+#from . import plot_res_and_kinks
 from . import choose
 
 
@@ -82,13 +86,14 @@ def main(
                 legend = c['legend']
 
     if len(input_files) == 0:
-        raise ValueError('No input files given.')
+        #raise ValueError('No input files given.')
+        warnings.warn('No input files given.')
 
     if legend is None or len(legend) == 0:
         legend = generate_legend_names(input_files)
     elif len(input_files) != len(legend):
-        raise ValueError(
-            "Number of legend labels does not equal number of input files.")
+        #raise ValueError("Number of legend labels does not equal number of input files.")
+        warnings.warn('Number of legend labels does not equal number of input files.')
 
     cfg.cfg(
         plot_list_file=plot_list,

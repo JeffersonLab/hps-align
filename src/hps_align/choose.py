@@ -1,4 +1,6 @@
 
+from typing import List
+
 import typer
 
 from ._cli import app, typer_unpacker
@@ -8,11 +10,7 @@ from . import plot
 
 from enum import Enum
 
-class PlotOpt(str,Enum) :
-    pass
-
-for name in plotter.__registry__ :
-    PlotOpt.__dict__[name] = name
+PlotOpt = Enum('PlotOpt', { name : name for name in plotter.__registry__ })
 
 @app.command()
 @typer_unpacker
