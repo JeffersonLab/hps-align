@@ -55,6 +55,8 @@ def main(
                                     help='output directory to put plots'),
         html: bool = typer.Option(True,
                                   help='write an HTML file for viewing plots'),
+        is2016 : bool = typer.Option(False,
+                                     help='if we are looking at 2016 plots or not'),
         ext: str = typer.Option('png',
                                 help='plot file extension (png or pdf)'),
         config: str = typer.Option(None,
@@ -102,6 +104,7 @@ def main(
         out_dir=out_dir,
         html=html,
         ext=ext,
+        is2016 = is2016,
     )
 
 

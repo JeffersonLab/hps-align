@@ -17,6 +17,7 @@ class cfg:
                  legend_labels=[],
                  out_dir=None,
                  html=True,
+                 is2016=False,
                  ext='.png',
                  plot_list_file=None):
         self._plot_list_file = plot_list_file
@@ -26,13 +27,23 @@ class cfg:
         self.legend_labels = legend_labels
         self.out_dir = out_dir
         self.html = html
+        self.is2016 = is2016
         self.ext = ext
 
-    def plot_list():
+    def plot_list(name = None):
         if cfg.__instance is None:
             raise ValueError(
                 'Attempting to access value before configuration.')
-        return cfg.cfg()._plot_list
+        if name is None :
+            # provide whole plot list
+            return cfg.cfg()._plot_list
+        elif name not in cfg.cfg()._plot_list :
+            raise ValueError(
+                f'{name} not a category in plot listing.')
+        else :
+            # provide currently-configured year of that category
+            year = '2016' if self.is2016 else 'not2016'
+            return cfg.cfg()._plot_list[name][year]
 
     def make_plotter(cls, **kwargs):
         if cfg.__instance is None:
