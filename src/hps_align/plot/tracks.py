@@ -38,10 +38,12 @@ def tracks(p : Plotter) :
 
                 # File loop
                 histos = [f.Get(hname) for f in p.input_files]
-                p.make_1D_plots(histos, out_name=var+vol+crg, xtitle=var +
-                                " " + vol + " " + corrcrg, RebinFactor=1, yrange=[0, 0.05])
+                p.make_1D_plots(histos, 
+                    out_name='TrackPlots/'+var+vol+crg, 
+                    xtitle=var + " " + vol + " " + corrcrg, 
+                    RebinFactor=1, yrange=[0, 0.05])
 
-    if self.do_HTML:
+    if p.do_HTML:
         img_type = self.oFext.strip(".")
         hw = htmlWriter(p.outdir, img_type=img_type)
         hw.add_images(p.outdir)

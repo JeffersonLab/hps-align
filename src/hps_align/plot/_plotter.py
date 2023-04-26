@@ -274,7 +274,7 @@ class Plotter:
         if (leg is not None):
             leg.Draw()
 
-        can.SaveAs(self.outdir + "/TrackPlots/" + out_name + self.oFext)
+        can.SaveAs(self.outdir + out_name + self.oFext)
 
 def plotter() :
     """decorator for registering plotters
