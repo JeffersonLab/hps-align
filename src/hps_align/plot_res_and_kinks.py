@@ -4,15 +4,15 @@ import typer
 
 from ._cli import app, typer_unpacker
 from ._cfg import cfg
-from .tools.analysis.FEE_momentum_plots import FeeMomentumPlots
-from .tools.analysis.track_plots import TrackPlots
-from .tools.analysis.residual_plots import ResidualPlots
-from .tools.analysis.kink_plots import KinkPlots
-from .tools.analysis.profile_plots import ProfilePlots
-from .tools.analysis.vertex_plots import VertexPlots
-from .tools.analysis.derivative_plots import DerivativePlots
-from .tools.analysis.tanL_plots import TanLambdaPlots
-from .tools.analysis import alignment_utils
+from .plot.FEE_momentum_plots import FeeMomentumPlots
+from .plot.track_plots import TrackPlots
+from .plot.residual_plots import ResidualPlots
+from .plot.kink_plots import KinkPlots
+from .plot.profile_plots import ProfilePlots
+from .plot.vertex_plots import VertexPlots
+from .plot.derivative_plots import DerivativePlots
+from .plot.tanL_plots import TanLambdaPlots
+from .plot import alignment_utils
 
 
 @app.command()
