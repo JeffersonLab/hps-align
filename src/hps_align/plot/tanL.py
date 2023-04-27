@@ -2,7 +2,6 @@ import ROOT as r
 from ._plotter import Plotter, plotter
 from . import alignment_utils
 from .index_page import htmlWriter
-from .._cfg import cfg
 
 
 def z0_vs_tanL_fit(p: Plotter, name: str):

@@ -45,7 +45,7 @@ class Plotter:
                  do_HTML=False,
                  oFext=".png",
                  indir="",
-                 ):
+                 plot_list_file=None):
         # ROOT plot colors
         self.colors = [r.kBlue+2, r.kCyan+2, r.kRed+2, r.kOrange+10,
                        r.kYellow+2, r.kGreen-1, r.kAzure-2, r.kGreen-8,
@@ -97,7 +97,22 @@ class Plotter:
         if (not os.path.exists(self.outdir)):
             os.mkdir(self.outdir)
 
+        with open(plot_list_file) as plf :
+            self._plot_list = json.load(plf)
+
         print("STORING RESULTS IN::", self.outdir)
+
+    def plot_list(name=None):
+        if name is None:
+            # provide whole plot list
+            return self._plot_list
+        elif name not in self._plot_list:
+            raise ValueError(
+                f'{name} not a category in plot listing.')
+        else:
+            # provide currently-configured year of that category
+            year = '2016' if self.is2016 else 'not2016'
+            return self._plot_list[name][year]
 
     def do_legend(self, histos, legend_names, location=1, plot_properties=[], leg_location=[]):
         """!

@@ -2,7 +2,6 @@ import ROOT as r
 from ._plotter import Plotter, plotter
 from . import alignment_utils
 from .index_page import htmlWriter
-from .._cfg import cfg
 
 
 def single_residual_plot(p: Plotter, histo_name, title=""):
@@ -84,8 +83,8 @@ def single_residual_plot(p: Plotter, histo_name, title=""):
 def one_dim(p: Plotter):
     """Plot the 1D residuals for the sensors in the plot listing"""
 
-    for plot in cfg.plot_list('1D_residual_plots'):
-        single_residual_plot(plot)
+    for plot in p.plot_list('1D_residual_plots'):
+        single_residual_plot(p, plot)
 
 
 @plotter()
