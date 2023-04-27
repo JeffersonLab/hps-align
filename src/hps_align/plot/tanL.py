@@ -5,7 +5,7 @@ from .index_page import htmlWriter
 from .._cfg import cfg
 
 
-def z0_vs_tanL_fit(p : Plotter, name : str):
+def z0_vs_tanL_fit(p: Plotter, name: str):
     """!
     Plot z0 vs tanL and fit it
 
@@ -82,8 +82,8 @@ def z0_vs_tanL_fit(p : Plotter, name : str):
         hw.add_images(p.outdir)
         hw.close_html()
 
+
 @plotter()
-def tanL(p : Plotter) :
+def tanL(p: Plotter):
     z0_vs_tanL_fit(p, 'z0_vs_tanLambda_top')
     z0_vs_tanL_fit(p, 'z0_vs_tanLambda_bottom')
-
