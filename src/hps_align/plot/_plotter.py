@@ -109,10 +109,13 @@ class Plotter:
         elif name not in self._plot_list:
             raise ValueError(
                 f'{name} not a category in plot listing.')
-        else:
+        elif '2016' in self._plot_list[name]:
             # provide currently-configured year of that category
             year = '2016' if self.is2016 else 'not2016'
             return self._plot_list[name][year]
+        else:
+            # year-separation not available
+            return self._plot_list[name]
 
     def do_legend(self, histos, legend_names, location=1, plot_properties=[], leg_location=[]):
         """!

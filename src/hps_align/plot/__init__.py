@@ -13,6 +13,7 @@ from . import vertex
 from . import tracks
 from . import residual
 from . import kinks
+from . import derivatives
 
 PlotOpt = Enum('PlotOpt', {name: name for name in plotter.__registry__})
 
