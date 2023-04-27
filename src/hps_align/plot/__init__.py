@@ -13,7 +13,7 @@ from . import vertex
 from . import tracks
 from . import residual
 
-PlotOpt = Enum('PlotOpt', {name:name for name in plotter.__registry__})
+PlotOpt = Enum('PlotOpt', {name: name for name in plotter.__registry__})
 
 
 def generate_legend_names(input_files):
@@ -57,6 +57,8 @@ def plot(
         config: str = typer.Option(None,
                                    help='JSON config for plotting inputs rather than command line.')
 ):
+    """create comparison plots across different detector iterations of alignment-related variables"""
+
     if config is not None:
         # read the JSON config instead of command line parameters
 
@@ -98,6 +100,5 @@ def plot(
         is2016=is2016,
     )
 
-    for plot in plots :
+    for plot in plots:
         plot(p)
-

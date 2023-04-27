@@ -97,7 +97,7 @@ class Plotter:
         if (not os.path.exists(self.outdir)):
             os.mkdir(self.outdir)
 
-        with open(plot_list_file) as plf :
+        with open(plot_list_file) as plf:
             self._plot_list = json.load(plf)
 
         print("STORING RESULTS IN::", self.outdir)
