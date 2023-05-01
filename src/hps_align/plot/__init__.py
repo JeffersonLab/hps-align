@@ -54,7 +54,7 @@ def plot(
                                   help='write an HTML file for viewing plots'),
         is2016: bool = typer.Option(False,
                                     help='if we are looking at 2016 plots or not'),
-        ext: str = typer.Option('png',
+        ext: str = typer.Option('.png',
                                 help='plot file extension (png or pdf)'),
         config: str = typer.Option(None,
                                    help='JSON config for plotting inputs rather than command line.')
