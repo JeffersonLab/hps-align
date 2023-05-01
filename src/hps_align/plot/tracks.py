@@ -45,7 +45,7 @@ def tracks(p: Plotter):
                                 RebinFactor=1, yrange=[0, 0.05])
 
     if p.do_HTML:
-        img_type = self.oFext.strip(".")
+        img_type = p.oFext.strip(".")
         hw = htmlWriter(p.outdir, img_type=img_type)
         hw.add_images(p.outdir)
         hw.close_html()

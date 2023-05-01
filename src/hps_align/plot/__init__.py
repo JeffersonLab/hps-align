@@ -94,13 +94,13 @@ def plot(
 
     p = Plotter(
         plot_list_file=plot_list,
-        input_files=input_files,
-        legend_labels=legend,
-        out_dir=out_dir,
-        html=html,
-        ext=ext,
+        infile_names=input_files,
+        legend_names=legend,
+        outdir=out_dir,
+        do_HTML=html,
+        oFext=ext,
         is2016=is2016,
     )
 
     for plot in plots:
-        plot(p)
+        Plotter.__registry__[plot.name](p)

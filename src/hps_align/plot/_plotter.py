@@ -5,6 +5,8 @@ import json
 import os
 import ROOT as r
 
+from . import alignment_utils
+from .index_page import htmlWriter
 
 class Plotter:
     """class for plotting alignment results
@@ -50,6 +52,7 @@ class Plotter:
                  outdir="",
                  do_HTML=False,
                  oFext=".png",
+                 is2016=False,
                  indir="",
                  plot_list_file=None):
         # ROOT plot colors
@@ -92,6 +95,7 @@ class Plotter:
         self.do_HTML = do_HTML
         # extension of output files
         self.oFext = oFext
+        self.is2016 = is2016
         # internal directory histograms are in
         self.indir = indir
 
@@ -108,7 +112,7 @@ class Plotter:
 
         print("STORING RESULTS IN::", self.outdir)
 
-    def plot_list(name=None):
+    def plot_list(self, name=None):
         """Get the plot listing
 
         If a name is not provided, the full plot listing is returned.
