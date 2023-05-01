@@ -4,7 +4,7 @@ hps_align package
 .. toctree::
    :maxdepth: 4
 
-   plot_res_and_kinks
+   hps_align.plot
 
 Module contents
 ---------------
