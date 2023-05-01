@@ -109,3 +109,34 @@ def eop(p: Plotter):
 
     p.plot_profileY("EoP_vs_phi_bottom_fid", xtitle="Bottom track #phi [GeV]", rangeY=[
         0.5, 1.3], fit="[0]*x*x*x + [1]*x*x + [2]*x + [3]")
+
+
+@Plotter.user
+def fee(p: Plotter):
+    p.make_1D_plots_with_fit("trk_params/z0_top")
+    p.make_1D_plots_with_fit("trk_params/z0_bottom")
+    p.make_1D_plots_with_fit("trk_params/d0_top")
+    p.make_1D_plots_with_fit("trk_params/d0_bottom")
+    p.make_1D_plots_with_fit("trk_params/trk_extr_bs_x_top")
+    p.make_1D_plots_with_fit("trk_params/trk_extr_bs_y_top")
+    p.make_1D_plots_with_fit("trk_params/trk_extr_bs_x_bottom")
+    p.make_1D_plots_with_fit("trk_params/trk_extr_bs_y_bottom")
+    p.make_1D_plots_with_fit("trk_params/Chi2_top_neg", do_fit=False)
+    p.make_1D_plots_with_fit("trk_params/Chi2_top_pos", do_fit=False)
+    p.make_1D_plots_with_fit("trk_params/Chi2_bottom_neg", do_fit=False)
+    p.make_1D_plots_with_fit("trk_params/Chi2_bottom_pos", do_fit=False)
+    p.make_1D_plots_with_fit("trk_params/p_bottom")
+    p.make_1D_plots_with_fit("trk_params/p_top")
+    p.make_1D_plots_with_fit("trk_params/p_slot_top")
+    p.make_1D_plots_with_fit("trk_params/p_hole_top",
+                             xtitle="e^{-} Hole side p [GeV]")
+    p.make_1D_plots_with_fit("trk_params/p_slot_bottom",
+                             xtitle="e^{-} Slot side p [GeV]", ytitle="Tracks")
+    p.make_1D_plots_with_fit("trk_params/p_hole_bottom",
+                             xtitle="e^{-} Hole side p [GeV]", ytitle="Tracks")
+    p.make_1D_plots_with_fit("trk_params/p5h_top",
+                             xtitle="p [GeV]", ytitle="Tracks")
+    p.make_1D_plots_with_fit("trk_params/p6h_top",
+                             xtitle="p [GeV]", ytitle="Tracks")
+    p.make_1D_plots_with_fit("trk_params/p7h_top",
+                             xtitle="p [GeV]", ytitle="Tracks")

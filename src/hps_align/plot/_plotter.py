@@ -36,7 +36,7 @@ class Plotter:
         extension to use for writing plots ('.png' or '.pdf')
     indir : str
         directory inside ROOT files to access plots from
-    
+
 
     Attributes
     ----------
@@ -142,16 +142,25 @@ class Plotter:
             return self._plot_list[name]
 
     def do_legend(self, histos, legend_names, location=1, plot_properties=[], leg_location=[]):
-        """!
-        Create legend
+        """Create legend
 
-        @param histos           list of histograms
-        @param legend_names     list of names for legend entries
-        @param location         location of the legend
-        @param plot_properties  list of properties for legend entries
-        @param leg_location     more precise location of the legend overwriting simple location
+        Parameters
+        ----------
+        histos : List[TH1]
+            of histograms to do legend for
+        legend_names : List[str]
+            names for the histograms in the legend
+        location : int
+            location short ID
+        plot_properties : List[str]
+            list of properties to include along with legend entries
+        leg_location : List[float]
+            more precise legend location, overwriting predefined one
 
-        @return legend
+        Returns
+        -------
+        TLegend :
+            created TLegend ready to Draw at your convenience
         """
         if len(legend_names) < len(histos):
             raise Exception(
@@ -318,6 +327,91 @@ class Plotter:
 
         can.SaveAs(self.outdir + out_name + self.oFext)
 
+    def make_1D_plots_with_fit(self, histopath, do_fit=True, xtitle="", ytitle="", scale_histos=False):
+        """Plot the histograms with an iterative gaussian fit
+
+        Parameters
+        ----------
+        histopath : str
+            path to the histogram in the ROOT files
+        do_fit : bool
+            do the iterative gaussing fit and plot the result
+        xtitle : str
+            title of x-axis
+        ytitle : str
+            title of y-axis
+        scale_histos : bool
+            scale the histograms to unity
+        """
+
+        canv = r.TCanvas("c", "c", 2200, 2000)
+
+        histos = []
+        for infile in self.input_files:
+            histos.append(infile.Get(histopath))
+
+        fitList = []
+        plotProperties = []
+
+        for ihisto in range(len(histos)):
+            self.set_histo_style(histos[ihisto], ihisto, line_width=3)
+
+            # Scale the histogram to unity
+            if scale_histos:
+                histos[ihisto].Scale(1./histos[ihisto].Integral())
+            histos[ihisto].SetLineWidth(3)
+
+            if do_fit:
+                fitList.append(alignment_utils.make_fit(
+                    histos[ihisto], "singleGausIterative", color=self.colors[ihisto]))
+
+            if (ihisto == 0):
+                histos[ihisto].Draw("h")
+                histos[ihisto].GetXaxis().SetTitle(xtitle)
+                histos[ihisto].GetXaxis().SetTitleSize(0.05)
+                histos[ihisto].GetXaxis().SetTitleOffset(1.)
+                histos[ihisto].GetXaxis().SetLabelSize(0.06)
+
+                histos[ihisto].GetYaxis().SetTitle(ytitle)
+                histos[ihisto].GetYaxis().SetLabelSize(0.06)
+                histos[ihisto].GetYaxis().SetTitleSize(0.05)
+                histos[ihisto].GetYaxis().SetTitleOffset(1.4)
+
+            else:
+                histos[ihisto].Draw("hsame")
+
+            if len(fitList) > 0:
+                fitList[ihisto].Draw("same")
+                mu = fitList[ihisto].GetParameter(1)
+                mu_err = fitList[ihisto].GetParError(1)
+                sigma = fitList[ihisto].GetParameter(2)
+                sigma_err = fitList[ihisto].GetParError(2)
+
+                plotProperties.append((" #mu=%.3f" % round(mu, 3)) + ("+/- %.3f" % round(mu_err, 3))
+                                      + (" #sigma=%.3f" % round(sigma, 3)) + ("+/- %.3f" % round(sigma_err, 3)))
+
+        leg = self.do_legend(histos, self.legend_names, 3,
+                             plotProperties, leg_location=[0.6, 0.80])
+
+        leg.Draw("same")
+
+        text = r.TLatex()
+        text.SetNDC()
+        text.SetTextFont(42)
+        text.SetTextSize(0.04)
+        text.SetTextColor(r.kBlack)
+        text.DrawLatex(0.62, 0.82, '#bf{#it{HPS}} Work In Progress')
+
+        saveName = self.outdir + "/" + histopath.split("/")[-1] + self.oFext
+
+        canv.SaveAs(saveName)
+
+        if self.do_HTML:
+            img_type = self.oFext.strip(".")
+            hw = htmlWriter(self.outdir, img_type=img_type)
+            hw.add_images(self.outdir)
+            hw.close_html()
+
     def plot_profileY(self, name,
                       xtitle="hit position [mm]",
                       ytitle="<ures> [mm]",
@@ -463,27 +557,25 @@ class Plotter:
             hw.add_images(self.outdir)
             hw.close_html()
 
-
     __registry__ = dict()
-
 
     def user(func):
         """decorator for registering plotters
-    
+
         This is the wackiest python thing in this package and is
         used to allow the CLI to have a list of all plotters in
         submodules. In order for this to function, a plotting function
         needs...
-    
+
         1. to be in a module imported in __init__.py. This is required
            so that the function is imported when the parent module is
            imported
         2. to be decorated by the 'plotter' decorator below.
-    
+
         Examples
         --------
         Register a plotter
-    
+
             @Plotter.user
             def my_hist_plotter(d) :
                 # d will be a Plotter object
@@ -491,5 +583,3 @@ class Plotter:
         func_name = func.__module__.replace('hps_align.plot.', '')+'.'+func.__name__
         Plotter.__registry__[func_name] = func
         return func
-    
-    
