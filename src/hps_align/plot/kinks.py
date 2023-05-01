@@ -1,10 +1,10 @@
 import ROOT as r
-from ._plotter import Plotter, plotter
+from ._plotter import Plotter
 from . import alignment_utils
 from .index_page import htmlWriter
 
 
-@plotter()
+@Plotter.user
 def Lambda(p: Plotter):
     """Create lambda-kink summary plots
 
@@ -54,7 +54,7 @@ def Lambda(p: Plotter):
         hw.close_html()
 
 
-@plotter()
+@Plotter.user
 def phi(p: Plotter):
     """Create and save the phi kink summary plots"""
 

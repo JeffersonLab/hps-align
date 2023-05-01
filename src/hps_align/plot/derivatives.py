@@ -1,6 +1,6 @@
 import os
 import ROOT as r
-from ._plotter import Plotter, plotter
+from ._plotter import Plotter
 from .index_page import htmlWriter
 
 
@@ -79,7 +79,7 @@ def single_derivative(p: Plotter, name: str):
         hw.close_html()
 
 
-@plotter()
+@Plotter.user
 def all(p: Plotter):
     """Plot all the derivatives in the plot listing"""
     for plot in p.plot_list('derivatives'):

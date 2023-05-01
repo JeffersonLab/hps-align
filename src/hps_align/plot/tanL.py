@@ -1,5 +1,5 @@
 import ROOT as r
-from ._plotter import Plotter, plotter
+from ._plotter import Plotter
 from . import alignment_utils
 from .index_page import htmlWriter
 
@@ -82,7 +82,7 @@ def z0_vs_tanL_fit(p: Plotter, name: str):
         hw.close_html()
 
 
-@plotter()
+@Plotter.user
 def tanL(p: Plotter):
     z0_vs_tanL_fit(p, 'z0_vs_tanLambda_top')
     z0_vs_tanL_fit(p, 'z0_vs_tanLambda_bottom')

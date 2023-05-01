@@ -1,9 +1,9 @@
 import os
-from ._plotter import Plotter, plotter
+from ._plotter import Plotter
 from .index_page import htmlWriter
 
 
-@plotter()
+@Plotter.user
 def tracks(p: Plotter):
     """
     """
@@ -51,7 +51,7 @@ def tracks(p: Plotter):
         hw.close_html()
 
 
-@plotter()
+@Plotter.user
 def profiles(p: Plotter):
     for half in ['top', 'bottom']:
         p.plot_profileY(
@@ -77,7 +77,7 @@ def profiles(p: Plotter):
         )
 
 
-@plotter()
+@Plotter.user
 def eop(p: Plotter):
     """EoP plots require the EoP directory in the ROOT files"""
     p.plot_profileY(

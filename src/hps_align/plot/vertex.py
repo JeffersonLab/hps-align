@@ -1,10 +1,10 @@
 import os
 import ROOT as r
-from ._plotter import Plotter, plotter
+from ._plotter import Plotter
 from .index_page import htmlWriter
 
 
-@plotter()
+@Plotter.user
 def multi_vtx(p):
     """plot multi-vertex distributions
 

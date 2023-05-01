@@ -7,7 +7,7 @@ from pathlib import Path
 import typer
 
 from .._cli import app, typer_unpacker
-from ._plotter import plotter, Plotter
+from ._plotter import Plotter
 
 from . import vertex
 from . import tracks
@@ -15,7 +15,7 @@ from . import residual
 from . import kinks
 from . import derivatives
 
-PlotOpt = Enum('PlotOpt', {name: name for name in plotter.__registry__})
+PlotOpt = Enum('PlotOpt', {name: name for name in Plotter.__registry__})
 
 
 def generate_legend_names(input_files):

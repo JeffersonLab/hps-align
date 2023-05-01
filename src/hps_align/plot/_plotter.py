@@ -36,6 +36,12 @@ class Plotter:
         extension to use for writing plots ('.png' or '.pdf')
     indir : str
         directory inside ROOT files to access plots from
+    
+
+    Attributes
+    ----------
+    __registry__ : dict
+        Dictionary of registered plotters
     """
 
     def __init__(self,
@@ -103,6 +109,24 @@ class Plotter:
         print("STORING RESULTS IN::", self.outdir)
 
     def plot_list(name=None):
+        """Get the plot listing
+
+        If a name is not provided, the full plot listing is returned.
+        If a name is provided, only that category of plots is returned
+        and if that category of plots is separated by year, we only
+        return the group of plots from that category for the configured
+        year.
+
+        Parameter
+        ---------
+        name : str, optional
+            optional name of plot category to pull
+
+        Returns
+        -------
+        dict
+            plot listing
+        """
         if name is None:
             # provide whole plot list
             return self._plot_list
@@ -440,37 +464,32 @@ class Plotter:
             hw.close_html()
 
 
-def plotter():
-    """decorator for registering plotters
+    __registry__ = dict()
 
-    This is the wackiest python thing in this package and is
-    used to allow the CLI to have a list of all plotters in
-    submodules. In order for this to function, a plotting function
-    needs...
 
-    1. to be in a module imported in __init__.py. This is required
-       so that the function is imported when the parent module is
-       imported
-    2. to be decorated by the 'plotter' decorator below.
-
-    Examples
-    --------
-    Register a plotter
-
-        @plotter
-        def my_hist_plotter(d) :
-            # d will be a Plotter object
-
-    Attributes
-    ----------
-    __registry__ : dict
-        Dictionary of registered plotters
-    """
-    def plotter_decorator(func):
+    def user(func):
+        """decorator for registering plotters
+    
+        This is the wackiest python thing in this package and is
+        used to allow the CLI to have a list of all plotters in
+        submodules. In order for this to function, a plotting function
+        needs...
+    
+        1. to be in a module imported in __init__.py. This is required
+           so that the function is imported when the parent module is
+           imported
+        2. to be decorated by the 'plotter' decorator below.
+    
+        Examples
+        --------
+        Register a plotter
+    
+            @Plotter.user
+            def my_hist_plotter(d) :
+                # d will be a Plotter object
+        """
         func_name = func.__module__.replace('hps_align.plot.', '')+'.'+func.__name__
-        plotter.__registry__[func_name] = func
+        Plotter.__registry__[func_name] = func
         return func
-    return plotter_decorator
-
-
-plotter.__registry__ = dict()
+    
+    
