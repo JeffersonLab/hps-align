@@ -8,6 +8,7 @@ import ROOT as r
 from . import alignment_utils
 from .index_page import htmlWriter
 
+
 class Plotter:
     """class for plotting alignment results
 
@@ -417,7 +418,7 @@ class Plotter:
             hw.close_html()
 
     def plot_profileY(self, name,
-                      indir = 'res/',
+                      indir='res/',
                       xtitle="hit position [mm]",
                       ytitle="<ures> [mm]",
                       rangeX=[], rangeY=[], do_fit=False,

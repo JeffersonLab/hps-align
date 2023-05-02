@@ -86,33 +86,34 @@ def one_dim(p: Plotter):
     for plot in p.plot_list('1D_residual_plots'):
         single_residual_plot(p, plot)
 
+
 @Plotter.user
 def vs_u(p: Plotter):
     """Plot the residuals for the sensors agains u"""
-    for vol in ['top','bottom'] :
+    for vol in ['top', 'bottom']:
         names = p.plot_list('ures_vs_u_plots')[vol]['name']
         titles = p.plot_list('ures_vs_u_plots')[vol]['title']
-        for ipl, (name, title) in enumerate(zip(names,titles)) :
+        for ipl, (name, title) in enumerate(zip(names, titles)):
             p.plot_profileY(
-                name, xtitle = title,
+                name, xtitle=title,
                 indir='res/',
-                rangeX = [-10,10] if ipl < 2 else [-0.2,0.2],
-                rangeY = [-0.2,0.2]
+                rangeX=[-10, 10] if ipl < 2 else [-0.2, 0.2],
+                rangeY=[-0.2, 0.2]
             )
 
 
 @Plotter.user
 def vs_v(p: Plotter):
     """Plot the residuals for the sensors agains u"""
-    for vol in ['top','bottom'] :
+    for vol in ['top', 'bottom']:
         names = p.plot_list('ures_vs_v_pred_plots')[vol]['name']
         titles = p.plot_list('ures_vs_v_pred_plots')[vol]['title']
-        for ipl, (name, title) in enumerate(zip(names,titles)) :
+        for ipl, (name, title) in enumerate(zip(names, titles)):
             p.plot_profileY(
-                name, xtitle = title,
+                name, xtitle=title,
                 indir='res/',
-                rangeX = [-20,20] if ipl < 2 else [],
-                rangeY = [-0.15,0.15]
+                rangeX=[-20, 20] if ipl < 2 else [],
+                rangeY=[-0.15, 0.15]
             )
 
 
