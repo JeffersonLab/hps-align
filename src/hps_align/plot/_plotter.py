@@ -466,12 +466,6 @@ class Plotter:
 
         canv.SaveAs(saveName)
 
-        if self.do_HTML:
-            img_type = self.oFext.strip(".")
-            hw = htmlWriter(self.outdir, img_type=img_type)
-            hw.add_images(self.outdir)
-            hw.close_html()
-
     def plot_profileY(self, name,
                       indir='res/',
                       xtitle="hit position [mm]",
