@@ -417,6 +417,7 @@ class Plotter:
             hw.close_html()
 
     def plot_profileY(self, name,
+                      indir = 'res/',
                       xtitle="hit position [mm]",
                       ytitle="<ures> [mm]",
                       rangeX=[], rangeY=[], do_fit=False,
@@ -443,10 +444,10 @@ class Plotter:
         histos_sigma = []
 
         for infile in self.input_files:
-            if not infile.Get(self.indir+name):
-                raise Exception(self.indir + name + "   NOT FOUND")
+            if not infile.Get(indir+name):
+                raise Exception(indir + name + "   NOT FOUND")
 
-            histos.append(infile.Get(self.indir+name))
+            histos.append(infile.Get(indir+name))
 
         canv = r.TCanvas("c1", "c1", 2200, 2000)
         canv.SetGridx()

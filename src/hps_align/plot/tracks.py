@@ -55,22 +55,26 @@ def tracks(p: Plotter):
 def profiles(p: Plotter):
     for half in ['top', 'bottom']:
         p.plot_profileY(
-            f'trk_params/p_vs_tanLambda_{half}',
+            f'p_vs_tanLambda_{half}',
+            indir='trk_params/',
             xtitle=f"tan(#lambda) {half}", ytitle="p [GeV]",
             rangeY=[0., 5.], fit="[0] + [1]*x"
         )
         p.plot_profileY(
-            f'trk_params/d0_vs_tanLambda_{half}',
+            f'd0_vs_tanLambda_{half}',
+            indir='trk_params/',
             xtitle=f'tan(#lambda) {half}', ytitle='d0 [mm]',
             rangeX=[0, 0.1], rangeY=[-1., 1.]
         )
         p.plot_profileY(
-            f'trk_params/d0_vs_phi_{half}',
+            f'd0_vs_phi_{half}',
+            indir='trk_params/',
             xtitle=f'#phi {half}', ytitle='d0 [mm]',
             rangeX=[0, 0.1], rangeY=[-1., 1.]
         )
         p.plot_profileY(
-            f'trk_params/p_vs_phi_{half}',
+            f'p_vs_phi_{half}',
+            indir='trk_params/',
             xtitle=f'#phi {half}', ytitle='p [GeV]',
             rangeY=[0., 5.],
             fit='[0] + [1]*x'
