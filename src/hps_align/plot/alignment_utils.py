@@ -20,13 +20,18 @@ def find_max(histos):
 
 
 def make_fit(histoGram, fitType, range=[], color=None):
-    """!
-    Make a fit to a histogram
+    """Make a fit to a histogram
 
-    @param histoGram  histogram to fit
-    @param fitType  type of fit to make
-    @param range  range of fit
-    @param color  color of fit graph
+    Parameters
+    ----------
+    h : r.TH1
+        ROOT histogram to fit
+    fitType : str
+        type of fit to perform
+    range : 2-tuple or length-2 list
+        end-points of fit to include
+    color : int, optional
+        ROOT color to align with histogram style
     """
 
     # no Fit

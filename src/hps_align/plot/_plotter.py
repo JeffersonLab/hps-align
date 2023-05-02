@@ -45,6 +45,15 @@ class Plotter:
     ----------
     __registry__ : dict
         Dictionary of registered plotters
+    colors : List[int]
+        list of ROOT colors to iterate through as we plot
+    markers : List[int]
+        list of ROOT markers to iterate through as we plot
+        in parallel with colors
+    binLabels : List[str]
+        list of bin labels for kink and ures summary plots
+    input_files : List[TFile]
+        list of ROOT files we are going to pull histograms from
     """
 
     def __init__(self,
@@ -54,7 +63,6 @@ class Plotter:
                  do_HTML=False,
                  oFext=".png",
                  is2016=False,
-                 indir="",
                  plot_list_file=None):
         # ROOT plot colors
         self.colors = [r.kBlue+2, r.kCyan+2, r.kRed+2, r.kOrange+10,
@@ -86,24 +94,15 @@ class Plotter:
                           "L6bSh", "L6bAs", "L6bSs", "L7bAh", "L7bSh",
                           "L7bAs", "L7bSs", "", "", "", "", "", "", "", "", "", "", "", ""]
 
-        # legend names
         self.legend_names = legend_names
-        # input file names
         self.infile_names = infile_names
-        # output directory
         self.outdir = outdir
-        # create html page
         self.do_HTML = do_HTML
-        # extension of output files
         self.oFext = oFext
         self.is2016 = is2016
-        # internal directory histograms are in
-        self.indir = indir
 
         # input TFiles
-        self.input_files = []
-        for inFile in self.infile_names:
-            self.input_files.append(r.TFile(inFile))
+        self.input_files = [r.TFile(inf) for inf in self.infile_names]
 
         if (not os.path.exists(self.outdir)):
             os.mkdir(self.outdir)
@@ -111,6 +110,7 @@ class Plotter:
         with open(plot_list_file) as plf:
             self._plot_list = json.load(plf)
 
+        alignment_utils.set_style()
         print("STORING RESULTS IN::", self.outdir)
 
     def plot_list(self, name=None):
@@ -145,6 +145,40 @@ class Plotter:
         else:
             # year-separation not available
             return self._plot_list[name]
+
+    def get(self, hist_name, indir = ""):
+        """Get a histogram from each ROOT file
+
+        Parameters
+        ----------
+        hist_name : str
+            name of histogram to get
+        indir : str, optional
+            optional ROOT directory histogram is contained in
+
+        Returns
+        -------
+        List[TH1]
+            list of histograms, one from each file
+        
+        Raises
+        ------
+        KeyError
+            if hist_name is not found in any of the files
+        """
+
+        # deduce full in-file path to histogram
+        path = indir + '/' + hist_name
+
+        # do not use list expansion since we want to handle errors
+        histos = []
+        for f in self.input_files :
+            h = f.Get(path)
+            if h is None or not isinstance(h, r.TH1) :
+                raise KeyError(f'Histogram {path} not found in {f.GetName()}')
+            histos.append(h)
+
+        return histos
 
     def do_legend(self, histos, legend_names, location=1, plot_properties=[], leg_location=[]):
         """Create legend
@@ -200,15 +234,22 @@ class Plotter:
         return leg
 
     def set_histo_style(self, histo, ihisto, marker_size=4, line_width=5, label_size=0.05):
-        """!
-        Set histo properties.
+        """Set histo properties.
 
-        @param histo        histogram
-        @param ihisto       index of the histogram in list of histos
-        @param marker_size  marker size
-        @param line_width   line width
-        @param label_size   label size
+        Parameters
+        ----------
+        histo : r.TH1
+            histogram to style
+        ihisto : int
+            index of histogram in list of histograms, sets the style
+        marker_size : int
+            size of marker in ROOT units
+        line_width : int
+            with of line in ROOT units
+        label_size : float
+            size of label in ROOT units
         """
+
         histo.SetMarkerStyle(self.markers[ihisto])
         histo.SetMarkerColor(self.colors[ihisto])
         histo.SetMarkerSize(marker_size)
@@ -332,21 +373,27 @@ class Plotter:
 
         can.SaveAs(self.outdir + out_name + self.oFext)
 
-    def make_1D_plots_with_fit(self, histopath, do_fit=True, xtitle="", ytitle="", scale_histos=False):
+    def make_1D_plots_with_fit(self, histopath, xtitle="", ytitle="", fit = True, scale_histos=False):
         """Plot the histograms with an iterative gaussian fit
 
         Parameters
         ----------
         histopath : str
             path to the histogram in the ROOT files
-        do_fit : bool
+        fit : bool or dict, optional
             do the iterative gaussing fit and plot the result
+            if dictionary, use those settings as keyword arguments to make_fit
         xtitle : str
             title of x-axis
         ytitle : str
             title of y-axis
         scale_histos : bool
             scale the histograms to unity
+
+        See Also
+        --------
+        alignment_utils.make_fit
+            for how fitting of histograms is done
         """
 
         canv = r.TCanvas("c", "c", 2200, 2000)
@@ -366,9 +413,17 @@ class Plotter:
                 histos[ihisto].Scale(1./histos[ihisto].Integral())
             histos[ihisto].SetLineWidth(3)
 
-            if do_fit:
-                fitList.append(alignment_utils.make_fit(
-                    histos[ihisto], "singleGausIterative", color=self.colors[ihisto]))
+            if fit or isinstance(fit, dict):
+                fitting_kwargs = dict(
+                    color = self.colors[ihisto]
+                    )
+                if isinstance(fit, dict) :
+                    for k, v in fit.items() :
+                        fitting_kwargs[k] = v
+                fitList.append(alignment_utils.make_fit( 
+                  histos[ihisto], "singleGausIterative",
+                  **fitting_kwargs
+                  ))
 
             if (ihisto == 0):
                 histos[ihisto].Draw("h")
