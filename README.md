@@ -19,3 +19,9 @@ you can make changes without having to re-install.
 python3 -m pip install -e .
 ```
 
+## Usage
+Now that this package is "installed", you can run it from anywhere!
+Run the module to see an up-to-date help printout.
+```
+python3 -m hps_align --help
+```
