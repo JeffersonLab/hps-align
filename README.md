@@ -18,6 +18,13 @@ you can make changes without having to re-install.
 ```
 python3 -m pip install -e .
 ```
+On SDF, there isn't a good "local install" location,
+so you should manually specify a target. Below,
+I am directing python to install `hps_align` to the
+python library installed with `hps-mc`.
+```
+python3 -m pip install --target ${HPSMC_DIR}/lib/python -e .
+```
 
 ## Usage
 Now that this package is "installed", you can run it from anywhere!
