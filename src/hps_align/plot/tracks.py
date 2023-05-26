@@ -114,38 +114,39 @@ def eop(p: Plotter):
     p.plot_profileY("EoP_vs_phi_bottom_fid", xtitle="Bottom track #phi [GeV]", rangeY=[
         0.5, 1.3], fit="[0]*x*x*x + [1]*x*x + [2]*x + [3]")
 
+
 @Plotter.user
 def fee(p: Plotter):
-    for half in ['top','bottom'] :
+    for half in ['top', 'bottom']:
         p.make_1D_plots_with_fit(
             f'trk_params/z0_{half}',
-            xtitle = f'{half} z_{{0}} [mm]'
+            xtitle=f'{half} z_{{0}} [mm]'
         )
         p.make_1D_plots_with_fit(
             f'trk_params/d0_{half}',
-            xtitle = f'{half} d_{{0}} [mm]'
+            xtitle=f'{half} d_{{0}} [mm]'
         )
-        for coord in ['x','y'] :
+        for coord in ['x', 'y']:
             p.make_1D_plots_with_fit(
                 f'trk_params/trk_extr_bs_{coord}_{half}',
-                xtitle = f'Track BS {half} {coord} [mm]'
-                )
-        for sign in ['neg','pos'] :
+                xtitle=f'Track BS {half} {coord} [mm]'
+            )
+        for sign in ['neg', 'pos']:
             p.make_1D_plots_with_fit(
                 f'trk_params/Chi2_{half}_{sign}',
-                xtitle = f'{half} {sign} #chi^{{2}}',
-                fit = False
-                )
+                xtitle=f'{half} {sign} #chi^{{2}}',
+                fit=False
+            )
         p.make_1D_plots_with_fit(
-          f'trk_params/p_{half}',
-          xtitle = f'{half} p [GeV]'
-          )
-        for side in ['slot','hole'] :
+            f'trk_params/p_{half}',
+            xtitle=f'{half} p [GeV]'
+        )
+        for side in ['slot', 'hole']:
             p.make_1D_plots_with_fit(
-              f'trk_params/p_{side}_{half}',
-              xtitle = f'e^{{-}} {side} side {half} p [GeV]',
-              ytitle = 'Tracks'
-              )
+                f'trk_params/p_{side}_{half}',
+                xtitle=f'e^{{-}} {side} side {half} p [GeV]',
+                ytitle='Tracks'
+            )
 
     # not 100p what these are since I'm working on 2016
     p.make_1D_plots_with_fit("trk_params/p5h_top",

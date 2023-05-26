@@ -5,7 +5,7 @@ Call into this module and run the app constructed by typer::
     python3 -m hps_align <args>
 
 Besides running the app constructed by typer, we also make
-sure to inform ROOT that this is a batch script. This 
+sure to inform ROOT that this is a batch script. This
 prevents ROOT from opening any GUI windows while constructing
 plots.
 """

@@ -146,7 +146,7 @@ class Plotter:
             # year-separation not available
             return self._plot_list[name]
 
-    def get(self, hist_name, indir = ""):
+    def get(self, hist_name, indir=""):
         """Get a histogram from each ROOT file
 
         Parameters
@@ -160,7 +160,7 @@ class Plotter:
         -------
         List[TH1]
             list of histograms, one from each file
-        
+
         Raises
         ------
         KeyError
@@ -172,9 +172,9 @@ class Plotter:
 
         # do not use list expansion since we want to handle errors
         histos = []
-        for f in self.input_files :
+        for f in self.input_files:
             h = f.Get(path)
-            if h is None or not isinstance(h, r.TH1) :
+            if h is None or not isinstance(h, r.TH1):
                 raise KeyError(f'Histogram {path} not found in {f.GetName()}')
             histos.append(h)
 
@@ -373,7 +373,7 @@ class Plotter:
 
         can.SaveAs(self.outdir + out_name + self.oFext)
 
-    def make_1D_plots_with_fit(self, histopath, xtitle="", ytitle="", fit = True, scale_histos=False):
+    def make_1D_plots_with_fit(self, histopath, xtitle="", ytitle="", fit=True, scale_histos=False):
         """Plot the histograms with an iterative gaussian fit
 
         Parameters
@@ -415,15 +415,15 @@ class Plotter:
 
             if fit or isinstance(fit, dict):
                 fitting_kwargs = dict(
-                    color = self.colors[ihisto]
-                    )
-                if isinstance(fit, dict) :
-                    for k, v in fit.items() :
+                    color=self.colors[ihisto]
+                )
+                if isinstance(fit, dict):
+                    for k, v in fit.items():
                         fitting_kwargs[k] = v
-                fitList.append(alignment_utils.make_fit( 
-                  histos[ihisto], "singleGausIterative",
-                  **fitting_kwargs
-                  ))
+                fitList.append(alignment_utils.make_fit(
+                    histos[ihisto], "singleGausIterative",
+                    **fitting_kwargs
+                ))
 
             if (ihisto == 0):
                 histos[ihisto].Draw("h")
