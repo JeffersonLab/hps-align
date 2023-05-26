@@ -10,7 +10,7 @@ Sphinx is available on PyPI, so one can::
 
 Then one can build the documentation from the root of this repository.::
 
-    sphinx-build docs docs/html
+    sphinx-build docs _site
 
 
 Doc Strings
