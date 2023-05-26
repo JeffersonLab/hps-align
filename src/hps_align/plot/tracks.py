@@ -42,7 +42,7 @@ def tracks(p: Plotter):
                 p.make_1D_plots(histos,
                                 out_name='TrackPlots/'+var+vol+crg,
                                 xtitle=var + " " + vol + " " + corrcrg,
-                                RebinFactor=1, yrange=[0, 0.05])
+                                RebinFactor=0, yrange=[0, 0.05])
 
     if p.do_HTML:
         img_type = p.oFext.strip(".")
