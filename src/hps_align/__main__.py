@@ -11,6 +11,7 @@ plots.
 """
 
 from . import plot
+from . import detdump
 
 from ._cli import app
 
