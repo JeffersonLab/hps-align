@@ -10,6 +10,8 @@ prevents ROOT from opening any GUI windows while constructing
 plots.
 """
 
+from . import plot
+
 from ._cli import app
 
 import ROOT
