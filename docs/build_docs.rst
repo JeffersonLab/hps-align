@@ -12,6 +12,22 @@ Then one can build the documentation from the root of this repository.::
 
     sphinx-build docs _site
 
+Sphinx Primer
+-------------
+While doxygen puts pretty much all documentation into the form
+of comments inside of the source files, sphinx steps away from
+this and allows the user to define where documentation for specific
+groups of code should be. This means the user can define the organization
+of the code documentation as well as intersperse the documentation
+generated from the code docstrings with manually written documentation.
+
+Looking at the rst files in the docs directory will give you some
+examples on how to tell sphinx to insert the documentation for
+a specific module, class, or function.
+
+Technically, we are using the 
+`sphinx-autodoc <https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html>`_ 
+plugin to generate the documentation from the python docstrings.
 
 Doc Strings
 -----------
