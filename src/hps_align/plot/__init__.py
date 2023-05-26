@@ -1,3 +1,4 @@
+"""systematic generation of alignment-related plots"""
 
 import os
 from enum import Enum
@@ -16,7 +17,7 @@ from . import kinks
 from . import derivatives
 
 PlotOpt = Enum('PlotOpt', {name: name for name in Plotter.__registry__})
-
+PlotOpt.__doc__ = """dynamically-generate enum listing the different plotters available"""
 
 def generate_legend_names(input_files):
     """Generate legend names from input file names"""

@@ -1,15 +1,20 @@
-hps_align package
-=================
+HPS Align
+=========
+
+.. automodule:: hps_align.__main__
+
+Sub-Modules
+-----------
 
 .. toctree::
-   :maxdepth: 4
+   :maxdepth: 2
 
    hps_align.plot
 
-Module contents
+CLI Development
 ---------------
 
-.. automodule:: hps_align
+.. automodule:: hps_align._cli
    :members:
    :undoc-members:
    :show-inheritance:

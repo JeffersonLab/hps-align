@@ -11,6 +11,8 @@ Welcome to hps_align's documentation!
    :caption: Contents:
 
    hps_align 
+   build_docs
+   hps_align.plot
 
 Indices and tables
 ==================

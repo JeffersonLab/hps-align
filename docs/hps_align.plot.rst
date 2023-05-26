@@ -1,7 +1,8 @@
-hps_align.plot package
-======================
+Alignment Plotting
+==================
 
 .. automodule:: hps_align.plot
+   :exclude-members: PlotOpt
    :members:
    :undoc-members:
    :show-inheritance:
@@ -10,7 +11,7 @@ hps_align.plot package
 Plotters
 --------
 The `hps_align.plot` submodule is broken up
-into veraious "plotters" so that users can choose
+into various "plotters" so that users can choose
 which plots to generate from the input files.
 
 .. automodule:: hps_align.plot.vertex

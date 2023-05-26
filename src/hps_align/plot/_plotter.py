@@ -629,7 +629,7 @@ class Plotter:
 
         Examples
         --------
-        Register a plotter
+        Register a plotter::
 
             @Plotter.user
             def my_hist_plotter(d) :

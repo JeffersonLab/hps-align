@@ -1,26 +1,19 @@
 """Main entrypoint when running this package
 
+Call into this module and run the app constructed by typer::
+
     python3 -m hps_align <args>
 
-Calls into this module.
+Besides running the app constructed by typer, we also make
+sure to inform ROOT that this is a batch script. This 
+prevents ROOT from opening any GUI windows while constructing
+plots.
 """
 
-from . import plot
 from ._cli import app
-import os
-import warnings
-from pathlib import Path
-from typing import List
-
-import typer
-from typing import List
 
 import ROOT
 ROOT.gROOT.SetBatch(1)
-
-
-# from . import plot_res_and_kinks
-
 
 if __name__ == '__main__':
     app()
