@@ -97,7 +97,7 @@ def vs_u(p: Plotter):
             p.plot_profileY(
                 name, xtitle=title,
                 indir='res/',
-                rangeX=[], 
+                rangeX=[],
                 rangeY=[-0.2, 0.2]
             )
 
