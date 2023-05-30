@@ -635,6 +635,9 @@ class Plotter:
             def my_hist_plotter(d) :
                 # d will be a Plotter object
         """
-        func_name = func.__module__.replace('hps_align.plot.', '')+'.'+func.__name__
+        if func.__module__ == 'hps_align.plot':
+            func_name = func.__name__
+        else:
+            func_name = func.__module__.replace('hps_align.plot.', '')+'.'+func.__name__
         Plotter.__registry__[func_name] = func
         return func

@@ -17,6 +17,16 @@ from . import residual
 from . import kinks
 from . import derivatives
 
+
+@Plotter.user
+def default(p: Plotter):
+    residual.summary(p)
+    residual.vs_u(p)
+    residual.vs_v(p)
+    tracks.profiles(p)
+    tracks.fee(p)
+
+
 PlotOpt = Enum('PlotOpt', {name: name for name in Plotter.__registry__})
 PlotOpt.__doc__ = """dynamically-generate enum listing the different plotters available"""
 
@@ -42,7 +52,7 @@ def generate_legend_names(input_files):
 @app.command()
 @typer_unpacker
 def plot(
-        plots: List[PlotOpt],
+        plots: List[PlotOpt] = typer.Argument(None),
         plot_list: str = typer.Option(
             (Path(__file__).parent.resolve() / "data" / "plot_list.json"),
             help='JSON plot config file'
@@ -105,5 +115,8 @@ def plot(
         is2016=is2016,
     )
 
-    for plot in plots:
-        Plotter.__registry__[plot.name](p)
+    if len(plots) == 0:
+        default(p)
+    else:
+        for plot in plots:
+            Plotter.__registry__[plot.name](p)
