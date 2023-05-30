@@ -17,25 +17,9 @@ jobs:
     container: tomeichlersmith/hps-env:latest
     steps:
       -
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      -
-        name: Install Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.x'
-      -
-        name: Cache pip
-        uses: actions/cache@v2
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip
-      -
-        name: Install Dependencies
-        run: |
-          python -m pip install --upgrade pip
-          python -m pip install Sphinx typer[all]
       -
         name: Set Version
         run: |
