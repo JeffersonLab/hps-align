@@ -40,7 +40,7 @@ def tracks(p: Plotter):
                 # File loop
                 histos = [f.Get(hname) for f in p.input_files]
                 p.make_1D_plots(histos,
-                                out_name='TrackPlots/'+var+vol+crg,
+                                out_name='/TrackPlots/'+var+vol+crg,
                                 xtitle=var + " " + vol + " " + corrcrg,
                                 RebinFactor=0, yrange=[0, 0.05])
 
