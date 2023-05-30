@@ -54,7 +54,7 @@ def multi_vtx(p):
         leg = p.do_legend(histos, p.legend_names, 4)
         if (leg is not None):
             leg.Draw()
-        canv.SaveAs(p.outdir + save_names[iarr] + p.oFext)
+        canv.SaveAs(p.outdir + '/' + save_names[iarr] + p.oFext)
 
     histos2d_top = []
     for infile in p.input_files:
