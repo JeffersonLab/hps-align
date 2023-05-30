@@ -24,9 +24,13 @@ and then pass the Eigen install location to GBL with ``-DEIGEN3_DIR=<install loc
 Specialized Configurations
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 The C++ GBL library has a few compile-time configurations that may be helpful if memory issues are encountered when using it.
-- *JNA_MEMORY_MONITOR*: set this to ``ON`` if you want a report of how many C++ GBL objects are left in memory when the program completes.
+
+JNA_MEMORY_MONITOR
+  set this to ``ON`` if you want a report of how many C++ GBL objects are left in memory when the program completes. 
   They should all be zero, but it is broken down by type so it may help point you in the directory of which ``delete`` call is missing.
-- *JNA_DEBUG*: set this to ``ON`` to enable debug printouts from the C++ GBL ``extern "C"`` wrapper functions.
+
+JNA_DEBUG 
+  set this to ``ON`` to enable debug printouts from the C++ GBL ``extern "C"`` wrapper functions. 
   These printouts are extremely verbose and should only be used in short runs.
 
 hps-java
