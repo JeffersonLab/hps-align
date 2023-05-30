@@ -23,6 +23,7 @@ jobs:
       -
         name: Set Version
         run: |
+          git config --global --add safe.directory $(pwd -P)
           _version_tag=$(git describe --tags)
           echo ${_version_tag}
           echo "release = '${_version_tag}'" >> docs/conf.py
