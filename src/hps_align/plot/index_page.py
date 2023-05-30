@@ -5,13 +5,14 @@ class htmlWriter:
     """! Class to write html file with output plots"""
 
     def __init__(self, dir, img_type="png", update_only=False, html_name="index.html", img_folder=""):
-        ## png or pdf
+        # png or pdf
         self.img_type = img_type
-        ## folder where the images are stored
+        # folder where the images are stored
         self.img_folder = img_folder
 
         if not update_only:
-            self.index_html = open(dir + "/" + html_name, "w")  # html file to be written
+            # html file to be written
+            self.index_html = open(dir + "/" + html_name, "w")
             self.img_folder = dir
 
             self.wline("<html>")
@@ -46,10 +47,12 @@ class htmlWriter:
         for img in list_images:
             # print img
             if (self.img_type == "png"):
-                self.wline('<img src="' + img.split("/")[-1]+'" width="900" height="700" >')
+                self.wline('<img src="' + img.split("/")
+                           [-1]+'" width="900" height="700" >')
             elif (self.img_type == "pdf"):
                 # print "Found pdf"
-                self.wline('<embed src="' + img.split("/")[-1] + '" width="700px" height="500px" />')
+                self.wline('<embed src="' + img.split("/")
+                           [-1] + '" width="700px" height="500px" />')
 
     def add_folder_links(self):
         """! Add links to subfolders to html file"""
