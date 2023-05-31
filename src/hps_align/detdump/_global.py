@@ -1,6 +1,8 @@
 
 from pathlib import Path
 import subprocess
+import os
+from ._write import write_mapping
 
 
 def coordump(detname: str, input_file: Path, jar: Path, output_file: Path):
@@ -53,7 +55,8 @@ def coordump(detname: str, input_file: Path, jar: Path, output_file: Path):
 
     sensor_map = {}
 
-    for line in geo_print_result.stdout:
+    for line in geo_print_result.stdout.splitlines():
+        line = line.decode('utf-8')
         if 'sensor' in line and ':' in line:
             # line printing sensor name and coordinate position
             #   <name>: [ X, Y, Z] [ ux, uy, uz] [ vx, vy, vz] [ wx, wy, wz]
@@ -70,4 +73,16 @@ def coordump(detname: str, input_file: Path, jar: Path, output_file: Path):
                 u=u, v=v, w=w
             )
 
-    json.dumps(sensor_map, output_file)
+    write_mapping(output_file, sensor_map,
+                  header=['sensor',
+                          'x', 'y', 'z',
+                          'ux', 'uy', 'uz',
+                          'vx', 'vy', 'vz',
+                          'wx', 'wy', 'wz'],
+                  getrow=lambda sensor, loc:
+                  [sensor,
+                   *loc['position'],
+                   *loc['u'],
+                   *loc['v'],
+                   *loc['w']
+                   ])

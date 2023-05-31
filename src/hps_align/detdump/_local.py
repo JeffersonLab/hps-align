@@ -1,6 +1,7 @@
 
+from pathlib import Path
 import xml.etree.ElementTree as ET
-import csv
+from ._write import write_mapping
 
 
 def coordump(detpath: str, output_file: str):
@@ -20,10 +21,13 @@ def coordump(detpath: str, output_file: str):
 
     tree = ET.parse(Path(detpath) / 'compact.xml')
 
-    with open(output_file, 'w', newline='') as csvfile:
-        csvwrite = csv.writer(csvfile)
-        csvwriter.writerow(['parameter', 'value'])
-        for element in tree.iter('millepede_constant'):
-            # use 'eval' so that python calculates the full value
-            # from the potentially-several values connected with +-
-            csvwriter.writerow([element.name, eval(element.value)])
+    # use 'eval' so that python calculates the full value
+    # from the potentially-several values connected with +-
+    param_map = {
+        element.get('name'): eval(element.get('value'))
+        for element in tree.iter('millepede_constant')
+    }
+
+    write_mapping(output_file, param_map,
+                  header=['parameter', 'value'],
+                  getrow=lambda k, v: [k, v])
