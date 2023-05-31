@@ -15,6 +15,7 @@ from . import _write
 
 
 class System(Enum):
+    """choose which coordinate system to dump"""
     GLOBAL = "global"
     LOCAL = "local"
 

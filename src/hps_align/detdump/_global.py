@@ -12,29 +12,43 @@ def coordump(detname: str, input_file: Path, jar: Path, output_file: Path):
     and then processing its output. Since we are running
     hps-java there are a few required inputs.
 
-    ## User
-    1. bin.jar file : the PrintGeometryDriver has been on
-      hps-java master for awhile so this does not need to
-      be incredibly recent.
-    2. input slcio file : the driver does not look at any
-      of the events in the slcio file so it just needs to
-      be /any/ slcio file with at least one event in it.
-    3. detname : name of detector
+    User
+    ----
 
-    ## Auto
-    1. java args : we aren't doing any strong processing
-      or using GBL so we just have a default set of java
-      arguments
-    2. steering file : we use the steering file that
-      is stored in this module
-    3. outputFile : nothing is written to it so we just
-      supply a dummy name
-    4. number of events : we just need one to trigger
-      the functionality of loading the detector
-    5. run number : the run number needs to be a valid
-      run number so that hps-java can pull down condition
-      databases, but it doesn't need to pertain to the
-      detector being used
+    bin.jar file
+        the PrintGeometryDriver has been on
+        hps-java master for awhile so this does not need to
+        be incredibly recent.
+
+    input slcio file
+        the driver does not look at any
+        of the events in the slcio file so it just needs to
+        be /any/ slcio file with at least one event in it.
+
+    detname
+        name of detector
+
+    Auto
+    ----
+
+    java args
+        we aren't doing any strong processing or using GBL
+        so we just have a default set of java arguments
+
+    steering file
+        we use the steering file that is stored in this module
+
+    outputFile
+        nothing is written to it so we just supply a dummy name
+
+    number of events
+        we just need one to trigger the functionality of loading the detector
+
+    run number
+        the run number needs to be a valid
+        run number so that hps-java can pull down condition
+        databases, but it doesn't need to pertain to the
+        detector being used
     """
 
     geo_print_result = subprocess.run(
