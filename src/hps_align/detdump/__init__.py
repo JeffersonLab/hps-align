@@ -68,6 +68,8 @@ def detdump(
         else:
             raise ValueError('Local system deduction needs path to detector directory.')
     elif system == System.GLOBAL:
+        if os.path.isdir(det):
+            raise ValueError('Global system deduction needs the detector name and not its path.')
         if input_file is None:
             raise ValueError('Input file required for global system deduction')
         _global.coordump(det, input_file, jar, output_file)
