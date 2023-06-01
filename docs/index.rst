@@ -21,3 +21,7 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
+
+.. click:: hps_align.__main__:typer_click_object
+  :prog: hps_align
+  :nested: full

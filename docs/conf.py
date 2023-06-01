@@ -25,6 +25,7 @@ release = 'local'
 extensions = [
         'sphinx.ext.autodoc', # generate docs from docstrings
         'sphinx.ext.napoleon', # support NumPy style docstrings
+        'sphinx_click',
         ]
 
 templates_path = ['_templates']

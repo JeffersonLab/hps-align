@@ -13,10 +13,13 @@ plots.
 from . import plot
 from . import detdump
 
+import typer
 from ._cli import app
 
 import ROOT
 ROOT.gROOT.SetBatch(1)
 
+typer_click_object = typer.main.get_command(app)
+
 if __name__ == '__main__':
-    app()
+    typer_click_object()
