@@ -23,11 +23,11 @@ class System(Enum):
 @app.command()
 @typer_unpacker
 def detdump(
-        system: System,
-        det: str,
+        system: System = typer.Argument(
+          help="coordinate system to dump - local is relative to sensor frame, i.e. dump the millepede constants and global is relative to the entire HPS detector frame"),
+        det: str = typer.Argument(help='detector to dump (directory path for local system, name for global system)'),
         output_file: str = typer.Option(None, help='output file to write data to, uses detector name by default'),
-        output_type: _write.OutputType = typer.Option(
-            _write.OutputType.JSON,
+        output_type: _write.OutputType = typer.Option('json',
             help='type of output to write will be over-written by extension of output_file if provided'),
         input_file: str = typer.Option(None, help='input slcio file (only required for global)'),
         jar: str = typer.Option(
@@ -69,7 +69,8 @@ def detdump(
             raise ValueError('Local system deduction needs path to detector directory.')
     elif system == System.GLOBAL:
         if os.path.isdir(det):
-            raise ValueError('Global system deduction needs the detector name and not its path.')
+            # need to have the detector name not the full path
+            det = os.path.basename(det.strip('/'))
         if input_file is None:
             raise ValueError('Input file required for global system deduction')
         _global.coordump(det, input_file, jar, output_file)
