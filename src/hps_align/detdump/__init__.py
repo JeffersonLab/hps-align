@@ -24,10 +24,12 @@ class System(Enum):
 @typer_unpacker
 def detdump(
         system: System = typer.Argument(
-          help="coordinate system to dump - local is relative to sensor frame, i.e. dump the millepede constants and global is relative to the entire HPS detector frame"),
+            help="coordinate system to dump - local is relative to sensor frame, i.e. dump the millepede constants"
+            " and global is relative to the entire HPS detector frame"),
         det: str = typer.Argument(help='detector to dump (directory path for local system, name for global system)'),
         output_file: str = typer.Option(None, help='output file to write data to, uses detector name by default'),
-        output_type: _write.OutputType = typer.Option('json',
+        output_type: _write.OutputType = typer.Option(
+            'json',
             help='type of output to write will be over-written by extension of output_file if provided'),
         input_file: str = typer.Option(None, help='input slcio file (only required for global)'),
         jar: str = typer.Option(
