@@ -19,11 +19,18 @@ you can make changes without having to re-install.
 python3 -m pip install -e .
 ```
 On SDF, there isn't a good "local install" location,
-so you should manually specify a target. Below,
-I am directing python to install `hps_align` to the
-python library installed with `hps-mc`.
+and the old-age of the Python (v3.6.8) and system
+install of setuptools (v39.2.0) prevents this editable
+install method from operating correctly. We get around
+this by manually symlinking the package rather than
+having `pip` setup a python-internal symlink. It is slow
+since it relies more on the filesystem, but it is 
+operational.
 ```
-python3 -m pip install --target ${HPSMC_DIR}/lib/python -e .
+# install dependencies
+python3 -m pip install --user typer[all]
+# "install" this package "manually"
+ln -s $(realpath src/hps_align) ~/.local/lib/python3.6/site-packages/
 ```
 
 ## Usage
