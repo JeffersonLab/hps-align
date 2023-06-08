@@ -4,7 +4,6 @@ Detector Dump
 Dumping the sensor position and orientation for easier analysis.
 
 .. automodule:: hps_align.detdump
-   :exclude-members: PlotOpt
    :members:
    :undoc-members:
    :show-inheritance:

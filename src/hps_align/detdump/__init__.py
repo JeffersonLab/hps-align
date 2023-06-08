@@ -35,6 +35,7 @@ def detdump(
             'json',
             help='type of output to write will be over-written by extension of output_file if provided'),
         input_file: str = typer.Option(None, help='input slcio file (only required for global)'),
+        run_number: int = typer.Option(None, help='run number pertaining to year (only required for global)'),
         jar: str = typer.Option(
             str(Path.home() /
                 '.m2' / 'repository' / 'org' / 'hps' /
@@ -78,4 +79,4 @@ def detdump(
             det = os.path.basename(det.strip('/'))
         if input_file is None:
             raise ValueError('Input file required for global system deduction')
-        _global.coordump(det, input_file, jar, output_file)
+        _global.coordump(det, input_file, jar, run_number, output_file)

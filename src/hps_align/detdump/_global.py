@@ -5,12 +5,27 @@ import os
 from ._write import write_mapping
 
 
-def coordump(detname: str, input_file: Path, jar: Path, output_file: Path):
+def coordump(detname: str, input_file: Path, jar: Path, run: int, output_file: Path):
     """dump coordinates of sensors in global frame
 
     This is done by running a specific driver in hps-java
     and then processing its output. Since we are running
     hps-java there are a few required inputs.
+
+    Run Number Look-Up-Table
+    ------------------------
+
+    Each year has a different set of "base" conditions that need to be
+    used; otherwise, the hps-java run isn't able to get to the geometry
+    construction.
+
+    * 2015: 5772
+    * 2016: 7800 (7000-8999)
+    * 2019: 10716
+    * 2021: 10716
+
+    Since the 2019 and 2021 conditions have the same "shape", we can use
+    the same (somewhat arbitrary) run number.
 
     User
     ----
@@ -28,6 +43,12 @@ def coordump(detname: str, input_file: Path, jar: Path, output_file: Path):
     detname
         name of detector
 
+    run number
+        the run number needs to be a valid run number for that year
+        so that hps-java can pull down condition
+        databases, but it doesn't need to pertain to the
+        detector being used
+
     Auto
     ----
 
@@ -43,12 +64,6 @@ def coordump(detname: str, input_file: Path, jar: Path, output_file: Path):
 
     number of events
         we just need one to trigger the functionality of loading the detector
-
-    run number
-        the run number needs to be a valid
-        run number so that hps-java can pull down condition
-        databases, but it doesn't need to pertain to the
-        detector being used
     """
 
     geo_print_result = subprocess.run(
@@ -60,7 +75,7 @@ def coordump(detname: str, input_file: Path, jar: Path, output_file: Path):
             str(Path(__file__).parent / 'geoPrint.lcsim'),
             '-i', str(input_file),
             '-d', detname,
-            '-R', '7800',
+            '-R', str(run),
             '-n', '1'
         ],
         capture_output=True,
