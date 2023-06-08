@@ -14,15 +14,18 @@ from ._cli import app
 This is done by running a specific driver in hps-java and then processing its output.
 Since we are running hps-java there are unfortunately many required inputs.
 
-Run numbers: 2015 use 5772, 2016 use 7800, 2019 and 2021 use 10716.
+Run numbers: 2015 use 5772, 2016 use 7800, 2019 use 10716, and 2021 use 14166.
 """
 )
-def global_coordump(
+def global_coord(
     detname: str = typer.Argument(..., help='name of detector to dump'),
     input_file: Path = typer.Argument(
-        ..., help='input slcio file to "run over", data within this file is never used just needs to have at least one event in it so hps-java can get to the detector loading stage of processing.'),
-    run_number: int = typer.Argument(...,
-                                     help='run number roughly corresponding to year of detector, again only necessary so hps-java can get to loading the detector'),
+        ..., help='input slcio file to "run over", data within this file is never used just needs '
+        'to have at least one event in it so hps-java can get to the detector loading stage of processing.'),
+    run_number: int = typer.Argument(
+        ...,
+        help='run number roughly corresponding to year of detector, again only necessary so '
+        'hps-java can get to loading the detector'),
     jar: Path = typer.Option(
         (Path.home() / '.m2' / 'repository' / 'org' / 'hps' /
          'hps-distribution' / '5.2-SNAPSHOT' / 'hps-distribution-5.2-SNAPSHOT-bin.jar'),
@@ -49,10 +52,10 @@ def global_coordump(
     * 2015: 5772
     * 2016: 7800 (7000-8999)
     * 2019: 10716
-    * 2021: 10716
+    * 2021: 14166
 
     Since the 2019 and 2021 conditions have the same "shape", we can use
-    the same (somewhat arbitrary) run number.
+    the same (somewhat arbitrary) run number if desired.
 
     User
     ----

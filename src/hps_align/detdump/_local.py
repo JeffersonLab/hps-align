@@ -15,7 +15,7 @@ the local coordinate frame and so they are kind of the
 "local" coordinates relative to the local frame.
 """
 )
-def local_coordump(
+def local_coord(
     detpath: Path = typer.Argument(..., help='path to detector to dump'),
     output_file: str = typer.Option(None, help='output file to write data to, uses detector name by default'),
     output_type: OutputType = typer.Option(
