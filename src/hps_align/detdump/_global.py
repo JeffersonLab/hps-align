@@ -1,11 +1,38 @@
 
+import typer
+
 from pathlib import Path
 import subprocess
 import os
-from ._write import write_mapping
+from ._write import OutputType, write_mapping
+from ._cli import app
 
 
-def coordump(detname: str, input_file: Path, jar: Path, run: int, output_file: Path):
+@app.command(
+    short_help="dump coordinates and orientations of sensors in the global frame",
+    help="""
+This is done by running a specific driver in hps-java and then processing its output.
+Since we are running hps-java there are unfortunately many required inputs.
+
+Run numbers: 2015 use 5772, 2016 use 7800, 2019 and 2021 use 10716.
+"""
+)
+def global_coordump(
+    detname: str = typer.Argument(..., help='name of detector to dump'),
+    input_file: Path = typer.Argument(
+        ..., help='input slcio file to "run over", data within this file is never used just needs to have at least one event in it so hps-java can get to the detector loading stage of processing.'),
+    run_number: int = typer.Argument(...,
+                                     help='run number roughly corresponding to year of detector, again only necessary so hps-java can get to loading the detector'),
+    jar: Path = typer.Option(
+        (Path.home() / '.m2' / 'repository' / 'org' / 'hps' /
+         'hps-distribution' / '5.2-SNAPSHOT' / 'hps-distribution-5.2-SNAPSHOT-bin.jar'),
+        help='java bin jar to use to run geometry printer'
+    ),
+    output_file: str = typer.Option(None, help='output file to write data to, uses detector name by default'),
+    output_type: OutputType = typer.Option(
+        'json',
+        help='type of output to write will be over-written by extension of output_file if provided')
+):
     """dump coordinates of sensors in global frame
 
     This is done by running a specific driver in hps-java

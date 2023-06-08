@@ -10,12 +10,21 @@ prevents ROOT from opening any GUI windows while constructing
 plots.
 """
 
+import ROOT
+import importlib
+
 from . import plot
-from . import detdump
 
 from ._cli import app
 
-import ROOT
+for module_name in ['detdump']:
+    module = importlib.import_module('.'+module_name, 'hps_align')
+    app.add_typer(
+        module.app,
+        name=module_name,
+        help=module.__doc__
+    )
+
 ROOT.gROOT.SetBatch(1)
 
 if __name__ == '__main__':

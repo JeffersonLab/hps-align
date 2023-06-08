@@ -1,10 +1,27 @@
 
+import typer
+
 from pathlib import Path
 import xml.etree.ElementTree as ET
-from ._write import write_mapping
+from ._write import OutputType, write_mapping
+from ._cli import app
 
 
-def coordump(detpath: str, output_file: str):
+@app.command(
+    short_help="dump millepede alignment constants",
+    help="""
+The millepede alignment constants are modifications on
+the local coordinate frame and so they are kind of the
+"local" coordinates relative to the local frame.
+"""
+)
+def local_coordump(
+    detpath: Path = typer.Argument(..., help='path to detector to dump'),
+    output_file: str = typer.Option(None, help='output file to write data to, uses detector name by default'),
+    output_type: OutputType = typer.Option(
+        'json',
+        help='type of output to write will be over-written by extension of output_file if provided')
+):
     """dump coordinates in local frame
 
     This effectively dumps the alignment parameters
