@@ -13,6 +13,7 @@ Welcome to hps_align's documentation!
    hps_align 
    build_docs
    hps_align.plot
+   hps_align.detdump
 
 Indices and tables
 ==================

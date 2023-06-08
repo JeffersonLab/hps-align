@@ -10,6 +10,7 @@ Sub-Modules
    :maxdepth: 2
 
    hps_align.plot
+   hps_align.detdump
 
 CLI Development
 ---------------
