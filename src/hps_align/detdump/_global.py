@@ -96,6 +96,17 @@ def global_coord(
         we just need one to trigger the functionality of loading the detector
     """
 
+    if output_file is None:
+        # deduce default to be name of detector + extension
+        output_file = f'{detname}-local.{output_type.value}'
+
+    if Path(output_file).suffix == '':
+        # no extension provided, use output_type
+        output_file += '.'+output_type.value
+
+    if not OutputType.valid(Path(output_file)):
+        raise ValueError(f'{output_file} does not have one of the allowed extensions')
+
     geo_print_result = subprocess.run(
         [
             'java',
@@ -105,7 +116,7 @@ def global_coord(
             str(Path(__file__).parent / 'geoPrint.lcsim'),
             '-i', str(input_file),
             '-d', detname,
-            '-R', str(run),
+            '-R', str(run_number),
             '-n', '1'
         ],
         capture_output=True,

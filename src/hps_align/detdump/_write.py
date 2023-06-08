@@ -1,4 +1,5 @@
 
+from pathlib import Path
 from enum import Enum
 import json
 import csv
@@ -7,6 +8,27 @@ import csv
 class OutputType(Enum):
     CSV = "csv"
     JSON = "json"
+
+    def valid(p: Path):
+        """validate that the input path is one of our types
+
+        We check validity by making sure the extension of the passed
+        Path is one of the supported output types in this Enum.
+
+        Parameters
+        ----------
+        p : Path
+            path to file to check output type of
+
+        Returns
+        -------
+        bool :
+            True if valid, False otherwise
+        """
+
+        if p.suffix not in ['.'+e.value for e in OutputType.__members__.values()]:
+            return False
+        return True
 
 
 def __get_row_default(k, v):

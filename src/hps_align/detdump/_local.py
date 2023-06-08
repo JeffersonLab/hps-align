@@ -36,7 +36,18 @@ def local_coord(
         output file to write coordinates to
     """
 
-    tree = ET.parse(Path(detpath) / 'compact.xml')
+    if output_file is None:
+        # deduce default to be name of detector + extension
+        output_file = f'{detpath.parts[-1]}-local.{output_type.value}'
+
+    if Path(output_file).suffix == '':
+        # no extension provided, use output_type
+        output_file += '.'+output_type.value
+
+    if not OutputType.valid(Path(output_file)):
+        raise ValueError(f'{output_file} does not have one of the allowed extensions')
+
+    tree = ET.parse(detpath / 'compact.xml')
 
     # use 'eval' so that python calculates the full value
     # from the potentially-several values connected with +-
