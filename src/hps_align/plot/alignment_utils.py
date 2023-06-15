@@ -205,13 +205,12 @@ def single_gauss_iterative(hist, sigmaRange, range=[], color=None):
             print("i = ", i, " newFitMean = ",
                   newFitMean, " newFitSig = ", newFitSig)
         if (i > 50):
-            if debug:
-                print(
-                    "WARNING terminate iterative gaus fit because of convergence problems")
-                print("final mean =  ", newFitMean,
-                      ", previous iter mean = ", fitMean)
-                print("final sigma =  ", newFitSig,
-                      ", previous iter sigma = ", fitSig)
+            print(
+                "WARNING terminate iterative gaus fit because of convergence problems")
+            print("final mean =  ", newFitMean,
+                  ", previous iter mean = ", fitMean)
+            print("final sigma =  ", newFitSig,
+                  ", previous iter sigma = ", fitSig)
             break
 
         i += 1
