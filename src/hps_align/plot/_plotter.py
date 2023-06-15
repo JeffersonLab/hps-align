@@ -424,12 +424,12 @@ class Plotter:
         plotProperties = []
 
         for ihisto in range(len(histos)):
-            self.set_histo_style(histos[ihisto], ihisto, line_width=3)
 
             # Scale the histogram to unity
             if scale_histos:
                 histos[ihisto].Scale(1./histos[ihisto].Integral())
-            histos[ihisto].SetLineWidth(3)
+
+            self.set_histo_style(histos[ihisto], ihisto, line_width=3)
 
             if fit or isinstance(fit, dict):
                 fitting_kwargs = dict(
