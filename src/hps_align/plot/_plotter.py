@@ -84,15 +84,33 @@ class Plotter:
                         r.kFullCircle, r.kOpenSquare, r.kFullSquare,
                         r.kOpenTriangleUp, r.kOpenCircle, r.kFullCircle,
                         r.kOpenSquare, r.kFullSquare, r.kOpenTriangleUp]
-        # bin labels for kink and ures summary plots
-        self.binLabels = ["", "L1tA", "L1tS", "L2tA", "L2tS", "L3tA", "L3tS",
-                          "L4tA", "L4tS", "L5tAh", "L5tSh", "L5tAs", "L5tSs",
-                          "L6tAh", "L6tSh", "L6tAs", "L6tSs", "L7tAh", "L7tSh",
-                          "L7tAs", "L7tSs", "", "", "", "", "", "L1bA", "L1bS",
-                          "L2bA", "L2bS", "L3bA", "L3bS", "L4bA", "L4bS",
-                          "L5bAh", "L5bSh", "L5bAs", "L5bSs", "L6bAh",
-                          "L6bSh", "L6bAs", "L6bSs", "L7bAh", "L7bSh",
-                          "L7bAs", "L7bSs", "", "", "", "", "", "", "", "", "", "", "", ""]
+        # bin labels for per-sensor summary plots (e.g. kink and ures)
+        if is2016:
+            self.binLabels = ["",
+                              "L1tA", "L1tS", "L2tA", "L2tS", "L3tA", "L3tS",
+                              "L4tAh", "L4tSh", "L4tAs", "L4tSs",
+                              "L5tAh", "L5tSh", "L5tAs", "L5tSs",
+                              "L6tAh", "L6tSh", "L6tAs", "L6tSs",
+                              "", "", "", "", "",
+                              "L1bA", "L1bS", "L2bA", "L2bS", "L3bA", "L3bS",
+                              "L4bAh", "L4bSh", "L4bAs", "L4bSs",
+                              "L5bAh", "L5bSh", "L5bAs", "L5bSs",
+                              "L6bAh", "L6bSh", "L6bAs", "L6bSs",
+                              "", "", "", "", "", "", "", "", "", "", "", ""]
+        else:
+            self.binLabels = ["",
+                              "L1tA", "L1tS", "L2tA", "L2tS",
+                              "L3tA", "L3tS", "L4tA", "L4tS",
+                              "L5tAh", "L5tSh", "L5tAs", "L5tSs",
+                              "L6tAh", "L6tSh", "L6tAs", "L6tSs",
+                              "L7tAh", "L7tSh", "L7tAs", "L7tSs",
+                              "", "", "", "", "",
+                              "L1bA", "L1bS", "L2bA", "L2bS",
+                              "L3bA", "L3bS", "L4bA", "L4bS",
+                              "L5bAh", "L5bSh", "L5bAs", "L5bSs",
+                              "L6bAh", "L6bSh", "L6bAs", "L6bSs",
+                              "L7bAh", "L7bSh", "L7bAs", "L7bSs",
+                              "", "", "", "", "", "", "", "", "", "", "", ""]
 
         self.legend_names = legend_names
         self.infile_names = infile_names
@@ -406,12 +424,12 @@ class Plotter:
         plotProperties = []
 
         for ihisto in range(len(histos)):
-            self.set_histo_style(histos[ihisto], ihisto, line_width=3)
 
             # Scale the histogram to unity
             if scale_histos:
                 histos[ihisto].Scale(1./histos[ihisto].Integral())
-            histos[ihisto].SetLineWidth(3)
+
+            self.set_histo_style(histos[ihisto], ihisto, line_width=3)
 
             if fit or isinstance(fit, dict):
                 fitting_kwargs = dict(

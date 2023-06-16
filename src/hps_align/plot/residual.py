@@ -94,6 +94,11 @@ def vs_u(p: Plotter):
         names = p.plot_list('ures_vs_u_plots')[vol]['name']
         titles = p.plot_list('ures_vs_u_plots')[vol]['title']
         for ipl, (name, title) in enumerate(zip(names, titles)):
+            # rangeX is u measurement and changes depending on
+            #    year and orientation (Ax/St and H/S for back) of sensor
+            # we could implement a method for deducing where to "zoom"
+            #   in for the different sensors here since all the plots have
+            #   a half-empty canvas (which half changes)
             p.plot_profileY(
                 name, xtitle=title,
                 indir='res/',
