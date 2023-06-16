@@ -119,7 +119,8 @@ def global_coord(
             '-R', str(run_number),
             '-n', '1'
         ],
-        capture_output=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
         check=True
     )
 
