@@ -155,8 +155,8 @@ def global_coord(
             sensor_map[name] = dict(
                 hps_position=sensor_map[name]['hps_position'],
                 svt_position=position,
-                u=sensor_map[name]['u'], 
-                v=sensor_map[name]['v'], 
+                u=sensor_map[name]['u'],
+                v=sensor_map[name]['v'],
                 w=sensor_map[name]['w']
             )
 
