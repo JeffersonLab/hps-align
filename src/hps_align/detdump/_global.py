@@ -124,10 +124,13 @@ def global_coord(
     )
 
     sensor_map = {}
+    svtFrameCount = False
+    svtFrameLine = 0
 
     for line in geo_print_result.stdout.splitlines():
         line = line.decode('utf-8')
         if 'sensor' in line and ':' in line:
+            svtFrameCount = True
             # line printing sensor name and coordinate position
             #   <name>: [ X, Y, Z] [ ux, uy, uz] [ vx, vy, vz] [ wx, wy, wz]
             line_elements = line.strip().split()
@@ -139,19 +142,35 @@ def global_coord(
             v = [float(line_elements[i][:-1]) for i in range(10, 13)]
             w = [float(line_elements[i][:-1]) for i in range(14, 17)]
             sensor_map[name] = dict(
-                position=position,
+                hps_position=position,
                 u=u, v=v, w=w
+            )
+        if svtFrameCount:
+            svtFrameLine += 1
+        if svtFrameLine == 14:
+            svtFrameLine = 0
+            svtFrameCount = False
+            line_elements = line.strip().split()
+            position = [float(line_elements[i][:-1]) for i in range(1, 4)]
+            sensor_map[name] = dict(
+                hps_position=sensor_map[name]['hps_position'],
+                svt_position=position,
+                u=sensor_map[name]['u'], 
+                v=sensor_map[name]['v'], 
+                w=sensor_map[name]['w']
             )
 
     write_mapping(output_file, sensor_map,
                   header=['sensor',
-                          'x', 'y', 'z',
+                          'hpsX', 'hpsY', 'hpsZ',
+                          'svtX', 'svtY', 'svtZ',
                           'ux', 'uy', 'uz',
                           'vx', 'vy', 'vz',
                           'wx', 'wy', 'wz'],
                   getrow=lambda sensor, loc:
                   [sensor,
-                   *loc['position'],
+                   *loc['hps_position'],
+                   *loc['svt_position'],
                    *loc['u'],
                    *loc['v'],
                    *loc['w']
