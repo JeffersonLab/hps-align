@@ -152,13 +152,7 @@ def global_coord(
             svtFrameCount = False
             line_elements = line.strip().split()
             position = [float(line_elements[i][:-1]) for i in range(1, 4)]
-            sensor_map[name] = dict(
-                hps_position=sensor_map[name]['hps_position'],
-                svt_position=position,
-                u=sensor_map[name]['u'],
-                v=sensor_map[name]['v'],
-                w=sensor_map[name]['w']
-            )
+            sensor_map[name]['svt_position'] = position
 
     write_mapping(output_file, sensor_map,
                   header=['sensor',
