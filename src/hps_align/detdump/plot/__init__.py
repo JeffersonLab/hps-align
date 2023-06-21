@@ -65,8 +65,15 @@ def diff(
     out: Path = typer.Option("diff.pdf", help="output file name to print image to"),
     which: str = typer.Option("hps", help="Which global coordinate system to use ('hps' or 'svt')")
 ):
+    """Plot difference between detectors and a reference detector.
+
+    The reference detector is the first detector provided in the input list.
+    All detectors are named after the name of the file. Use soft links to
+    rename files to helpful legend names if you wish.
+    """
+
     if local:
-        raise ValueError('local plot not implemented yet')
+        raise ValueError('local plotting not implemented yet')
 
     data = [
         (inf.stem, _load.glbl(inf).set_index(["sensor"]))
@@ -95,8 +102,14 @@ def abs(
     out: Path = typer.Option("abs.pdf", help="output file name to print image to"),
     which: str = typer.Option("hps", help="Which global coordinate system to use ('hps' or 'svt')")
 ):
+    """Plot the absolute position, overlaying all provided detectors
+
+    All detectors are named after the name of the provided file. Use soft links `ln -s` to
+    rename files to helpful legend names if you wish.
+    """
+
     if local:
-        raise ValueError('local plot not implemented yet')
+        raise ValueError('local plotting not implemented yet')
 
     data = [
         (inf.stem, _load.glbl(inf))
