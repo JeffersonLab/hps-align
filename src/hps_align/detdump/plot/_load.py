@@ -38,7 +38,7 @@ def _read_multitype(f: Path):
         return NotImplemented
 
 
-def glbl(f: Path):
+def _global(f: Path):
     r"""transform input global detdump into in-memory data table
 
     We calculate the Euler angles here which are just one definition.
@@ -75,7 +75,7 @@ def glbl(f: Path):
     return df
 
 
-def lcl(f: Path):
+def _local(f: Path):
     """Load the alignment constants from the input path
 
     Also convert a alignment constant ID number into its t_r and u_v_w
@@ -86,5 +86,6 @@ def lcl(f: Path):
     df['value'] = df.value.apply(pd.eval)
     df['t_r'] = (df.parameter % 10000) // 1000
     df['u_v_w'] = (df.parameter % 1000) // 100
+    df['individual'] = (df.parameter % 100 < 23) & (df.parameter % 100 > 0)
     df.sort_values('parameter', inplace=True)
     return df
