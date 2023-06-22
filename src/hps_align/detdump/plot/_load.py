@@ -52,7 +52,7 @@ def _global(f: Path):
     )
 
     # shorten sensor name
-    df['sensor'] = df.sensor.apply(lambda s: s.replace('module0_','').replace('_sensor0','').replace('halfmodule_','').replace('module_',''))
+    df['sensor'] = df.sensor.apply(lambda s: s.replace('module0_', '').replace('_sensor0', '').replace('halfmodule_', '').replace('module_', ''))
     df['lay'] = df.sensor.apply(lambda s: int(s[1]))
     df['vol'] = df.sensor.apply(lambda s: 1.0 if s[2] == 'b' else 0.0)
     df['tilt'] = df.sensor.apply(lambda s: 1.0 if (s[2] == 'b' and s[4] == 'a') or (s[2] == 't' and s[4] == 's') else 0.0)
