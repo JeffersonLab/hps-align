@@ -10,13 +10,35 @@ def _global(f: Path):
     r"""transform input global detdump into in-memory data table
 
     We calculate the Euler angles here which are just one definition.
+    Choice of which angles are easiest to interpret in the plot is
+    still being debated so the definition of these angles may change.
 
     .. math::
 
-        \tan\theta_x = \frac{v_z}{w_z}
-        \sin\theta_y = -u_z
-        \tan\theta_z = \frac{u_y}{u_x}
+        \theta_x = \arctan\left(\frac{v_z}{w_z}\right)
 
+    .. math::
+
+        \theta_y = -\arcsin(u_z)
+
+    .. math::
+
+        \theta_z = \arctan\left(\frac{u_y}{u_x}\right)
+
+    We also take this opportunity to reformat the sensor names into
+    something more readable and sort the dataframe in a special way
+    so that the order of the sensors in the plot is more natural.
+
+    Parameters
+    ----------
+    f : Path
+        file to load global sensor information from
+
+    Returns
+    -------
+    pd.DataFrame
+        dataframe holding the global sensor information along with the calculated
+        angles
     """
     df = pd.read_csv(f)
 
@@ -44,7 +66,27 @@ def _local(f: Path):
     """Load the alignment constants from the input path
 
     Also convert a alignment constant ID number into its t_r and u_v_w
-    for later plot categorization.
+    for later categorization into different plots. The conversion from
+    ID number into differet categories is listed below.
+
+    t_r
+        acquired by getting the 2nd digit of the 5-digit ID number.
+
+    u_v_w
+        getting the 3rd digit of the 5-digit ID number
+
+    individual
+        True if the last two digits are greater than 0 and less than 23
+
+    Parameters
+    ----------
+    f : Path
+        file to load local alignment constants from
+
+    Returns
+    -------
+    pd.DataFrame
+        dataframe holding the constants and the deduced categorical variables
     """
 
     df = pd.read_csv(f)
