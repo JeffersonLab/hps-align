@@ -42,9 +42,6 @@ def _global(f: Path):
     """
     df = pd.read_csv(f)
 
-    #df['thetax'] = np.arctan2(df.vz, df.wz)
-    #df['thetay'] = -np.arcsin(df.uz)
-    #df['thetaz'] = np.arctan2(df.uy, df.ux)
     df['thetax'] = np.arccos(df.vx)
     df['thetay'] = np.arccos(df.uy)
     df['thetaz'] = np.arccos(df.wz)
