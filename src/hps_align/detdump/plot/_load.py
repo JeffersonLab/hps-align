@@ -55,10 +55,10 @@ def _global(f: Path):
     for meas in meas_cols:
         df[[f'{meas}x',f'{meas}y',f'{meas}z']] = df[meas].tolist()
     df.rename(
-        columns = lambda colname : colname[:3]+colname[-1] if 'position' in colname and colname != 'position' else colname,
+        columns = lambda colname : colname[:3]+colname[-1] if 'position' in colname and colname != 'hps_position' and colname != 'svt_position' else colname,
         inplace=True
     )
-    #df.drop(columns = meas_cols, inplace=True)
+    df.drop(columns = meas_cols, inplace=True)
 
     df['thetax'] = np.arctan2(df.vz, df.wz)
     df['thetay'] = -np.arcsin(df.uz)
