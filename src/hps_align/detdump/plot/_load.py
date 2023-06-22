@@ -59,7 +59,7 @@ def _global(f: Path):
     df['lay'] = df.sensor.apply(lambda s: int(s[1]))
     df['vol'] = df.sensor.apply(lambda s: 1.0 if s[2] == 'b' else 0.0)
     df['tilt'] = df.sensor.apply(lambda s: 1.0 if (s[2] == 'b' and s[4] == 'a') or (s[2] == 't' and s[4] == 's') else 0.0)
-    df['side'] = df.sensor.apply(lambda s: 1.0 if int(s[1]) > 4 and s[-1] == 't' else 0.0)
+    df['side'] = df.sensor.apply(lambda s: 1.0 if s[-1] == 't' else 0.0)
     df['sortval'] = 500.0*df.vol + 2.0*df.tilt + 1.0*df.side + 4.0*df.lay
     df = df.sort_values('sortval')
     return df
