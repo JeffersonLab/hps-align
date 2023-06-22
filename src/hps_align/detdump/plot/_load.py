@@ -60,9 +60,12 @@ def _global(f: Path):
     )
     #df.drop(columns = meas_cols, inplace=True)
 
-    df['thetax'] = np.arctan2(df.vz, df.wz)
-    df['thetay'] = -np.arcsin(df.uz)
-    df['thetaz'] = np.arctan2(df.uy, df.ux)
+    #df['thetax'] = np.arctan2(df.vz, df.wz)
+    #df['thetay'] = -np.arcsin(df.uz)
+    #df['thetaz'] = np.arctan2(df.uy, df.ux)
+    df['thetax'] = np.arccos(df.vx)
+    df['thetay'] = np.arccos(df.uy)
+    df['thetaz'] = np.arccos(df.wz)
 
     df.reset_index(names='sensor', inplace=True)
     df.drop(

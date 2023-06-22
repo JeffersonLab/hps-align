@@ -98,7 +98,8 @@ def _global(data_items, output_file, title = None, which='hps', **kwargs):
                     else:
                         ax.set_title('SVT Global Position')
                 else:
-                    ax.set_title('Euler Angle\n$\\theta_x = atan(v_z, w_z)$, $\\theta_y = -asin(u_z)$, $\\theta_z = atan(u_y, u_x)$')
+                    ax.set_title('Axis Angles\n$\\theta_x = acos(v_x)$, $\\theta_y = acos(u_y)$, $\\theta_z = acos(w_z)$')
+                    #ax.set_title('Euler Angle\n$\\theta_x = atan(v_z, w_z)$, $\\theta_y = -asin(u_z)$, $\\theta_z = atan(u_y, u_x)$')
             if c == 'z':
                 ax.set_xticks(
                     ax.get_xticks(),
