@@ -10,4 +10,4 @@ app.add_typer(
     plot.app,
     name="plot",
     help=plot.__doc__
-    )
+)

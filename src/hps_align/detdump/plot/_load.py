@@ -5,60 +5,42 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from .._write import OutputType
-
-def _read_multitype(f: Path):
-    """Load the input file from any of the supported detdump output types
-
-    Parameters
-    ----------
-    f : str | Path
-      file path to file with detector dump
-
-    Returns
-    -------
-    pd.DataFrame
-        dataframe loaded from that file
-    """
-
-    if not isinstance(f, Path):
-        f = Path(f)
-
-    if not f.is_file():
-        raise ValueError(f'File {f} does not exist.')
-
-    if not OutputType.valid(f):
-        raise ValueError(f'File {f} does not have a supported extension.')
-
-    if f.suffix == '.csv':
-        return pd.read_csv(f)
-    elif f.suffix == '.json':
-        return pd.read_json(f).transpose()
-    else:
-        return NotImplemented
-
 
 def _global(f: Path):
     r"""transform input global detdump into in-memory data table
 
     We calculate the Euler angles here which are just one definition.
+    Choice of which angles are easiest to interpret in the plot is
+    still being debated so the definition of these angles may change.
 
     .. math::
 
-        \tan\theta_x = \frac{v_z}{w_z}
-        \sin\theta_y = -u_z
-        \tan\theta_z = \frac{u_y}{u_x}
+        \theta_x = \arctan\left(\frac{v_z}{w_z}\right)
 
+    .. math::
+
+        \theta_y = -\arcsin(u_z)
+
+    .. math::
+
+        \theta_z = \arctan\left(\frac{u_y}{u_x}\right)
+
+    We also take this opportunity to reformat the sensor names into
+    something more readable and sort the dataframe in a special way
+    so that the order of the sensors in the plot is more natural.
+
+    Parameters
+    ----------
+    f : Path
+        file to load global sensor information from
+
+    Returns
+    -------
+    pd.DataFrame
+        dataframe holding the global sensor information along with the calculated
+        angles
     """
-    df = _read_multitype(f)
-    meas_cols = ['hps_position','svt_position','u','v','w']
-    for meas in meas_cols:
-        df[[f'{meas}x',f'{meas}y',f'{meas}z']] = df[meas].tolist()
-    df.rename(
-        columns = lambda colname : colname[:3]+colname[-1] if 'position' in colname and colname != 'position' else colname,
-        inplace=True
-    )
-    #df.drop(columns = meas_cols, inplace=True)
+    df = pd.read_csv(f)
 
     #df['thetax'] = np.arctan2(df.vz, df.wz)
     #df['thetay'] = -np.arcsin(df.uz)
@@ -67,14 +49,13 @@ def _global(f: Path):
     df['thetay'] = np.arccos(df.uy)
     df['thetaz'] = np.arccos(df.wz)
 
-    df.reset_index(names='sensor', inplace=True)
     df.drop(
         df[df.sensor.str.contains('ECalScoring')].index,
         inplace=True
     )
 
     # shorten sensor name
-    df['sensor'] = df.sensor.apply(lambda s: s.replace('module0_','').replace('_sensor0','').replace('halfmodule_','').replace('module_',''))
+    df['sensor'] = df.sensor.apply(lambda s: s.replace('module0_', '').replace('_sensor0', '').replace('halfmodule_', '').replace('module_', ''))
     df['lay'] = df.sensor.apply(lambda s: int(s[1]))
     df['vol'] = df.sensor.apply(lambda s: 1.0 if s[2] == 'b' else 0.0)
     df['tilt'] = df.sensor.apply(lambda s: 1.0 if (s[2] == 'b' and s[4] == 'a') or (s[2] == 't' and s[4] == 's') else 0.0)
@@ -88,10 +69,30 @@ def _local(f: Path):
     """Load the alignment constants from the input path
 
     Also convert a alignment constant ID number into its t_r and u_v_w
-    for later plot categorization.
+    for later categorization into different plots. The conversion from
+    ID number into differet categories is listed below.
+
+    t_r
+        acquired by getting the 2nd digit of the 5-digit ID number.
+
+    u_v_w
+        getting the 3rd digit of the 5-digit ID number
+
+    individual
+        True if the last two digits are greater than 0 and less than 23
+
+    Parameters
+    ----------
+    f : Path
+        file to load local alignment constants from
+
+    Returns
+    -------
+    pd.DataFrame
+        dataframe holding the constants and the deduced categorical variables
     """
 
-    df = _read_multitype(f)
+    df = pd.read_csv(f)
     df['value'] = df.value.apply(pd.eval)
     df['t_r'] = (df.parameter % 10000) // 1000
     df['u_v_w'] = (df.parameter % 1000) // 100
