@@ -2,18 +2,25 @@
 
 from typing import List
 from pathlib import Path
+from enum import Enum
 
 import typer
 
 from ._cli import app
 
 
+class WhichCoord(Enum):
+    """which global coordinate system to use"""
+    HPS = "hps"
+    SVT = "svt"
+    LOCAL = "local"
+
+
 @app.command()
 def diff(
     input_file: List[Path],
-    local: bool = typer.Option(False, help="Comparing alignment parameters and not global positions/orientations"),
     out: Path = typer.Option("diff.pdf", help="output file name to print image to"),
-    which: str = typer.Option("hps", help="Which global coordinate system to use ('hps' or 'svt')")
+    which: WhichCoord = typer.Option(WhichCoord.HPS.value, help="Which coordinate system to use")
 ):
     """Plot difference between detectors and a reference detector.
 
@@ -22,7 +29,7 @@ def diff(
     rename files to helpful legend names if you wish.
     """
 
-    if local:
+    if which == WhichCoord.LOCAL:
         from ._load import _local as loader
         from ._table_fig import _local as plotter
         index = 'parameter'
@@ -31,7 +38,7 @@ def diff(
         from ._load import _global as loader
         from ._table_fig import _global as plotter
         index = 'sensor'
-        plot_kw = dict(which=which)
+        plot_kw = dict(which=which.value)
 
     data = [
         (inf.stem, loader(inf).set_index([index]))
@@ -57,9 +64,8 @@ def diff(
 @app.command()
 def abs(
     input_file: List[Path],
-    local: bool = typer.Option(False, help="Comparing alignment parameters and not global positions/orientations"),
     out: Path = typer.Option("abs.pdf", help="output file name to print image to"),
-    which: str = typer.Option("hps", help="Which global coordinate system to use ('hps' or 'svt')")
+    which: WhichCoord = typer.Option(WhichCoord.HPS.value, help="Which coordinate system to use")
 ):
     """Plot the absolute position, overlaying all provided detectors
 
@@ -67,7 +73,7 @@ def abs(
     rename files to helpful legend names if you wish.
     """
 
-    if local:
+    if which == WhichCoord.LOCAL:
         from ._load import _local as loader
         from ._table_fig import _local as plotter
         plot_kw = dict(
@@ -77,7 +83,7 @@ def abs(
         from ._load import _global as loader
         from ._table_fig import _global as plotter
         plot_kw = dict(
-            which=which,
+            which=which.value,
             title='Absolute Position and Orientation'
         )
 
