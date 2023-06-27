@@ -4,7 +4,19 @@
 def _local(data_items, output_file, title=None, **kwargs):
     """the local coordinate system is plotted in a 2x4 grid where
     the top row is translations, the bottom row is rotations, and
-    the last entry in the bottom row is for structure constants"""
+    the last entry in the bottom row is for structure constants
+
+    Parameters
+    ----------
+    data_items: List[Tuple[str,pd.DataFrame]]
+        items of data with corresponding names to plot
+    output_file: str | pathlib.Path
+        output file to write resulting figure to
+    title: str, optional
+        title to add onto legend. Default is None.
+    **kwargs: dict, optional
+        the rest of the keyword arguments are absorbed but then ignored
+    """
 
     import matplotlib.pyplot as plt
     fig, axes = plt.subplots(
@@ -65,7 +77,21 @@ def _local(data_items, output_file, title=None, **kwargs):
 def _global(data_items, output_file, title=None, which='hps', **kwargs):
     """the global coordinate system is plottined in a 3x2 grid
     where the first column is position and the second column is
-    euler angles. The rows go through x, y, z."""
+    euler angles. The rows go through x, y, z.
+
+    Parameters
+    ----------
+    data_items: List[Tuple[str,pd.DataFrame]]
+        items of data with corresponding names to plot
+    output_file: str | pathlib.Path
+        output file to write resulting figure to
+    title: str, optional
+        title to add onto legend. Default is None.
+    which: str, optional
+        which positional coordinates to use. Default is 'hps'.
+    **kwargs: dict, optional
+        the rest of the keyword arguments are absorbed but then ignored
+    """
 
     import matplotlib.pyplot as plt
     fig, axes = plt.subplots(
