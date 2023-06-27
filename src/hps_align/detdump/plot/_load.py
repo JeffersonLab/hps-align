@@ -6,12 +6,13 @@ import numpy as np
 import pandas as pd
 
 
-def _global(f: Path):
-    r"""transform input global detdump into in-memory data table
+def euler(df: pd.DataFrame):
+    r"""One definition of the Euler angles
 
-    We calculate the Euler angles here which are just one definition.
-    Choice of which angles are easiest to interpret in the plot is
-    still being debated so the definition of these angles may change.
+    This code is not currently being used by the global loader
+    but it is here for easy drop-in if users wish. Just change
+    which angle_calculator is used when the global loader
+    is being called.
 
     .. math::
 
@@ -25,6 +26,50 @@ def _global(f: Path):
 
         \theta_z = \arctan\left(\frac{u_y}{u_x}\right)
 
+    Parameters
+    ----------
+    df : pd.DataFrame
+        dataframe with u, v, w coordinate vectors
+
+    Returns
+    -------
+    Tuple[pd.Series]
+        the three-tuple of the three euler angles
+    """
+    df['thetax'] = np.arctan2(df.vz, df.wz),
+    df['thetay'] = -np.arcsin(df.uz),
+    df['thetaz'] = np.arctan2(df.uy, df.ux)
+
+
+def axis(df: pd.DataFrame):
+    r"""Calculate the angles relative to the known global axes
+    the local axes are close to.
+
+    .. math::
+
+        \theta_x = \arccos(v_x)
+
+    .. math::
+
+        \theta_y = \arccos(u_y)
+
+    .. math::
+
+        \theta_z = \arccos(w_z)
+
+    Parameters
+    ----------
+    df : pd.DataFrame
+        dataframe with u, v, w coordinate vectors
+    """
+    df['thetax'] = np.arccos(df.vx)
+    df['thetay'] = np.arccos(df.uy)
+    df['thetaz'] = np.arccos(df.wz)
+
+
+def _global(f: Path, angle_calculator=axis):
+    r"""transform input global detdump into in-memory data table
+
     We also take this opportunity to reformat the sensor names into
     something more readable and sort the dataframe in a special way
     so that the order of the sensors in the plot is more natural.
@@ -33,6 +78,12 @@ def _global(f: Path):
     ----------
     f : Path
         file to load global sensor information from
+    angle_calculator : Callable
+        calculate the three angles representing the orientation of the sensor.
+        This function is provided the parsed pandas DataFrame and then is
+        expected to set the three columns [thetax, thetay, thetaz] to there
+        calculated values.
+        The default calculator is :meth:`axis`.
 
     Returns
     -------
@@ -42,9 +93,7 @@ def _global(f: Path):
     """
     df = pd.read_csv(f)
 
-    df['thetax'] = np.arccos(df.vx)
-    df['thetay'] = np.arccos(df.uy)
-    df['thetaz'] = np.arccos(df.wz)
+    angle_calculator(df)
 
     df.drop(
         df[df.sensor.str.contains('ECalScoring')].index,
