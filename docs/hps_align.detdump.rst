@@ -41,6 +41,13 @@ or relative to a certain reference detector.
    :private-members:
 
 
+Calculating Angles
+^^^^^^^^^^^^^^^^^^
+
+.. automodule:: hps_align.detdump.plot._angles
+   :members:
+   :private-members:
+
 Loading Dumps
 ^^^^^^^^^^^^^
 Loading the dumps gives us an opportunity to apply transformations

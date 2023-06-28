@@ -6,20 +6,19 @@ from enum import Enum
 
 import typer
 
+from ._angles import angle_calculator
 from .._cli import app
 
 
-class WhichCoord(Enum):
+class Coord(Enum):
     """which coordinate system to use"""
-    HPS = "hps"
-    """coordinates relative to entire HPS detector"""
-    SVT = "svt"
-    """coordinates relative to SVT frame"""
+    GLOBAL = "global"
+    """coordinates of sensors in some parent volume holding all of them"""
     LOCAL = "local"
     """coordinates relative to each sensor individually i.e. the alignment constants themselves"""
 
 
-class WhichPlot(Enum):
+class Plot(Enum):
     """which type of comparison plot to use"""
     ABS = "abs"
     """plot all values in absolute terms"""
@@ -27,12 +26,32 @@ class WhichPlot(Enum):
     """subtract all values by the reference values"""
 
 
+Angle = Enum('Angle', {name: name for name in angle_calculator.__registry__})
+Angle.__doc__ = """what angle definition should be used in global coordinate plots
+
+See _angles module for how these definitions are defined.
+"""
+
+for a in Angle:
+    a.__doc__ = angle_calculator.__registry__[a.value].__doc__
+
+
+class Position(Enum):
+    """what position definition should be used in global coordinate plots"""
+    HPS = "hps"
+    """positions relative to entire HPS detector"""
+    SVT = "svt"
+    """positions relative to SVT box"""
+
+
 @app.command()
 def plot(
     input_file: List[Path],
     out: Path = typer.Option(None, help="output file name to print image to, default is <plot>.pdf"),
-    which: WhichCoord = typer.Option(WhichCoord.HPS.value, help="Which coordinate system to use"),
-    plot: WhichPlot = typer.Option(WhichPlot.ABS.value, help='What type of plot to make')
+    coord: Coord = typer.Option(Coord.GLOBAL.value, help="which coordinate system to use"),
+    angle: Angle = typer.Option(Angle.axis.value, help='which angle definition to use in global coordinates'),
+    pos: Position = typer.Option(Position.HPS.value, help='which position definition to use in global coordinates'),
+    plot: Plot = typer.Option(Plot.ABS.value, help='What type of plot to make')
 ):
     """Plot detector coordinate and orientation data
 
@@ -47,27 +66,35 @@ def plot(
     if out is None:
         out = plot.value + '.pdf'
 
-    if which == WhichCoord.LOCAL:
+    if coord == Coord.LOCAL:
         from ._load import _local as loader
         from ._table_fig import _local as plotter
         index = 'parameter'
         plot_kw = dict()
-        if plot == WhichPlot.ABS:
+        load_kw = dict()
+        if plot == Plot.ABS:
             plot_kw['title'] = 'Constant Values'
     else:
         from ._load import _global as loader
         from ._table_fig import _global as plotter
         index = 'sensor'
-        plot_kw = dict(which=which.value)
-        if plot == WhichPlot.ABS:
+        angle_def = angle_calculator.__registry__[angle.value]
+        plot_kw = dict(
+            position=pos.value,
+            angle_title=angle_def.__title__
+            )
+        load_kw = dict(
+            angle_calculator=angle_def
+            )
+        if plot == Plot.ABS:
             plot_kw['title'] = 'Absolute Position and Orientation'
 
     data = [
-        (inf.stem, loader(inf))
+        (inf.stem, loader(inf, **load_kw))
         for inf in input_file
     ]
 
-    if plot == WhichPlot.DIFF:
+    if plot == Plot.DIFF:
         if len(data) < 2:
             raise ValueError('Must provide 2 or more detectors to make a diff plot!')
         # set the index so subtraction lines up along ID

@@ -74,7 +74,7 @@ def _local(data_items, output_file, title=None, **kwargs):
     plt.clear()
 
 
-def _global(data_items, output_file, title=None, which='hps', **kwargs):
+def _global(data_items, output_file, title=None, position='hps', angle_title='Angles', **kwargs):
     """the global coordinate system is plottined in a 3x2 grid
     where the first column is position and the second column is
     euler angles. The rows go through x, y, z.
@@ -87,8 +87,10 @@ def _global(data_items, output_file, title=None, which='hps', **kwargs):
         output file to write resulting figure to
     title: str, optional
         title to add onto legend. Default is None.
-    which: str, optional
+    position: str, optional
         which positional coordinates to use. Default is 'hps'.
+    angle_title: str, optional
+        title to have above the angle columns, useful for defining what angles are being plotted
     **kwargs: dict, optional
         the rest of the keyword arguments are absorbed but then ignored
     """
@@ -102,7 +104,7 @@ def _global(data_items, output_file, title=None, which='hps', **kwargs):
     fig.set_size_inches(17, 8)
 
     for i_c, c in enumerate(['x', 'y', 'z']):
-        for i_tr, tr in enumerate([which, 'theta']):
+        for i_tr, tr in enumerate([position, 'theta']):
             # go through coordinates down columns and
             # and position/rotation across rows
             ax = axes[i_c][i_tr]
@@ -125,7 +127,7 @@ def _global(data_items, output_file, title=None, which='hps', **kwargs):
                     else:
                         ax.set_title('SVT Global Position')
                 else:
-                    ax.set_title('Axis Angles\n$\\theta_x = acos(v_x)$, $\\theta_y = acos(u_y)$, $\\theta_z = acos(w_z)$')
+                    ax.set_title(angle_title)
             if c == 'z':
                 ax.set_xticks(
                     ax.get_xticks(),
