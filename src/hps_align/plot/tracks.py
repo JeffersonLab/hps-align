@@ -82,6 +82,18 @@ def profiles(p: Plotter):
 
 
 @Plotter.user
+def p_vs_phi(p: Plotter):
+    for half in ['top', 'bottom']:
+        p.plot_2D_colormesh(
+            f'p_vs_phi_{half}',
+            indir='trk_params/',
+            xtitle=f'#phi {half}',
+            ytitle=f'p [GeV]',
+            ztitle='Tracks'
+        )
+
+
+@Plotter.user
 def eop(p: Plotter):
     """EoP plots require the EoP directory in the ROOT files"""
     p.plot_profileY(
