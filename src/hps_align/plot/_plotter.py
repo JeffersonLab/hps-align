@@ -335,6 +335,83 @@ class Plotter:
 
         can.SaveAs(self.outdir + "/" + out_name + self.oFext)
 
+    
+    def plot_2D_colormesh(self, name, indir='res/', xtitle=None, ytitle=None, ztitle=None, logz=True):
+        """plot a 2D colormesh for _each_ histogram in the list _separately_
+
+        Parameters
+        ----------
+        name: str
+            name of histogram to plot for each loaded file
+        indir: str, optional
+            directory in which histogram resides in ROOT file
+        out_name: str, optional
+            out name prefix, it is a prefix since we will be printing multiplt plots
+        xtitle: str, optional
+            title of x axis
+        ytitle: str, optional
+            title of y axis
+        ztitle: str, optional
+            title of z axis
+        logz: bool, optional
+            whether to have color scale be logarithmic or not (default yes)
+        """
+        if not os.path.exists(self.outdir):
+            os.mkdir(self.out_dir)
+
+        histolist = self.get(name, indir=indir)
+
+        can = r.TCanvas('c1', 'c1', 2200, 2200)
+        can.SetMargin(
+            0.1, # left
+            0.15, # right
+            0.1, # bottom
+            0.1, # top
+        )
+
+        if logz:
+            can.SetLogz()
+
+        for ih, hist in enumerate(histolist):
+            self.set_histo_style(hist, ih)
+            if xtitle is not None:
+                hist.GetXaxis().SetTitle(xtitle)
+            if ytitle is not None:
+                hist.GetYaxis().SetTitle(ytitle)
+            if ztitle is not None:
+                hist.GetZaxis().SetTitle(ztitle)
+
+            title_size = hist.GetXaxis().GetTitleSize()*0.7
+            title_offset = hist.GetXaxis().GetTitleOffset()
+            label_size = hist.GetXaxis().GetLabelSize()*0.75
+
+            hist.GetXaxis().SetTitleSize(title_size)
+            hist.GetXaxis().SetTitleOffset(title_offset)
+            hist.GetXaxis().SetLabelSize(label_size)
+
+            hist.GetYaxis().SetTitleSize(title_size)
+            hist.GetYaxis().SetTitleOffset(title_offset*1.7)
+            hist.GetYaxis().SetLabelSize(label_size)
+
+            hist.GetZaxis().SetTitleSize(title_size)
+            hist.GetZaxis().SetTitleOffset(title_offset*1.7)
+            hist.GetZaxis().SetLabelSize(label_size)
+
+            hist.Draw('colz')
+    
+            text = r.TLatex()
+            text.SetNDC()
+            text.SetTextFont(42)
+            text.SetTextSize(0.04)
+            text.SetTextColor(r.kBlack)
+            text.SetTextAlign(r.kVAlignTop+r.kHAlignCenter)
+            text.DrawLatex(0.5, 0.99, '#bf{#it{HPS}} Work In Progress')
+            text.DrawLatex(0.5, 0.99-text.GetTextSize(), self.legend_names[ih])
+    
+            can.SaveAs(f'{self.outdir}/{name}-{self.legend_names[ih]}{self.oFext}')
+            can.Clear()
+
+
     def make_1D_plots(self, histolist, out_name="output", xtitle="", ytitle="", yrange=[], logy=False, RebinFactor=0):
         """!
         Make 1D plots
