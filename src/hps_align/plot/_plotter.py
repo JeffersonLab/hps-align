@@ -335,7 +335,6 @@ class Plotter:
 
         can.SaveAs(self.outdir + "/" + out_name + self.oFext)
 
-    
     def plot_2D_colormesh(self, name, indir='res/', xtitle=None, ytitle=None, ztitle=None, logz=True):
         """plot a 2D colormesh for _each_ histogram in the list _separately_
 
@@ -363,10 +362,10 @@ class Plotter:
 
         can = r.TCanvas('c1', 'c1', 2200, 2200)
         can.SetMargin(
-            0.1, # left
-            0.15, # right
-            0.1, # bottom
-            0.1, # top
+            0.1,  # left
+            0.15,  # right
+            0.1,  # bottom
+            0.1,  # top
         )
 
         if logz:
@@ -398,7 +397,7 @@ class Plotter:
             hist.GetZaxis().SetLabelSize(label_size)
 
             hist.Draw('colz')
-    
+
             text = r.TLatex()
             text.SetNDC()
             text.SetTextFont(42)
@@ -407,10 +406,9 @@ class Plotter:
             text.SetTextAlign(r.kVAlignTop+r.kHAlignCenter)
             text.DrawLatex(0.5, 0.99, '#bf{#it{HPS}} Work In Progress')
             text.DrawLatex(0.5, 0.99-text.GetTextSize(), self.legend_names[ih])
-    
+
             can.SaveAs(f'{self.outdir}/{name}-{self.legend_names[ih]}{self.oFext}')
             can.Clear()
-
 
     def make_1D_plots(self, histolist, out_name="output", xtitle="", ytitle="", yrange=[], logy=False, RebinFactor=0):
         """!
