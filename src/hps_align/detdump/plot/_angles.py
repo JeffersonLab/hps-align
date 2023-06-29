@@ -1,7 +1,5 @@
 """module for calculating different angles from coordinate axes"""
 
-import functools
-
 import numpy as np
 import pandas as pd
 
@@ -11,11 +9,7 @@ def angle_calculator(f):
     angle_calculator.__registry__[f.__name__] = f
     # set default title
     f.__title__ = f.__name__
-
-    @functools.wraps(f)
-    def wrapper(*args, **kwargs):
-        return f(*args, **kwargs)
-    return wrapper
+    return f
 
 
 angle_calculator.__registry__ = dict()
