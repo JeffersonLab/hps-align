@@ -68,6 +68,8 @@ def plot(
 
     if coord == Coord.LOCAL:
         from ._load import _local as loader
+        from ._load import _local_is2016 as is2016
+        from ._load import _local_remap2016 as remap2016
         from ._table_fig import _local as plotter
         index = 'parameter'
         plot_kw = dict()
@@ -76,16 +78,18 @@ def plot(
             plot_kw['title'] = 'Constant Values'
     else:
         from ._load import _global as loader
+        from ._load import _global_is2016 as is2016
+        from ._load import _global_remap2016 as remap2016
         from ._table_fig import _global as plotter
         index = 'sensor'
         angle_def = angle_calculator.__registry__[angle.value]
         plot_kw = dict(
             position=pos.value,
             angle_title=angle_def.__title__
-            )
+        )
         load_kw = dict(
             angle_calculator=angle_def
-            )
+        )
         if plot == Plot.ABS:
             plot_kw['title'] = 'Absolute Position and Orientation'
 
@@ -93,6 +97,14 @@ def plot(
         (inf.stem, loader(inf, **load_kw))
         for inf in input_file
     ]
+
+    years = [is2016(df) for _name, df in data]
+    if any(years) and not all(years):
+        # at least one is 2016 but not all of them,
+        # apply 2016 remap to the 2016 ones
+        for yes2016, (_name, df) in zip(years, data):
+            if yes2016:
+                df[index] = df[index].apply(lambda i: remap2016[i])
 
     if plot == Plot.DIFF:
         if len(data) < 2:

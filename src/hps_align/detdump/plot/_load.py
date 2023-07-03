@@ -52,6 +52,69 @@ def _global(f: Path, angle_calculator=axis):
     return df
 
 
+def _global_is2016(df: pd.DataFrame):
+    """check if the input dataframe holdinging geometry information is from 2016 or not
+
+    This check is currently only valid for global coordinates.
+
+    For global coordinates, the distinguishing factor between 2016 and post-upgrade
+    years is the presence of a 7th layer.
+
+    Parameters
+    ----------
+    df: pd.DataFrame
+        dataframe of sensor coordinates and positions
+
+
+    Returns
+    -------
+    bool:
+        True if dataframe represents a 2016 detector
+    """
+
+    return not any(df.sensor.str.contains('L7'))
+
+
+_global_remap2016 = {
+    'L1t_axial': 'L2t_axial',
+    'L1t_stereo': 'L2t_stereo',
+    'L2t_axial': 'L3t_axial',
+    'L2t_stereo': 'L3t_stereo',
+    'L3t_axial': 'L4t_axial',
+    'L3t_stereo': 'L4t_stereo',
+    'L4t_axial_hole': 'L5t_axial_hole',
+    'L4t_stereo_hole': 'L5t_stereo_hole',
+    'L4t_axial_slot': 'L5t_axial_slot',
+    'L4t_stereo_slot': 'L5t_stereo_slot',
+    'L5t_axial_hole': 'L6t_axial_hole',
+    'L5t_stereo_hole': 'L6t_stereo_hole',
+    'L5t_axial_slot': 'L6t_axial_slot',
+    'L5t_stereo_slot': 'L6t_stereo_slot',
+    'L6t_axial_hole': 'L7t_axial_hole',
+    'L6t_stereo_hole': 'L7t_stereo_hole',
+    'L6t_axial_slot': 'L7t_axial_slot',
+    'L6t_stereo_slot': 'L7t_stereo_slot',
+    'L1b_axial': 'L2b_axial',
+    'L1b_stereo': 'L2b_stereo',
+    'L2b_axial': 'L3b_axial',
+    'L2b_stereo': 'L3b_stereo',
+    'L3b_axial': 'L4b_axial',
+    'L3b_stereo': 'L4b_stereo',
+    'L4b_axial_hole': 'L5b_axial_hole',
+    'L4b_stereo_hole': 'L5b_stereo_hole',
+    'L4b_axial_slot': 'L5b_axial_slot',
+    'L4b_stereo_slot': 'L5b_stereo_slot',
+    'L5b_axial_hole': 'L6b_axial_hole',
+    'L5b_stereo_hole': 'L6b_stereo_hole',
+    'L5b_axial_slot': 'L6b_axial_slot',
+    'L5b_stereo_slot': 'L6b_stereo_slot',
+    'L6b_axial_hole': 'L7b_axial_hole',
+    'L6b_stereo_hole': 'L7b_stereo_hole',
+    'L6b_axial_slot': 'L7b_axial_slot',
+    'L6b_stereo_slot': 'L7b_stereo_slot',
+}
+
+
 def _local(f: Path):
     """Load the alignment constants from the input path
 
@@ -86,3 +149,14 @@ def _local(f: Path):
     df['individual'] = (df.parameter % 100 < 23) & (df.parameter % 100 > 0)
     df.sort_values('parameter', inplace=True)
     return df
+
+
+def _local_is2016(df: pd.DataFrame):
+    """determine if a local-coordinate dataframe is 2016
+
+    not implemented
+    """
+    return False
+
+
+_local_remap2016 = dict()
