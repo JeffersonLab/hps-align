@@ -12,6 +12,7 @@ Welcome to hps_align's documentation!
 
    hps_align 
    build_docs
+   background
    hps-java-setup
    hps_align.plot
    hps_align.detdump
