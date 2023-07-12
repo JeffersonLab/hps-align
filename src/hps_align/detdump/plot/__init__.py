@@ -114,11 +114,18 @@ def plot(
             df.set_index([index], inplace=True)
         # get reference detector
         ref_name, ref_table = data[0]
+        ref_table['sortval'] = 0
+        ref_table['lay'] = 0
         # subtract away the first detector provided
         data = [
-            (name, (df-ref_table).reset_index())
+            (name, (df-ref_table).reset_index().sort_values('sortval').dropna(subset = ['ux']).reset_index(drop=True))
             for name, df in data[1:]
         ]
+        # remove layers not in both years if comparing both detector versions
+        if any(years) and not all(years) and years[0]:
+            data = [ (name, df[df.lay > 2.5]) for name, df in data ]
+        if any(years) and not all(years) and not years[0]:
+            data = [ (name, df[df.lay > 1.5]) for name, df in data ]
         # change plot title
         plot_kw['title'] = f'Difference Relative to {ref_name}'
 
