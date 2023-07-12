@@ -4,7 +4,7 @@ import typer
 from pathlib import Path
 import subprocess
 import os
-from ._write import OutputType, write_mapping
+from ._write import write_mapping
 from ._cli import app
 
 
@@ -31,10 +31,7 @@ def global_coord(
          'hps-distribution' / '5.2-SNAPSHOT' / 'hps-distribution-5.2-SNAPSHOT-bin.jar'),
         help='java bin jar to use to run geometry printer'
     ),
-    output_file: str = typer.Option(None, help='output file to write data to, uses detector name by default'),
-    output_type: OutputType = typer.Option(
-        'json',
-        help='type of output to write will be over-written by extension of output_file if provided')
+    output_file: str = typer.Option(None, help='output file to write data to, uses detector name by default')
 ):
     """dump coordinates of sensors in global frame
 
@@ -57,30 +54,8 @@ def global_coord(
     Since the 2019 and 2021 conditions have the same "shape", we can use
     the same (somewhat arbitrary) run number if desired.
 
-    User
-    ----
-
-    bin.jar file
-        the PrintGeometryDriver has been on
-        hps-java master for awhile so this does not need to
-        be incredibly recent.
-
-    input slcio file
-        the driver does not look at any
-        of the events in the slcio file so it just needs to
-        be /any/ slcio file with at least one event in it.
-
-    detname
-        name of detector
-
-    run number
-        the run number needs to be a valid run number for that year
-        so that hps-java can pull down condition
-        databases, but it doesn't need to pertain to the
-        detector being used
-
-    Auto
-    ----
+    Auto-Deduced java Arguments
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     java args
         we aren't doing any strong processing or using GBL
@@ -94,18 +69,36 @@ def global_coord(
 
     number of events
         we just need one to trigger the functionality of loading the detector
+
+    Parameters
+    ----------
+
+    detname : str
+        The name of the detector to load
+    input_file : Path
+        the driver does not look at any
+        of the events in the slcio file so it just needs to
+        be /any/ slcio file with at least one event in it.
+    run_number : int
+        The run number needs to be a valid run number for that year
+        so that hps-java can pull down condition
+        databases, but it doesn't need to pertain to the
+        detector being used
+    jar : Path, optional
+        the PrintGeometryDriver has been on
+        hps-java master for awhile so this does not need to
+        be incredibly recent. The default is the path to the 5.2-SNAPSHOT
+        located in the user's home maven repository.
+
     """
 
     if output_file is None:
         # deduce default to be name of detector + extension
-        output_file = f'{detname}-local.{output_type.value}'
+        output_file = f'{detname}-global.csv'
 
     if Path(output_file).suffix == '':
-        # no extension provided, use output_type
-        output_file += '.'+output_type.value
-
-    if not OutputType.valid(Path(output_file)):
-        raise ValueError(f'{output_file} does not have one of the allowed extensions')
+        # no extension provided, add it manually
+        output_file += '.csv'
 
     geo_print_result = subprocess.run(
         [
@@ -157,8 +150,8 @@ def global_coord(
 
     write_mapping(output_file, sensor_map,
                   header=['sensor',
-                          'hpsX', 'hpsY', 'hpsZ',
-                          'svtX', 'svtY', 'svtZ',
+                          'hpsx', 'hpsy', 'hpsz',
+                          'svtx', 'svty', 'svtz',
                           'ux', 'uy', 'uz',
                           'vx', 'vy', 'vz',
                           'wx', 'wy', 'wz'],
