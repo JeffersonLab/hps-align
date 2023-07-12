@@ -122,10 +122,8 @@ def plot(
             for name, df in data[1:]
         ]
         # remove layers not in both years if comparing both detector versions
-        if any(years) and not all(years) and years[0]:
-            data = [(name, df[df.lay > 2.5]) for name, df in data]
-        if any(years) and not all(years) and not years[0]:
-            data = [(name, df[df.lay > 1.5]) for name, df in data]
+        if any(years) and not all(years):
+            data = [((name, df[df.lay > 1.5]) if (df['lay'] == 1.0).any() else (name, df[df.lay > 2.5])) for name, df in data]
         # change plot title
         plot_kw['title'] = f'Difference Relative to {ref_name}'
 
