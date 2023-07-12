@@ -34,8 +34,6 @@ def _global(f: Path, angle_calculator=axis):
     """
     df = pd.read_csv(f)
 
-    angle_calculator(df)
-
     df.drop(
         df[df.sensor.str.contains('ECalScoring')].index,
         inplace=True
@@ -49,6 +47,7 @@ def _global(f: Path, angle_calculator=axis):
     df['side'] = df.sensor.apply(lambda s: 1.0 if s[-1] == 't' else 0.0)
     df['sortval'] = 500.0*df.vol + 2.0*df.tilt + 1.0*df.side + 4.0*df.lay
     df = df.sort_values('sortval')
+    angle_calculator(df)
     return df
 
 

@@ -85,3 +85,141 @@ def axis(df: pd.DataFrame):
 
 axis.__title__ = r"""Axis Angles
 $\theta_x = acos(v_x)$ $\theta_y = acos(u_y)$ $\theta_z = acos(w_z)$"""
+
+
+@angle_calculator
+def expected_axis(df: pd.DataFrame):
+    r"""Calculate the angles relative to the known global axes
+    the local axes are close to and applying flips when we
+    expect them to occur.
+
+    .. math::
+
+        \theta_x = \arccos(\pm v_x)
+
+    .. math::
+
+        \theta_y = \arccos(\pm u_y)
+
+    .. math::
+
+        \theta_z = \arccos(\pm w_z)
+
+    The +/- sign comes from knowledge of how the detector
+    was built and is summarized the the following tables.
+
+    .. list-table:: Front
+       :widths: 50 25 25 25
+       :header-rows: 1
+
+       * - Sensor Type
+         - :math:`sign(u \cdot y)`
+         - :math:`sign(v \cdot x)`
+         - :math:`sign(w \cdot z)`
+       * - L12-axial-top
+         - :math:`+`
+         - :math:`+`
+         - :math:`-`
+       * - L12-stereo-top
+         - :math:`+`
+         - :math:`-`
+         - :math:`+`
+       * - L34-axial-top
+         - :math:`+`
+         - :math:`+`
+         - :math:`-`
+       * - L34-stereo-top
+         - :math:`-`
+         - :math:`+`
+         - :math:`+`
+       * - L12-axial-bottom
+         - :math:`-`
+         - :math:`+`
+         - :math:`+`
+       * - L12-stereo-bottom
+         - :math:`-`
+         - :math:`-`
+         - :math:`-`
+       * - L34-axial-bottom
+         - :math:`-`
+         - :math:`+`
+         - :math:`+`
+       * - L34-stereo-bottom
+         - :math:`+`
+         - :math:`+`
+         - :math:`-`
+
+    .. list-table:: Back
+       :widths: 50 25 25 25
+       :header-rows: 1
+
+       * - Sensor Type
+         - :math:`sign(u \cdot y)`
+         - :math:`sign(v \cdot x)`
+         - :math:`sign(w \cdot z)`
+       * - axial-slot-top
+         - :math:`-`
+         - :math:`-`
+         - :math:`-`
+       * - axial-hole-top
+         - :math:`+`
+         - :math:`+`
+         - :math:`-`
+       * - stereo-slot-top
+         - :math:`+`
+         - :math:`-`
+         - :math:`+`
+       * - stereo-hole-top
+         - :math:`-`
+         - :math:`+`
+         - :math:`+`
+       * - axial-slot-bottom
+         - :math:`+`
+         - :math:`-`
+         - :math:`+`
+       * - axial-hole-bottom
+         - :math:`-`
+         - :math:`+`
+         - :math:`+`
+       * - stereo-slot-bottom
+         - :math:`-`
+         - :math:`-`
+         - :math:`-`
+       * - stereo-hole-bottom
+         - :math:`+`
+         - :math:`+`
+         - :math:`-`
+
+
+    Parameters
+    ----------
+    df : pd.DataFrame
+        dataframe with u, v, w coordinate vectors
+    """
+
+    is2016 = not any(df.sensor.str.contains('L7'))
+
+    vx_neg_sl = (
+        ((df.lay < 3) & (df.sensor.str.contains('stereo'))) |
+        (df.sensor.str.contains('slot'))
+    )
+    uy_neg_sl = (
+        ((df.lay > 2.5) & (df.lay < 4.5) & (df.sensor.str.contains('t_stereo')))
+        | ((df.lay < 4.5) & (df.sensor.str.contains('b_axial')))
+        | (df.sensor.str.contains('t_axial_slot'))
+        | (df.sensor.str.contains('t_stereo_hole'))
+        | (df.sensor.str.contains('b_axial_hole'))
+        | (df.sensor.str.contains('b_stereo_slot'))
+    )
+    wz_neg_sl = (
+        df.sensor.str.contains('t_axial')
+        | df.sensor.str.contains('b_stereo')
+    )
+
+    df['thetax'] = np.arccos((-1*vx_neg_sl+1*(~vx_neg_sl))*df.vx)
+    df['thetay'] = np.arccos((-1*uy_neg_sl+1*(~uy_neg_sl))*df.uy)
+    df['thetaz'] = np.arccos((-1*wz_neg_sl+1*(~wz_neg_sl))*df.wz)
+
+
+axis.__title__ = r"""Expected Axis Angles
+$\theta_x = acos(\pm v_x)$ $\theta_y = acos(\pm u_y)$ $\theta_z = acos(\pm w_z)$"""
