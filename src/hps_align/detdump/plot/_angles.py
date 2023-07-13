@@ -238,5 +238,5 @@ def expected_axis(df: pd.DataFrame):
     df['thetaz'] = np.arccos((-1*wz_neg_sl+1*(~wz_neg_sl))*df.wz)
 
 
-axis.__title__ = r"""Expected Axis Angles
+expected_axis.__title__ = r"""Expected Axis Angles
 $\theta_x = acos(\pm v_x)$ $\theta_y = acos(\pm u_y)$ $\theta_z = acos(\pm w_z)$"""
