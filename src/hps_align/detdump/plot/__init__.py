@@ -95,6 +95,7 @@ def plot(
         )
         if plot == Plot.ABS:
             plot_kw['title'] = 'Absolute Position and Orientation'
+            plot_kw['ref_line'] = None
 
     data = [
         (inf.stem, loader(inf, **load_kw))

@@ -74,7 +74,7 @@ def _local(data_items, output_file, title=None, **kwargs):
     plt.clear()
 
 
-def _global(data_items, output_file, title=None, position='hps', angle_title='Angles', **kwargs):
+def _global(data_items, output_file, title=None, position='hps', angle_title='Angles', ref_line=0., **kwargs):
     """the global coordinate system is plottined in a 3x2 grid
     where the first column is position and the second column is
     euler angles. The rows go through x, y, z.
@@ -91,6 +91,8 @@ def _global(data_items, output_file, title=None, position='hps', angle_title='An
         which positional coordinates to use. Default is 'hps'.
     angle_title: str, optional
         title to have above the angle columns, useful for defining what angles are being plotted
+    ref_line: float, optional
+        where to draw a horizontal reference line, use None to disable drawing
     **kwargs: dict, optional
         the rest of the keyword arguments are absorbed but then ignored
     """
@@ -118,7 +120,8 @@ def _global(data_items, output_file, title=None, position='hps', angle_title='An
                 ax.set_ylabel(f'{c.upper()} [$\\mu$m]')
             else:
                 ax.set_ylabel(f'$\\theta_{c}$ [mrad]')
-            ax.axhline(0.0, color='gray')
+            if ref_line is not None:
+                ax.axhline(ref_line, color='gray')
             ax.grid(axis='x')
             if c == 'x':
                 if i_tr == 0:
