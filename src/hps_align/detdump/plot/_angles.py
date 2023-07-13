@@ -197,10 +197,8 @@ def expected_axis(df: pd.DataFrame):
         dataframe with u, v, w coordinate vectors
     """
 
-    is2016 = not any(df.sensor.str.contains('L7'))
-
     vx_neg_sl = (
-        ((df.lay < 3) & (df.sensor.str.contains('stereo'))) |
+        ((df.lay < 2.5) & (df.sensor.str.contains('stereo'))) |
         (df.sensor.str.contains('slot'))
     )
     uy_neg_sl = (
@@ -216,6 +214,24 @@ def expected_axis(df: pd.DataFrame):
         df.sensor.str.contains('t_axial')
         | df.sensor.str.contains('b_stereo')
     )
+
+    # check for 2016
+    if not any(df.sensor.str.contains('L7')):
+        # change slices for 2016
+        #   Front only has three layers now
+        #   All three front layers behave together
+        #   (i.e. no L12/L34 separate like there is above
+        vx_neg_sl = (
+            (df.sensor.str.contains('slot'))
+        )
+        uy_neg_sl = (
+            ((df.lay < 3.5) & (df.sensor.str.contains('t_stereo')))
+            | ((df.lay < 3.5) & (df.sensor.str.contains('b_axial')))
+            | (df.sensor.str.contains('t_axial_slot'))
+            | (df.sensor.str.contains('t_stereo_hole'))
+            | (df.sensor.str.contains('b_axial_hole'))
+            | (df.sensor.str.contains('b_stereo_slot'))
+        )
 
     df['thetax'] = np.arccos((-1*vx_neg_sl+1*(~vx_neg_sl))*df.vx)
     df['thetay'] = np.arccos((-1*uy_neg_sl+1*(~uy_neg_sl))*df.uy)
