@@ -51,6 +51,7 @@ def plot(
     coord: Coord = typer.Option(Coord.GLOBAL.value, help="which coordinate system to use"),
     angle: Angle = typer.Option(Angle.expected_axis.value, help='which angle definition to use in global coordinates'),
     pos: Position = typer.Option(Position.HPS.value, help='which position definition to use in global coordinates'),
+    module: bool = typer.Option(False, help='Plot module position/orientation rather than individual sensors'),
     plot: Plot = typer.Option(Plot.ABS.value, help='What type of plot to make')
 ):
     """Plot detector coordinate and orientation data
@@ -109,6 +110,26 @@ def plot(
         for yes2016, (_name, df) in zip(years, data):
             if yes2016:
                 df[index] = df[index].apply(lambda i: remap2016[i])
+
+    if module:
+        if coord == Coord.LOCAL:
+            raise Exception('Merging modules together for raw alignment constants is not implemented.')
+        data = [
+            (
+                name, 
+                # I group the sensors by their sensor name with '_axial' and '_stereo' removed,
+                # this pairs up all sensors into modules which I can then 'sum()' over the different
+                # coordinates in the set and '/2' to get the average
+                # Then I resort by sortval for nicer-looking plots after 'reset_index()' so that the
+                # 'sensor' column name is available again - it is now the module name (i.e. same as
+                # before but with '_axial' and '_stereo' removed
+                (df.set_index('sensor').groupby(
+                    lambda s: s.replace('_axial','').replace('_stereo','')
+                ).sum()/2).reset_index().sort_values(
+                    'sortval'
+                )
+            ) for name, df in data
+        ]
 
     if plot == Plot.DIFF:
         if len(data) < 2:
