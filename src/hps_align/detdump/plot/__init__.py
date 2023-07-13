@@ -118,14 +118,14 @@ def plot(
             (
                 name,
                 # I group the sensors by their sensor name with '_axial' and '_stereo' removed,
-                # this pairs up all sensors into modules which I can then 'sum()' over the different
-                # coordinates in the set and '/2' to get the average
+                # this pairs up all sensors into modules which I can then 'mean()' over the different
+                # coordinates to get the average
                 # Then I resort by sortval for nicer-looking plots after 'reset_index()' so that the
                 # 'sensor' column name is available again - it is now the module name (i.e. same as
                 # before but with '_axial' and '_stereo' removed
                 (df.set_index('sensor').groupby(
                     lambda s: s.replace('_axial', '').replace('_stereo', '')
-                ).sum()/2).reset_index().sort_values(
+                ).mean()).reset_index().sort_values(
                     'sortval'
                 )
             ) for name, df in data
