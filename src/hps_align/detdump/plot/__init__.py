@@ -49,7 +49,7 @@ def plot(
     input_file: List[Path],
     out: Path = typer.Option(None, help="output file name to print image to, default is <plot>.pdf"),
     coord: Coord = typer.Option(Coord.GLOBAL.value, help="which coordinate system to use"),
-    angle: Angle = typer.Option(Angle.axis.value, help='which angle definition to use in global coordinates'),
+    angle: Angle = typer.Option(Angle.expected_axis.value, help='which angle definition to use in global coordinates'),
     pos: Position = typer.Option(Position.HPS.value, help='which position definition to use in global coordinates'),
     plot: Plot = typer.Option(Plot.ABS.value, help='What type of plot to make')
 ):
