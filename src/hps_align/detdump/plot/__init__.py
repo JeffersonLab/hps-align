@@ -64,7 +64,10 @@ def plot(
     """
 
     if out is None:
-        out = plot.value + '.pdf'
+        default_name = plot.value
+        if len(input_file) == 1:
+            default_name = input_file[0].stem
+        out = str(default_name) + '.pdf'
 
     if coord == Coord.LOCAL:
         from ._load import _local as loader
