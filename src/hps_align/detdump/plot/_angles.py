@@ -206,6 +206,7 @@ def expected_axis(df: pd.DataFrame):
     uy_neg_sl = (
         ((df.lay > 2.5) & (df.lay < 4.5) & (df.sensor.str.contains('t_stereo')))
         | ((df.lay < 4.5) & (df.sensor.str.contains('b_axial')))
+        | ((df.lay < 2.5) & (df.sensor.str.contains('b_stereo')))
         | (df.sensor.str.contains('t_axial_slot'))
         | (df.sensor.str.contains('t_stereo_hole'))
         | (df.sensor.str.contains('b_axial_hole'))
