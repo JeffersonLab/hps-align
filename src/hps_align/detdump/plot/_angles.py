@@ -240,3 +240,50 @@ def expected_axis(df: pd.DataFrame):
 
 expected_axis.__title__ = r"""Expected Axis Angles
 $\theta_x = acos(\pm v_x)$ $\theta_y = acos(\pm u_y)$ $\theta_z = acos(\pm w_z)$"""
+
+
+@angle_calculator
+def expected_svt_axis(df: pd.DataFrame):
+    r"""Calculate the angles relative to the known global axes
+    the local axes are close to *after* applying a 30.5mrad rotation
+    to the uvw coordinate vectors.
+
+    See Also
+    --------
+    expected_axis:
+        the function that does the angle calculation after the 30.5mrad
+        rotation
+
+    Parameters
+    ----------
+    df : pd.DataFrame
+        dataframe with u, v, w coordinate vectors
+    """
+
+    mrad = 1e-3
+    c = np.cos(30.5*mrad)
+    s = np.sin(30.5*mrad)
+
+    svt_rotation = np.array([
+        [c, 0, -s],
+        [0, 1,  0],
+        [s, 0,  c]
+    ])
+
+    df[['vx', 'vy', 'vz']] = np.dot(svt_rotation, df[['vx', 'vy', 'vz']].values.T).T
+    df[['ux', 'uy', 'uz']] = np.dot(svt_rotation, df[['ux', 'uy', 'uz']].values.T).T
+    df[['wx', 'wy', 'wz']] = np.dot(svt_rotation, df[['wx', 'wy', 'wz']].values.T).T
+
+    # the w axis is often very close to the svt_z axis
+    # and so the w coordinates may fall outside the range of acos due to
+    # floating point errors in the rotation calculation
+    # we use np.clip to put anything below -1 at -1 and anything
+    # above 1 to 1
+    df[['vx', 'vy', 'vz', 'ux', 'uy', 'uz', 'wx', 'wy', 'wz']] = np.clip(
+        df[['vx', 'vy', 'vz', 'ux', 'uy', 'uz', 'wx', 'wy', 'wz']], -1, 1
+    )
+    expected_axis(df)
+
+
+expected_svt_axis.__title__ = r"""Expected Angles relative to SVT Axes
+$\theta_x = acos(\pm v_x')$ $\theta_y = acos(\pm u_y')$ $\theta_z = acos(\pm w_z')$"""
