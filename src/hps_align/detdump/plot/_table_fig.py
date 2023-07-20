@@ -39,11 +39,9 @@ def _local(data_items, output_file, title=None, **kwargs):
                     df[sl].value*1000,
                     label=name if (i_tr == 1 and i_uvw == 1) else '_no_legend'
                 )
-            ax.set_xticks(
-                ax.get_xticks(),
-                ax.get_xticklabels(),
-                rotation=90,
-                fontsize='xx-small'
+            ax.tick_params(
+                labelrotation=90,
+                labelsize='xx-small'
             )
             ax.grid(axis='x', alpha=0.5)
             ax.axhline(0., color='gray')
@@ -132,10 +130,8 @@ def _global(data_items, output_file, title=None, position='hps', angle_title='An
                 else:
                     ax.set_title(angle_title)
             if c == 'z':
-                ax.set_xticks(
-                    ax.get_xticks(),
-                    ax.get_xticklabels(),
-                    rotation=90
+                ax.tick_params(
+                    labelrotation=90
                 )
     fig.legend(
         title=title,
