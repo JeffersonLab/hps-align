@@ -1,0 +1,448 @@
+{\rtf1\ansi\deff0{\fonttbl{\f0\froman\fprq1 Courier New;}}
+{\colortbl ;\red255\green255lue255;}
+{\*\generator Msftedit 5.41.15.1507;}\viewkind4\uc1\lang1033\f0\fs20 C:\\Documents and Settings\\Administrator\\Desktop\\HPSL0\\L0_upright_routine3.RTN
+ ===============================================================================
+ Header:   
+ -------------------------------------------------------------------------------
+ Setup:    
+ ===============================================================================
+ Step:  1     MM     Cart  Decimal Degree   Measure                     ANSI 
+ Comment:    
+ oriball                                                                     
+ Prompt:     
+                                                                             
+ Sphere      
+                                  Actual     Nominal     Upper     Lower
+             Diameter             +006.35414  +006.35813 +00.00000 -00.00000
+             X Location           +310.99268  +310.94495 +00.00000 -00.00000
+             Y Location           -010.23445  -010.32991 +00.00000 -00.00000
+             Z Location           -005.95344  -006.19387 +00.00000 -00.00000
+
+                                  Actual   Tolerance    Mod       ID/OD 
+             Sphericity           +000.00000   +00.00000
+             True Position        +000.52612   +00.00000    RFS            
+
+        Skip:    No  
+Points: 16     Touch Probe        Data Stream:   No          Hide:    No  
+DSM : 2MM_STAR_20MM  Tip # 4
+-------------------------------------------------------------------------------
+ Step:  2     MM     Cart  Decimal Degree   Measure                     ANSI 
+Comment:    
+diagball                                                                    
+Prompt:     
+                                                                            
+ Sphere      
+                                  Actual     Nominal     Upper     Lower
+             Diameter             +006.35569  +006.35662 +00.00000 -00.00000
+             X Location           +307.55297  +307.48003 +00.00000 -00.00000
+             Y Location           -035.21103  -035.34691 +00.00000 -00.00000
+             Z Location           -031.34393  -031.58600 +00.00000 -00.00000
+
+                                  Actual   Tolerance    Mod       ID/OD 
+             Sphericity           +000.00000   +00.00000
+             True Position        +000.57405   +00.00000    RFS            
+
+        Skip:    No  
+Points: 16     Touch Probe        Data Stream:   No          Hide:    No  
+DSM : 2MM_STAR_20MM  Tip # 4
+-------------------------------------------------------------------------------
+ Step:  3     MM     Cart  Decimal Degree   Measure                     ANSI 
+Comment:    
+                                                                            
+Prompt:     
+                                                                            
+ Point       
+                                  Actual     Nominal     Upper     Lower
+             X Location           +014.03990  +014.03990 +00.00000 -00.00000
+             Y Location           +027.41630  +027.41630 +00.00000 -00.00000
+             Z Location           +000.18068  +000.18068 +00.00000 -00.00000
+
+                                  Actual   Tolerance    Mod             
+             True Position        +000.00000   +00.00000    RFS  
+        Skip:    No  
+Points: 4      Touch Probe        Data Stream:   No          Hide:    No  
+DSM : 2MM_STAR_20MM  Tip # 1
+-------------------------------------------------------------------------------
+ Step:  4     MM     Cart  Decimal Degree   Measure                     ANSI 
+Comment:    
+axiball                                                                     
+Prompt:     
+                                                                            
+ Sphere      
+                                  Actual     Nominal     Upper     Lower
+             Diameter             +006.35289  +006.35371 +00.00000 -00.00000
+             X Location           -001.12268  -001.09048 +00.00000 -00.00000
+             Y Location           +032.16403  +032.36284 +00.00000 -00.00000
+             Z Location           -005.93298  -005.91214 +00.00000 -00.00000
+
+                                  Actual   Tolerance    Mod       ID/OD 
+             Sphericity           +000.00000   +00.00000
+             True Position        +000.40497   +00.00000    RFS            
+
+        Skip:    No  
+Points: 16     Touch Probe        Data Stream:   No          Hide:    No  
+DSM : 2MM_STAR_20MM  Tip # 2
+-------------------------------------------------------------------------------
+ Step:  5     MM     Cart  Decimal Degree  Construct                    ANSI 
+Comment:    
+                                                                            
+Prompt:     
+                                                                            
+ Plane         Best Fit       
+                                  Actual     Nominal     Upper     Lower
+             XY Angle             -097.73215  -097.73215 +00.00000 -00.00000
+             Elevation            +044.79822  +044.79822 +00.00000 -00.00000
+             X Location           +205.80766  +205.80766 +00.00000 -00.00000
+             Y Location           -004.42715  -004.42715 +00.00000 -00.00000
+             Z Location           -014.41012  -014.41012 +00.00000 -00.00000
+
+                                  Actual   Tolerance                    
+             Flatness             +000.00000   +00.00000
+        Skip:    No  
+Features: 3         Composite:  No   Data Stream:   No          Hide:    No  
+     Reference Feature(s): 2, 1, 4
+-------------------------------------------------------------------------------
+ Step:  6     MM     Cart  Decimal Degree  Construct                    ANSI 
+Comment:    
+                                                                            
+Prompt:     
+                                                                            
+ Line        
+                                  Actual     Nominal     Upper     Lower
+             XY Angle             +172.26416  +172.26416 +00.00000 -00.00000
+             Elevation            +000.00372  +000.00372 +00.00000 -00.00000
+             X Location           +154.93500  +154.93500 +00.00000 -00.00000
+             Y Location           +010.96479  +010.96479 +00.00000 -00.00000
+             Z Location           -005.94321  -005.94321 +00.00000 -00.00000
+
+                                  Actual   Tolerance                    
+             3D Straightness      +000.00000   +00.00000
+        Skip:    No  
+Features: 2         Composite:  No   Data Stream:   No          Hide:    No  
+     Reference Feature(s): 1, 4
+-------------------------------------------------------------------------------
+ Step:  7     MM     Cart  Decimal Degree  Construct          
+Comment:    
+                                                                            
+Prompt:     
+                                                                            
+ Datum Plane    Align XY Plane    
+
+           Set Z Axis           +000.00000
+Features: 1   
+     Reference Feature(s): 5
+-------------------------------------------------------------------------------
+ Step:  8     MM     Cart  Decimal Degree  Construct          
+Comment:    
+                                                                            
+Prompt:     
+                                                                            
+ Datum Origin   At Actual        
+
+        v  Set X Axis           +000.00000
+        v  Set Y Axis           +000.00000
+        v  Set Z Axis           +000.00000
+
+Features: 1   
+     Reference Feature(s): 1
+-------------------------------------------------------------------------------
+ Step:  9     MM     Cart  Decimal Degree  Construct     XY Plane   
+Comment:    
+                                                                            
+Prompt:     
+                                                                            
+ Datum Axis     At Actual        
+
+              Align X Axis           +000.00000
+
+Features: 1   
+     Reference Feature(s): 6
+-------------------------------------------------------------------------------
+ Step:  10    MM     Cart  Decimal Degree   Measure                     ANSI 
+Comment:    
+                                                                            
+Prompt:     
+                                                                            
+ Line        
+                                  Actual     Nominal     Upper     Lower
+             XY Angle             +000.24526  +000.24526 +00.00000 -00.00000
+             Elevation            +000.24171  +000.24171 +00.00000 -00.00000
+             X Location           +117.49530  +117.49530 +00.00000 -00.00000
+             Y Location           +007.88737  +007.88737 +00.00000 -00.00000
+             Z Location           +015.95222  +015.95222 +00.00000 -00.00000
+
+                                  Actual   Tolerance                    
+             3D Straightness      +000.00227   +00.00000
+        Skip:    No  
+Points: 14        Lens: 1x     Data Stream:   No          Hide:    No  
+Target: FeatureFinder       
+-------------------------------------------------------------------------------
+ Step:  11    MM     Cart  Decimal Degree   Measure                     ANSI 
+Comment:    
+                                                                            
+Prompt:     
+                                                                            
+ Line        
+                                  Actual     Nominal     Upper     Lower
+             XY Angle             +000.06782  +000.06782 +00.00000 -00.00000
+             Elevation            +000.06302  +000.06302 +00.00000 -00.00000
+             X Location           +117.51838  +117.51838 +00.00000 -00.00000
+             Y Location           +007.74945  +007.74945 +00.00000 -00.00000
+             Z Location           +015.80835  +015.80835 +00.00000 -00.00000
+
+                                  Actual   Tolerance                    
+             3D Straightness      +000.00091   +00.00000
+        Skip:    No  
+Points: 16        Lens: 1x     Data Stream:   No          Hide:    No  
+Target: FeatureFinder       
+-------------------------------------------------------------------------------
+ Step:  12    MM     Cart  Decimal Degree   Measure                     ANSI 
+Comment:    
+                                                                            
+Prompt:     
+                                                                            
+ Line        
+                                  Actual     Nominal     Upper     Lower
+             XY Angle             +179.98250  +179.98250 +00.00000 -00.00000
+             Elevation            +000.02290  +000.02290 +00.00000 -00.00000
+             X Location           +131.35167  +131.35167 +00.00000 -00.00000
+             Y Location           +007.95716  +007.95716 +00.00000 -00.00000
+             Z Location           +015.89988  +015.89988 +00.00000 -00.00000
+
+                                  Actual   Tolerance                    
+             3D Straightness      +000.00148   +00.00000
+        Skip:    No  
+Points: 16        Lens: 1x     Data Stream:   No          Hide:    No  
+Target: FeatureFinder       
+-------------------------------------------------------------------------------
+ Step:  13    MM     Cart  Decimal Degree   Measure                     ANSI 
+Comment:    
+                                                                            
+Prompt:     
+                                                                            
+ Line        
+                                  Actual     Nominal     Upper     Lower
+             XY Angle             +000.01305  +000.01305 +00.00000 -00.00000
+             Elevation            +000.00786  +000.00786 +00.00000 -00.00000
+             X Location           +131.34964  +131.34964 +00.00000 -00.00000
+             Y Location           +007.81107  +007.81107 +00.00000 -00.00000
+             Z Location           +015.75275  +015.75275 +00.00000 -00.00000
+
+                                  Actual   Tolerance                    
+             3D Straightness      +000.00110   +00.00000
+        Skip:    No  
+Points: 17        Lens: 1x     Data Stream:   No          Hide:    No  
+Target: FeatureFinder       
+-------------------------------------------------------------------------------
+ Step:  14    MM     Cart  Decimal Degree   Measure                     ANSI 
+Comment:    
+                                                                            
+Prompt:     
+                                                                            
+ Line        
+                                  Actual     Nominal     Upper     Lower
+             XY Angle             -000.13215  -000.13215 +00.00000 -00.00000
+             Elevation            -000.13837  -000.13837 +00.00000 -00.00000
+             X Location           +144.33245  +144.33245 +00.00000 -00.00000
+             Y Location           +007.96848  +007.96848 +00.00000 -00.00000
+             Z Location           +015.86111  +015.86111 +00.00000 -00.00000
+
+                                  Actual   Tolerance                    
+             3D Straightness      +000.00124   +00.00000
+        Skip:    No  
+Points: 18        Lens: 1x     Data Stream:   No          Hide:    No  
+Target: FeatureFinder       
+-------------------------------------------------------------------------------
+ Step:  15    MM     Cart  Decimal Degree   Measure                     ANSI 
+Comment:    
+                                                                            
+Prompt:     
+                                                                            
+ Line        
+                                  Actual     Nominal     Upper     Lower
+             XY Angle             -179.94598  -179.94598 +00.00000 -00.00000
+             Elevation            -000.04912  -000.04912 +00.00000 -00.00000
+             X Location           +144.33395  +144.33395 +00.00000 -00.00000
+             Y Location           +007.82502  +007.82502 +00.00000 -00.00000
+             Z Location           +015.71593  +015.71593 +00.00000 -00.00000
+
+                                  Actual   Tolerance                    
+             3D Straightness      +000.00100   +00.00000
+        Skip:    No  
+Points: 13        Lens: 1x     Data Stream:   No          Hide:    No  
+Target: FeatureFinder       
+-------------------------------------------------------------------------------
+ Step:  16    MM     Cart  Decimal Degree  Construct                    ANSI 
+Comment:    
+Axial sensor edge                                                           
+Prompt:     
+                                                                            
+ Line        
+                                  Actual     Nominal     Upper     Lower
+             XY Angle             +000.17445  +000.17445 +00.00000 -00.00000
+             Elevation            -000.19474  -000.19474 +00.00000 -00.00000
+             X Location           +130.91384  +130.91384 +00.00000 -00.00000
+             Y Location           +007.93723  +007.93723 +00.00000 -00.00000
+             Z Location           +015.90490  +015.90490 +00.00000 -00.00000
+
+                                  Actual   Tolerance                    
+             3D Straightness      +000.02871   +00.00000
+        Skip:    No  
+Features: 3         Composite:  No   Data Stream:   No          Hide:    No  
+     Reference Feature(s): 10, 12, 14
+-------------------------------------------------------------------------------
+ Step:  17    MM     Cart  Decimal Degree   Measure                     ANSI 
+Comment:    
+                                                                            
+Prompt:     
+                                                                            
+ Line        
+                                  Actual     Nominal     Upper     Lower
+             XY Angle             -000.19431  -000.19431 +00.00000 -00.00000
+             Elevation            -000.20096  -000.20096 +00.00000 -00.00000
+             X Location           +140.78766  +140.78766 +00.00000 -00.00000
+             Y Location           +003.10412  +003.10412 +00.00000 -00.00000
+             Z Location           +009.43843  +009.43843 +00.00000 -00.00000
+
+                                  Actual   Tolerance                    
+             3D Straightness      +000.00171   +00.00000
+        Skip:    No  
+Points: 19        Lens: 1x     Data Stream:   No          Hide:    No  
+Target: FeatureFinder       
+-------------------------------------------------------------------------------
+ Step:  18    MM     Cart  Decimal Degree   Measure                     ANSI 
+Comment:    
+                                                                            
+Prompt:     
+                                                                            
+ Line        
+                                  Actual     Nominal     Upper     Lower
+             XY Angle             -179.63589  -179.63589 +00.00000 -00.00000
+             Elevation            -000.36140  -000.36140 +00.00000 -00.00000
+             X Location           +140.90380  +140.90380 +00.00000 -00.00000
+             Y Location           +003.24294  +003.24294 +00.00000 -00.00000
+             Z Location           +009.57822  +009.57822 +00.00000 -00.00000
+
+                                  Actual   Tolerance                    
+             3D Straightness      +000.00134   +00.00000
+        Skip:    No  
+Points: 13        Lens: 1x     Data Stream:   No          Hide:    No  
+Target: FeatureFinder       
+-------------------------------------------------------------------------------
+ Step:  19    MM     Cart  Decimal Degree   Measure                     ANSI 
+Comment:    
+                                                                            
+Prompt:     
+                                                                            
+ Line        
+                                  Actual     Nominal     Upper     Lower
+             XY Angle             +000.67275  +000.67275 +00.00000 -00.00000
+             Elevation            +000.67218  +000.67218 +00.00000 -00.00000
+             X Location           +132.47211  +132.47211 +00.00000 -00.00000
+             Y Location           +002.50857  +002.50857 +00.00000 -00.00000
+             Z Location           +010.32752  +010.32752 +00.00000 -00.00000
+
+                                  Actual   Tolerance                    
+             3D Straightness      +000.00269   +00.00000
+        Skip:    No  
+Points: 11        Lens: 1x     Data Stream:   No          Hide:    No  
+Target: FeatureFinder       
+-------------------------------------------------------------------------------
+ Step:  20    MM     Cart  Decimal Degree   Measure                     ANSI 
+Comment:    
+                                                                            
+Prompt:     
+                                                                            
+ Line        
+                                  Actual     Nominal     Upper     Lower
+             XY Angle             -179.78416  -179.78416 +00.00000 -00.00000
+             Elevation            -000.21208  -000.21208 +00.00000 -00.00000
+             X Location           +132.55583  +132.55583 +00.00000 -00.00000
+             Y Location           +002.36440  +002.36440 +00.00000 -00.00000
+             Z Location           +010.18232  +010.18232 +00.00000 -00.00000
+
+                                  Actual   Tolerance                    
+             3D Straightness      +000.00624   +00.00000
+        Skip:    No  
+Points: 15        Lens: 1x     Data Stream:   No          Hide:    No  
+Target: FeatureFinder       
+-------------------------------------------------------------------------------
+ Step:  21    MM     Cart  Decimal Degree   Measure                     ANSI 
+Comment:    
+                                                                            
+Prompt:     
+                                                                            
+ Line        
+                                  Actual     Nominal     Upper     Lower
+             XY Angle             -000.01431  -000.01431 +00.00000 -00.00000
+             Elevation            -000.01970  -000.01970 +00.00000 -00.00000
+             X Location           +117.71205  +117.71205 +00.00000 -00.00000
+             Y Location           +001.61991  +001.61991 +00.00000 -00.00000
+             Z Location           +011.24985  +011.24985 +00.00000 -00.00000
+
+                                  Actual   Tolerance                    
+             3D Straightness      +000.00082   +00.00000
+        Skip:    No  
+Points: 18        Lens: 1x     Data Stream:   No          Hide:    No  
+Target: FeatureFinder       
+-------------------------------------------------------------------------------
+ Step:  22    MM     Cart  Decimal Degree   Measure                     ANSI 
+Comment:    
+                                                                            
+Prompt:     
+                                                                            
+ Line        
+                                  Actual     Nominal     Upper     Lower
+             XY Angle             -000.05205  -000.05205 +00.00000 -00.00000
+             Elevation            -000.05770  -000.05770 +00.00000 -00.00000
+             X Location           +117.70232  +117.70232 +00.00000 -00.00000
+             Y Location           +001.47378  +001.47378 +00.00000 -00.00000
+             Z Location           +011.10269  +011.10269 +00.00000 -00.00000
+
+                                  Actual   Tolerance                    
+             3D Straightness      +000.00041   +00.00000
+        Skip:    No  
+Points: 16        Lens: 1x     Data Stream:   No          Hide:    No  
+Target: FeatureFinder       
+-------------------------------------------------------------------------------
+ Step:  23    MM     Cart  Decimal Degree  Construct                    ANSI 
+Comment:    
+Stereo sensor edge                                                          
+Prompt:     
+                                                                            
+ Line        
+                                  Actual     Nominal     Upper     Lower
+             XY Angle             -176.03268  -176.03268 +00.00000 -00.00000
+             Elevation            +004.04501  +004.04501 +00.00000 -00.00000
+             X Location           +129.25194  +129.25194 +00.00000 -00.00000
+             Y Location           +002.23804  +002.23804 +00.00000 -00.00000
+             Z Location           +010.31888  +010.31888 +00.00000 -00.00000
+
+                                  Actual   Tolerance                    
+             3D Straightness      +000.23170   +00.00000
+        Skip:    No  
+Features: 3         Composite:  No   Data Stream:   No          Hide:    No  
+     Reference Feature(s): 17, 20, 22
+-------------------------------------------------------------------------------
+ Step:  24    MM     Cart  Decimal Degree  Construct                    ANSI 
+Comment:    
+                                                                            
+Prompt:     
+                                                                            
+ Line        
+                                  Actual     Nominal     Upper     Lower
+             XY Angle             -176.05938  -176.05938 +00.00000 -00.00000
+             Elevation            +004.05172  +004.05172 +00.00000 -00.00000
+             X Location           +129.31436  +129.31436 +00.00000 -00.00000
+             Y Location           +002.38493  +002.38493 +00.00000 -00.00000
+             Z Location           +010.45963  +010.45963 +00.00000 -00.00000
+
+                                  Actual   Tolerance                    
+             3D Straightness      +000.21405   +00.00000
+        Skip:    No  
+Features: 3         Composite:  No   Data Stream:   No          Hide:    No  
+     Reference Feature(s): 18, 19, 21
+-------------------------------------------------------------------------------
+
+}
+ 
