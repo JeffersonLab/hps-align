@@ -10,7 +10,7 @@ class BasePlane:
 
     def _find_L0_base_plane(self):
         """Find L0 base plane coordinates in survey data file
-        
+
         Returns
         -------
         L0_base_plane : dict
@@ -19,10 +19,10 @@ class BasePlane:
         L0_base_plane = self.parser.find_coords(
             self.parser.find_names(['L0 base plane'])['L0 base plane'] + 1)
         return L0_base_plane
-    
+
     def _find_L1_base_plane(self):
         """Find L1 base plane coordinates in survey data file
-        
+
         Returns
         -------
         L1_base_plane : dict
@@ -34,7 +34,7 @@ class BasePlane:
 
     def _find_L2_base_plane(self):
         """Find L2 base plane coordinates in survey data file
-        
+
         Returns
         -------
         L2_base_plane : dict
@@ -43,10 +43,10 @@ class BasePlane:
         L2_base_plane = self.parser.find_coords(
             self.parser.find_names(['L2 base plane'])['L2 base plane'] + 1)
         return L2_base_plane
-    
+
     def _find_L3_base_plane(self):
         """Find L3 base plane coordinates in survey data file
-        
+
         Returns
         -------
         L3_base_plane : dict

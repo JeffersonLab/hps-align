@@ -8,12 +8,12 @@ from _utils import normal_vector
 
 class Sensor:
     """Get sensor data from OGP measurement files
-    
+
     Parameters
     ----------
     input_file : str
         Path to survey data file
-        
+
     Attributes
     ----------
     input_file : str
@@ -33,7 +33,7 @@ class Sensor:
     def __init__(self, input_file):
         self.input_file = input_file
         self.parser = Parser(input_file)
-        
+
         self.sensor_origin_dict = self._find_sensor_origin()
         self.sensor_plane_dict = self._find_sensor_plane()
         self.sensor_active_edge_dict = self._find_sensor_active_edge()
@@ -41,7 +41,7 @@ class Sensor:
 
     def _find_sensor_origin(self):
         """Find sensor origin coordinates in survey data file
-        
+
         Returns
         -------
         sensor_origin : dict
@@ -50,10 +50,10 @@ class Sensor:
         sensor_origin = self.parser.find_coords(
             self.parser.find_names(['Sensor origin'])['Sensor origin'] + 1)
         return sensor_origin
-    
+
     def _find_sensor_plane(self):
         """Find sensor plane coordinates in survey data file
-        
+
         Returns
         -------
         sensor_plane : dict
@@ -62,10 +62,10 @@ class Sensor:
         sensor_plane = self.parser.find_coords(
             self.parser.find_names(['Sensor plane'])['Sensor plane'] + 1)
         return sensor_plane
-    
+
     def _find_sensor_active_edge(self):
         """Find sensor active edge coordinates in survey data file
-        
+
         Returns
         -------
         sensor_active_edge : dict
@@ -74,10 +74,10 @@ class Sensor:
         sensor_active_edge = self.parser.find_coords(
             self.parser.find_names(['Active edge beam'])['Active edge beam'] + 1)
         return sensor_active_edge
-    
+
     def _find_sensor_physical_edge(self):
         """Find sensor physical edge coordinates in survey data file
-        
+
         Returns
         -------
         sensor_physical_edge : dict
@@ -86,10 +86,10 @@ class Sensor:
         sensor_physical_edge = self.parser.find_coords(
             self.parser.find_names(['Sensor physical edge'])['Sensor physical edge'] + 1)
         return sensor_physical_edge
-    
+
     def get_sensor_origin(self):
         """Get sensor origin coordinates
-        
+
         Returns
         -------
         origin : np.array
@@ -97,22 +97,22 @@ class Sensor:
         """
         origin = np.array([self.sensor_origin_dict['x'], self.sensor_origin_dict['y'], self.sensor_origin_dict['z']])
         return origin
-    
+
     # def get_sensor_plane(self):
     #     return self.sensor_plane
-    
+
     # def get_sensor_active_edge(self):
     #     return self.sensor_active_edge
 
     # def get_sensor_active_edge_vector(self):
     #     return _utils.normal_vector(self.sensor_active_edge_dict["xy_angle"], self.sensor_active_edge_dict["elevation"])
-    
+
     # def get_sensor_physical_edge(self):
     #     return self.sensor_physical_edge
-    
+
     def get_sensor_normal(self):
         """Get sensor normal vector
-        
+
         Returns
         -------
         normal : np.array
@@ -128,4 +128,4 @@ class Sensor:
 #     print(sensor.get_sensor_normal())
 #     print(sensor.sensor_plane_dict)
 #     print(sensor.sensor_active_edge_dict)
-#     print(sensor.sensor_physical_edge_dict) 
+#     print(sensor.sensor_physical_edge_dict)

@@ -1,9 +1,10 @@
 
 import math
 
+
 class Parser:
     """Class to parse survey data files and extract relevant information
-    
+
     Parameters
     ----------
     input_file : str
@@ -20,12 +21,12 @@ class Parser:
 
     def find_names(self, input_strings):
         """Find line numbers of first appearances of strings in survey data file
-        
+
         Parameters
         ----------
         input_strings : list
             List of strings to search for
-        
+
         Returns
         -------
         first_appearances : dict
@@ -43,14 +44,14 @@ class Parser:
 
     def find_coords(self, line_number, num_lines_to_read=15):
         """Find coordinates in survey data file starting at line_number
-        
+
         Parameters
         ----------
         line_number : int
             Line number to start reading from
         num_lines_to_read : int
             Number of lines to read from line_number
-            
+
         Returns
         -------
         coordinates : dict
@@ -83,4 +84,3 @@ class Parser:
 #     print(parser.find_names(['axiball', 'Diameter', 'oriball']))
 #     print(parser.find_coords(145))
 #     print(parser.find_coords(220))
-        

@@ -11,7 +11,7 @@ class BallFrame:
 
     def _find_L1_hole_ball(self):
         """Find L1 hole ball coordinates in survey data file
-        
+
         Returns
         -------
         L1_hole_ball : dict
@@ -20,10 +20,10 @@ class BallFrame:
         L1_hole_ball = self.parser.find_coords(
             self.parser.find_names(['L1 hole ball'])['L1 hole ball'] + 1)
         return L1_hole_ball
-    
+
     def _find_L1_slot_ball(self):
         """Find L1 slot ball coordinates in survey data file
-        
+
         Returns
         -------
         L1_slot_ball : dict
@@ -32,10 +32,10 @@ class BallFrame:
         L1_slot_ball = self.parser.find_coords(
             self.parser.find_names(['L1 slot ball'])['L1 slot ball'] + 1)
         return L1_slot_ball
-    
+
     def _find_L3_hole_ball(self):
         """Find L3 hole ball coordinates in survey data file
-        
+
         Returns
         -------
         L3_hole_ball : dict
@@ -44,10 +44,10 @@ class BallFrame:
         L3_hole_ball = self.parser.find_coords(
             self.parser.find_names(['L3 hole ball'])['L3 hole ball'] + 1)
         return L3_hole_ball
-    
+
     def _find_L3_slot_ball(self):
         """Find L3 slot ball coordinates in survey data file
-        
+
         Returns
         -------
         L3_slot_ball : dict
@@ -56,10 +56,10 @@ class BallFrame:
         L3_slot_ball = self.parser.find_coords(
             self.parser.find_names(['L3 slot ball'])['L3 slot ball'] + 1)
         return L3_slot_ball
-    
+
     def _find_ball_plane(self):
         """Find ball plane coordinates in survey data file
-        
+
         Returns
         -------
         ball_plane : dict
@@ -68,7 +68,7 @@ class BallFrame:
         ball_plane = self.parser.find_coords(
             self.parser.find_names(['Step:  8'])['Step:  8'] + 1, 20)
         return ball_plane
-    
+
 
 # if __name__ == '__main__':
 #     ballframe = BallFrame('/Users/schababi/workspace/hps/hps-align/survey_data/meas1/uchannel_empty_top_1.txt')
