@@ -1,12 +1,12 @@
 
 import numpy as np
 
-from _parser import parser
+from _parser import Parser
 from _utils import normal_vector
-# from _cli import app
+# from ._cli import app
 
 
-class sensor:
+class Sensor:
     """Get sensor data from OGP measurement files
     
     Parameters
@@ -32,7 +32,7 @@ class sensor:
 
     def __init__(self, input_file):
         self.input_file = input_file
-        self.parser = parser(input_file)
+        self.parser = Parser(input_file)
         
         self.sensor_origin_dict = self._find_sensor_origin()
         self.sensor_plane_dict = self._find_sensor_plane()
@@ -122,7 +122,7 @@ class sensor:
 
 
 # if __name__ == "__main__":
-#     sensor = sensor('/Users/schababi/workspace/hps/hps-align/survey_data/meas1/L0_axial1_1.txt')
+#     sensor = Sensor('/Users/schababi/workspace/hps/hps-align/survey_data/meas1/L0_axial1_1.txt')
 
 #     print(sensor.get_sensor_origin())
 #     print(sensor.get_sensor_normal())

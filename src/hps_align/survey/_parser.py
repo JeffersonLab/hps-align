@@ -1,7 +1,7 @@
 
 import math
 
-class parser:
+class Parser:
     """Class to parse survey data files and extract relevant information
     
     Parameters
@@ -78,7 +78,7 @@ class parser:
 
 
 # if __name__ == '__main__':
-#     parser = parser('/Users/schababi/workspace/hps/hps-align/survey_data/meas1/L0_axial1_1.txt')
+#     parser = Parser('/Users/schababi/workspace/hps/hps-align/survey_data/meas1/L0_axial1_1.txt')
 
 #     print(parser.find_names(['axiball', 'Diameter', 'oriball']))
 #     print(parser.find_coords(145))
