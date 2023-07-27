@@ -1,11 +1,20 @@
 
-from _utils import *
-from _parser import Parser
+import warnings
+from ._utils import *
+from ._parser import Parser
 
 
 class BallFrame:
 
-    def __init__(self, input_file):
+    def __init__(self, input_file=None):
+        if input_file is None:
+            warnings.warn('No input file specified')
+            self.L1_hole_ball_dict = {'x': 0, 'y': 0, 'z': 0}
+            self.L1_slot_ball_dict = {'x': 0, 'y': 0, 'z': 0}
+            self.L3_hole_ball_dict = {'x': 0, 'y': 0, 'z': 0}
+            self.L3_slot_ball_dict = {'x': 0, 'y': 0, 'z': 0}
+            return
+        
         self.input_file = input_file
         self.parser = Parser(input_file)
 
@@ -86,6 +95,28 @@ class BallFrame:
             self.parser.find_names(['Step:  8'])['Step:  8'] + 1, 20)
         return ball_plane
 
+    def set_ball(self, ball_coords, layer, ball_type):
+        """Set ball coordinates for a given layer and ball type"""
+        if type(ball_coords) is not dict:
+            raise ValueError('Invalid ball coordinate type: {}'.format(ball_coords))
+
+        if layer == 1:
+            if ball_type == 'hole':
+                self.L1_hole_ball_dict = ball_coords
+            elif ball_type == 'slot':
+                self.L1_slot_ball_dict = ball_coords
+            else:
+                raise ValueError('Invalid ball type: {}'.format(ball_type))
+        elif layer == 3:
+            if ball_type == 'hole':
+                self.L3_hole_ball_dict = ball_coords
+            elif ball_type == 'slot':
+                self.L3_slot_ball_dict = ball_coords
+            else:
+                raise ValueError('Invalid ball type: {}'.format(ball_type))
+        else:
+            raise ValueError('Invalid layer: {}'.format(layer))
+
     def get_ball(self, layer, ball_type):
         """Get ball coordinates for a given layer and ball type
 
@@ -120,7 +151,7 @@ class BallFrame:
 
         return np.array([ball['x'], ball['y'], ball['z']])
 
-    def get_basis(self, volume):
+    def get_basis(self):
         """Get basis vectors for ball frame
 
         Returns
@@ -132,14 +163,9 @@ class BallFrame:
         """
         origin = self.get_ball(1, 'slot')
         hole_avg = (self.get_ball(1, 'hole') + self.get_ball(3, 'hole')) / 2
-        basis = make_basis(self.get_ball(3, 'slot') - origin, origin - hole_avg)
+        basis = make_basis(self.get_ball(3, 'slot') - origin, hole_avg - origin)
 
-        if volume == 'top':
-            return np.array([-basis[0], basis[2], basis[1]]), origin
-        elif volume == 'bottom':
-            return np.array([basis[0], basis[2], -basis[1]]), origin
-        else:
-            raise ValueError('Invalid volume: {}'.format(volume))
+        return np.array([-basis[1], -basis[2], basis[0]]), origin
 
 
 # if __name__ == '__main__':

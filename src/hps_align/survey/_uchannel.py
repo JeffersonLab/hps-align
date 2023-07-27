@@ -30,7 +30,7 @@ class UChannel:
         else:
             raise ValueError('Invalid volume: {}'.format(volume))
 
-        basis, origin = ball_frame.get_basis(volume)
+        basis, origin = ball_frame.get_basis()
         # origin in ball frame
         origin = np.matmul(basis, origin)
         return basis, origin
@@ -107,3 +107,14 @@ if __name__ == '__main__':
     print(uchannel.get_pin_basis(3, 'bottom')[1])
     # print(uchannel.pin_to_ball_frame(2))
     # print(uchannel.pin_to_ball_vector(np.array([0, 0, 0]), 2))
+
+    # <SurveyVolume name="module_L2t" desc="Top L2 pin basis in U-channel fiducial frame:">
+    #                 <origin x="-95.2519" y="52.9069" z="90.4129" />
+    
+    # <SurveyVolume name="module_L3t" desc="Top L3 pin basis in U-channel fiducial frame:">
+    #                 <origin x="-95.2881" y="54.3996" z="190.4827" />
+
+    # <SurveyVolume name="module_L2b" desc="Bottom L2 pin basis in U-channel fiducial frame:">
+    #                 <origin x="-95.2388" y="-52.9364" z="109.5866" />
+    # <SurveyVolume name="module_L3b" desc="Bottom L3 pin basis in U-channel fiducial frame:">
+    #                 <origin x="-95.2926" y="-54.4158" z="209.5887" />
