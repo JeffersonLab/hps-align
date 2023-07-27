@@ -8,6 +8,11 @@ class BasePlane:
         self.input_file = input_file
         self.parser = Parser(input_file)
 
+        self.L0_base_plane_dict = self._find_L0_base_plane()
+        self.L1_base_plane_dict = self._find_L1_base_plane()
+        self.L2_base_plane_dict = self._find_L2_base_plane()
+        self.L3_base_plane_dict = self._find_L3_base_plane()
+
     def _find_L0_base_plane(self):
         """Find L0 base plane coordinates in survey data file
 
@@ -55,6 +60,64 @@ class BasePlane:
         L3_base_plane = self.parser.find_coords(
             self.parser.find_names(['L3 base plane'])['L3 base plane'] + 1)
         return L3_base_plane
+    
+    def get_base_plane_dict(self, layer):
+        """Get base plane coordinates for a given layer
+
+        Parameters
+        ----------
+        layer : int
+            Layer number
+
+        Returns
+        -------
+        base_plane : dict
+            Dictionary of base plane coordinates
+        """
+        if layer == 0:
+            base_plane = self.L0_base_plane_dict
+        elif layer == 1:
+            base_plane = self.L1_base_plane_dict
+        elif layer == 2:
+            base_plane = self.L2_base_plane_dict
+        elif layer == 3:
+            base_plane = self.L3_base_plane_dict
+        else:
+            raise ValueError('Invalid layer number')
+        
+        return base_plane
+
+    def get_base_plane_origin(self, layer):
+        """Get base plane origin coordinates for a given layer
+
+        Parameters
+        ----------
+        layer : int
+            Layer number
+
+        Returns
+        -------
+        base_plane_origin : np.array
+            Base plane origin coordinates
+        """
+        base_plane = self.get_base_plane_dict(layer)
+        return np.array([base_plane['x'], base_plane['y'], base_plane['z']])
+
+    def get_base_plane_normal(self, layer):
+        """Get base plane normal vector for a given layer
+
+        Parameters
+        ----------
+        layer : int
+            Layer number
+
+        Returns
+        -------
+        base_plane_normal : np.array
+            Base plane normal vector
+        """
+        base_plane = self.get_base_plane_dict(layer)
+        return normal_vector(base_plane['xy_angle'], base_plane['elevation'])
 
 
 # if __name__ == '__main__':
