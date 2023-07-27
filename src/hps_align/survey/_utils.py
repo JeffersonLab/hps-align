@@ -5,6 +5,8 @@ import numpy as np
 
 def normalize(vec):
     """Normalize a vector"""
+    if np.linalg.norm(vec) == 0:
+        return vec
     return vec/np.linalg.norm(vec)
 
 
@@ -26,6 +28,7 @@ def normal_vector(az, el):
     if (el < 0):
         az = az + math.pi
         el = -1.0 * el
+    # def of el shifted by 90 deg compared to standard spherical coords
     normal = np.array([math.cos(az) * math.cos(el),
                        math.sin(az) * math.cos(el),
                        math.sin(el)])
@@ -35,6 +38,8 @@ def normal_vector(az, el):
 
 def orthogonalize(vec1, vec2):
     """Orthogonalize vec2 with respect to vec1"""
+    if np.dot(vec1, vec1) == 0:
+        return vec2
     return vec2 - np.dot(vec1, vec2)/np.dot(vec1, vec1) * vec1
 
 
