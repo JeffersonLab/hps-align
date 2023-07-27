@@ -85,7 +85,7 @@ class BallFrame:
         ball_plane = self.parser.find_coords(
             self.parser.find_names(['Step:  8'])['Step:  8'] + 1, 20)
         return ball_plane
-    
+
     def get_ball(self, layer, ball_type):
         """Get ball coordinates for a given layer and ball type
 
@@ -117,7 +117,7 @@ class BallFrame:
                 raise ValueError('Invalid ball type: {}'.format(ball_type))
         else:
             raise ValueError('Invalid layer: {}'.format(layer))
-        
+
         return np.array([ball['x'], ball['y'], ball['z']])
 
     def get_basis(self, volume):

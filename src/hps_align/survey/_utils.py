@@ -45,7 +45,7 @@ def orthogonalize(vec1, vec2):
 
 def make_basis(vec1, vec2):
     """Make orthonormal basis from two vectors
-    
+
     Parameters
     ----------
     vec1 : np.array

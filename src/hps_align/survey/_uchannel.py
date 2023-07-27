@@ -34,7 +34,7 @@ class UChannel:
         # origin in ball frame
         origin = np.matmul(basis, origin)
         return basis, origin
-    
+
     def get_pin_basis(self, layer, volume):
         if volume == 'top':
             pin_frame = self.pin_frame_top
@@ -51,12 +51,12 @@ class UChannel:
 
     def pin_to_ball_frame(self, layer, volume):
         """Transform pin coordinates to ball frame coordinates
-        
+
         Parameters
         ----------
         layer : int
             Layer number
-        
+
         Returns
         -------
         pin_to_ball : np.array
@@ -71,17 +71,17 @@ class UChannel:
         translation = ball_origin - pin_origin
 
         return rotation, translation
-        
+
     def pin_to_ball_vector(self, vec, layer, volume):
         """Transform vector from pin frame to ball frame
-        
+
         Parameters
         ----------
         vec : np.array
             Numpy array of vector coordinates in pin frame
         layer : int
             Layer number
-        
+
         Returns
         -------
         vec : np.array
@@ -91,10 +91,12 @@ class UChannel:
         vec = np.matmul(rotation, vec) + translation
         return vec
 
-        
+
 if __name__ == '__main__':
-    input_files_empty = {'top': '/Users/schababi/workspace/hps/hps-align/survey_data/meas1/uchannel_empty_top_1.txt', 'bottom': '/Users/schababi/workspace/hps/hps-align/survey_data/meas1/uchannel_empty_bottom_1.txt'}
-    input_files_full = {'top': '/Users/schababi/workspace/hps/hps-align/survey_data/meas1/uchannel_full_top_1.txt', 'bottom': '/Users/schababi/workspace/hps/hps-align/survey_data/meas1/uchannel_full_bottom_1.txt'}
+    input_files_empty = {'top': '/Users/schababi/workspace/hps/hps-align/survey_data/meas1/uchannel_empty_top_1.txt',
+                         'bottom': '/Users/schababi/workspace/hps/hps-align/survey_data/meas1/uchannel_empty_bottom_1.txt'}
+    input_files_full = {'top': '/Users/schababi/workspace/hps/hps-align/survey_data/meas1/uchannel_full_top_1.txt',
+                        'bottom': '/Users/schababi/workspace/hps/hps-align/survey_data/meas1/uchannel_full_bottom_1.txt'}
 
     uchannel = UChannel(input_files_empty, input_files_full)
 
@@ -105,5 +107,3 @@ if __name__ == '__main__':
     print(uchannel.get_pin_basis(3, 'bottom')[1])
     # print(uchannel.pin_to_ball_frame(2))
     # print(uchannel.pin_to_ball_vector(np.array([0, 0, 0]), 2))
-
-    #<origin x="-95.2519" y="52.9069" z="90.4129" />

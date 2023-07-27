@@ -79,15 +79,15 @@ class TestNormalVector(unittest.TestCase):
         self.assertAlmostEqual(0, normal_vector[1])
         self.assertAlmostEqual(1, normal_vector[2])
 
-        normal_vector = utils.normal_vector(np.pi/2, np.pi/4)    
+        normal_vector = utils.normal_vector(np.pi/2, np.pi/4)
         self.assertAlmostEqual(0, normal_vector[0])
         self.assertAlmostEqual(1/np.sqrt(2), normal_vector[1])
         self.assertAlmostEqual(1/np.sqrt(2), normal_vector[2])
 
-        normal_vector = utils.normal_vector(np.pi/2, -np.pi/4)    
+        normal_vector = utils.normal_vector(np.pi/2, -np.pi/4)
         self.assertAlmostEqual(0, normal_vector[0])
         self.assertAlmostEqual(-1/np.sqrt(2), normal_vector[1])
-        self.assertAlmostEqual(1/np.sqrt(2), normal_vector[2])   
+        self.assertAlmostEqual(1/np.sqrt(2), normal_vector[2])
 
 
 class TestOrthogonalize(unittest.TestCase):
