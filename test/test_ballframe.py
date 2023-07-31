@@ -10,18 +10,11 @@ class TestInit(unittest.TestCase):
         with self.assertWarns(UserWarning):
             ballframe = BallFrame()
 
-        self.assertEqual(0, ballframe.L1_hole_ball_dict['x'])
-        self.assertEqual(0, ballframe.L1_hole_ball_dict['y'])
-        self.assertEqual(0, ballframe.L1_hole_ball_dict['z'])
-        self.assertEqual(0, ballframe.L1_slot_ball_dict['x'])
-        self.assertEqual(0, ballframe.L1_slot_ball_dict['y'])
-        self.assertEqual(0, ballframe.L1_slot_ball_dict['z'])
-        self.assertEqual(0, ballframe.L3_hole_ball_dict['x'])
-        self.assertEqual(0, ballframe.L3_hole_ball_dict['y'])
-        self.assertEqual(0, ballframe.L3_hole_ball_dict['z'])
-        self.assertEqual(0, ballframe.L3_slot_ball_dict['x'])
-        self.assertEqual(0, ballframe.L3_slot_ball_dict['y'])
-        self.assertEqual(0, ballframe.L3_slot_ball_dict['z'])
+        empty_dict = {'x': 0, 'y': 0, 'z': 0}
+        self.assertEqual(empty_dict, ballframe.L1_hole_ball_dict)
+        self.assertEqual(empty_dict, ballframe.L1_slot_ball_dict)
+        self.assertEqual(empty_dict, ballframe.L3_hole_ball_dict)
+        self.assertEqual(empty_dict, ballframe.L3_slot_ball_dict)
 
 
 class TestGetBall(unittest.TestCase):
@@ -53,7 +46,7 @@ class TestSetBall(unittest.TestCase):
             ballframe = BallFrame()
 
         ballframe.set_ball({'x': 1, 'y': 2, 'z': 0}, 1, 'hole')
-        ballframe.set_ball({'x': 1, 'y': 0, 'z': 0}, 1, 'slot')  # origin
+        ballframe.set_ball({'x': 1, 'y': 0, 'z': 0}, 1, 'slot')
         ballframe.set_ball({'x': 5, 'y': 3, 'z': 0}, 3, 'hole')
         ballframe.set_ball({'x': 5, 'y': 1, 'z': 0}, 3, 'slot')
 

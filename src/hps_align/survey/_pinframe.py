@@ -1,13 +1,25 @@
 
-from _utils import *
+import warnings
 
-from _pins import Pin
-from _baseplanes import BasePlane
+from ._utils import *
+from ._pins import Pin
+from ._baseplanes import BasePlane
+from ._cli import app
 
 
 class PinFrame:
 
-    def __init__(self, input_file):
+    def __init__(self, input_file=None):
+        """Initialize PinFrame object
+
+        Parameters
+        ----------
+        input_file : str
+            Survey data file
+        """
+        if input_file is None:
+            warnings.warn('No input file specified')
+
         self.input_file = input_file
         self.pins = Pin(input_file)
         self.base_planes = BasePlane(input_file)

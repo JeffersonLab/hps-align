@@ -1,10 +1,33 @@
-from _utils import *
-from _parser import Parser
+
+import warnings
+
+from ._utils import *
+from ._parser import Parser
+from ._cli import app
 
 
 class SensorEdge:
 
-    def __init__(self, input_file):
+    def __init__(self, input_file=None):
+        """Initialize SensorEdge object
+
+        Parameters
+        ----------
+        input_file : str
+            Survey data file
+        """
+        if input_file is None:
+            warnings.warn('No input file specified')
+            self.L0_axial_frontedge_dict = {'x': 0, 'y': 0, 'z': 0, 'xy_angle': 0, 'elevation': 0}
+            self.L0_stereo_backedge_dict = {'x': 0, 'y': 0, 'z': 0, 'xy_angle': 0, 'elevation': 0}
+            self.L1_axial_frontedge_dict = {'x': 0, 'y': 0, 'z': 0, 'xy_angle': 0, 'elevation': 0}
+            self.L1_stereo_backedge_dict = {'x': 0, 'y': 0, 'z': 0, 'xy_angle': 0, 'elevation': 0}
+            self.L2_axial_frontedge_dict = {'x': 0, 'y': 0, 'z': 0, 'xy_angle': 0, 'elevation': 0}
+            self.L2_stereo_backedge_dict = {'x': 0, 'y': 0, 'z': 0, 'xy_angle': 0, 'elevation': 0}
+            self.L3_axial_frontedge_dict = {'x': 0, 'y': 0, 'z': 0, 'xy_angle': 0, 'elevation': 0}
+            self.L3_stereo_backedge_dict = {'x': 0, 'y': 0, 'z': 0, 'xy_angle': 0, 'elevation': 0}
+            return
+
         self.input_file = input_file
         self.parser = Parser(input_file)
 

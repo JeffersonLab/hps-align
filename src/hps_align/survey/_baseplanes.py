@@ -1,11 +1,29 @@
 
-from _utils import *
-from _parser import Parser
+import warnings
+
+from ._utils import *
+from ._parser import Parser
+from ._cli import app
 
 
 class BasePlane:
 
-    def __init__(self, input_file):
+    def __init__(self, input_file=None):
+        """Initialize BasePlane object
+
+        Parameters
+        ----------
+        input_file : str
+            Survey data file
+        """
+        if input_file is None:
+            warnings.warn('No input file specified')
+            self.L0_base_plane_dict = {'x': 0, 'y': 0, 'z': 0, 'xy_angle': 0, 'elevation': 0}
+            self.L1_base_plane_dict = {'x': 0, 'y': 0, 'z': 0, 'xy_angle': 0, 'elevation': 0}
+            self.L2_base_plane_dict = {'x': 0, 'y': 0, 'z': 0, 'xy_angle': 0, 'elevation': 0}
+            self.L3_base_plane_dict = {'x': 0, 'y': 0, 'z': 0, 'xy_angle': 0, 'elevation': 0}
+            return
+
         self.input_file = input_file
         self.parser = Parser(input_file)
 
@@ -61,6 +79,29 @@ class BasePlane:
         L3_base_plane = self.parser.find_coords(
             self.parser.find_names(['L3 base plane'])['L3 base plane'] + 1)
         return L3_base_plane
+
+    def set_base_plane_dict(self, base_plane_coords, layer):
+        """Set base plane coordinates for a given layer
+
+        Parameters
+        ----------
+        base_plane_coords : dict
+            Dictionary of base plane coordinates
+        layer : int
+            Layer number
+        """
+        if not isinstance(base_plane_coords, dict):
+            raise TypeError('Base plane coordinates must be a dictionary')
+        if layer == 0:
+            self.L0_base_plane_dict = base_plane_coords
+        elif layer == 1:
+            self.L1_base_plane_dict = base_plane_coords
+        elif layer == 2:
+            self.L2_base_plane_dict = base_plane_coords
+        elif layer == 3:
+            self.L3_base_plane_dict = base_plane_coords
+        else:
+            raise ValueError('Invalid layer number')
 
     def get_base_plane_dict(self, layer):
         """Get base plane coordinates for a given layer

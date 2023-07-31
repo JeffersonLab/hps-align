@@ -1,6 +1,7 @@
 
 import math
 import numpy as np
+from ._cli import app
 
 
 def normalize(vec):
@@ -71,7 +72,3 @@ def project_to_plane(vec, plane_origin, plane_normal):
     """Project a vector onto a plane"""
     # TODO check this
     return vec - np.dot(vec - plane_origin, plane_normal) * plane_normal
-
-
-if __name__ == '__main__':
-    print(normalize(np.array([1, 0, 0])))

@@ -1,9 +1,9 @@
 
 import numpy as np
 
-from _parser import Parser
-from _utils import normal_vector
-# from ._cli import app
+from ._parser import Parser
+from ._utils import normal_vector
+from ._cli import app
 
 
 class Sensor:

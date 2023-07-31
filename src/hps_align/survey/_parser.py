@@ -1,5 +1,6 @@
 
 import math
+from ._cli import app
 
 
 class Parser:
