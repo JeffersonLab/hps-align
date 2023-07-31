@@ -28,7 +28,7 @@ since it relies more on the filesystem, but it is
 operational.
 ```
 # install dependencies
-python3 -m pip install --user typer[all]
+python3 -m pip install --user typer[all] matplotlib pandas
 # "install" this package "manually"
 ln -s $(realpath src/hps_align) ~/.local/lib/python3.6/site-packages/
 ```

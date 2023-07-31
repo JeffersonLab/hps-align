@@ -3,3 +3,5 @@
 from . import _global
 from . import _local
 from ._cli import app
+
+from . import plot

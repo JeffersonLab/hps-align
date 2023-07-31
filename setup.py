@@ -132,6 +132,8 @@ setup(
     # https://packaging.python.org/discussions/install-requires-vs-requirements/
     install_requires=[
         "typer[all]",
+        "matplotlib",
+        "pandas"
     ],
     # List additional groups of dependencies here (e.g. development
     # dependencies). Users will be able to install these using the "extras"
