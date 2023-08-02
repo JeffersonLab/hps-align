@@ -269,7 +269,7 @@ class Sensor:
         normal : np.array
             Normal vector to sensor plane
         """
-        return normal_vector(math.radians(self.sensor_plane_dict["xy_angle"]), math.radians(self.sensor_plane_dict["elevation"]))
+        return normal_vector(self.sensor_plane_dict["xy_angle"], self.sensor_plane_dict["elevation"])
 
     def get_sensor_normal_ballframe(self, use_matt_basis=False):
         """Get sensor origin coordinates in ball frame

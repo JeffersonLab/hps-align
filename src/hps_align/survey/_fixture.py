@@ -188,7 +188,7 @@ class Fixture:
             Normal vector of base plane
         """
         origin = np.array([self.base_plane_dict['x'], self.base_plane_dict['y'], self.base_plane_dict['z']])
-        normal = normal_vector(math.radians(self.base_plane_dict['xy_angle']), math.radians(self.base_plane_dict['elevation']))
+        normal = normal_vector(self.base_plane_dict['xy_angle'], self.base_plane_dict['elevation'])
         return origin, normal
 
     def set_pin(self, pin_coords, type):
