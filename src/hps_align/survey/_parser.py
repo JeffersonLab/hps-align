@@ -77,11 +77,3 @@ class Parser:
                     coordinates["elevation"] = math.radians(float(line.split()[2]))
 
         return coordinates
-
-
-# if __name__ == '__main__':
-#     parser = Parser('/Users/schababi/workspace/hps/hps-align/survey_data/meas1/L0_axial1_1.txt')
-
-#     print(parser.find_names(['axiball', 'Diameter', 'oriball']))
-#     print(parser.find_coords(145))
-#     print(parser.find_coords(220))

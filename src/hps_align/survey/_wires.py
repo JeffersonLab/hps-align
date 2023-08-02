@@ -50,10 +50,3 @@ class Wire:
         diagonal_wire = self.parser.find_coords(
             self.parser.find_names(['Diagonal wire'])['Diagonal wire'] + 1)
         return diagonal_wire
-
-
-# if __name__ == '__main__':
-#     wire = Wire('/Users/schababi/workspace/hps/hps-align/survey_data/meas1/uchannel_full_top_1.txt')
-
-#     print(wire._find_parallel_wire())
-#     print(wire._find_diagonal_wire())

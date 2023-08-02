@@ -228,16 +228,3 @@ class Pin:
             raise ValueError('Invalid layer number')
 
         return np.array([pin['x'], pin['y'], pin['z']])
-
-# if __name__ == '__main__':
-
-    # pin = Pin('/Users/schababi/workspace/hps/hps-align/survey_data/meas1/uchannel_empty_top_1.txt')
-
-    # print(pin._find_L0_slot_pin())
-    # print(pin._find_L0_hole_pin())
-    # print(pin._find_L1_slot_pin())
-    # print(pin._find_L1_hole_pin())
-    # print(pin._find_L2_slot_pin())
-    # print(pin._find_L2_hole_pin())
-    # print(pin._find_L3_slot_pin())
-    # print(pin._find_L3_hole_pin())

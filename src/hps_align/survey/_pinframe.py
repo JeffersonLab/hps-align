@@ -51,8 +51,3 @@ class PinFrame:
         basis = make_basis(hole_to_slot, plane_normal)
 
         return basis, hole_pin_projected
-
-
-# if __name__ == '__main__':
-
-#     pinframe = PinFrame('/Users/schababi/workspace/hps/hps-align/survey_data/meas1/uchannel_empty_top_1.txt')

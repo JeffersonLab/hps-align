@@ -212,13 +212,3 @@ class BallFrame:
         basis = make_basis(vec0 - origin, hole_avg - origin)
 
         return np.array([-basis[1], -basis[2], basis[0]]), origin
-
-
-# if __name__ == '__main__':
-#     ballframe = BallFrame('/Users/schababi/workspace/hps/hps-align/survey_data/meas1/uchannel_empty_top_1.txt')
-
-#     print(ballframe._find_L1_hole_ball())
-#     print(ballframe._find_L1_slot_ball())
-#     print(ballframe._find_L3_hole_ball())
-#     print(ballframe._find_L3_slot_ball())
-#     print(ballframe._find_ball_plane())

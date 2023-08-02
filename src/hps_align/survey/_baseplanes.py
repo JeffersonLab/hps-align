@@ -160,12 +160,3 @@ class BasePlane:
         """
         base_plane = self.get_base_plane_dict(layer)
         return normal_vector(base_plane['xy_angle'], base_plane['elevation'])
-
-
-# if __name__ == '__main__':
-#     baseplane = BasePlane('/Users/schababi/workspace/hps/hps-align/survey_data/meas1/uchannel_empty_top_1.txt')
-
-#     print(baseplane._find_L0_base_plane())
-#     print(baseplane._find_L1_base_plane())
-#     print(baseplane._find_L2_base_plane())
-#     print(baseplane._find_L3_base_plane())

@@ -1,6 +1,8 @@
 
 import numpy as np
 
+import warnings
+
 from ._utils import *
 from ._parser import Parser
 from ._cli import app
@@ -8,13 +10,26 @@ from ._cli import app
 
 class Fixture:
 
-    def __init__(self, input_file):
+    def __init__(self, input_file=None):
+        if input_file is None:
+            warnings.warn('No input file specified')
+            self.oriball_dict = {'x': 0, 'y': 0, 'z': 0}
+            self.diagball_dict = {'x': 0, 'y': 0, 'z': 0}
+            self.axiball_dict = {'x': 0, 'y': 0, 'z': 0}
+            self.base_plane_dict = {'x': 0, 'y': 0, 'z': 0, 'xy_angle': 0, 'elevation': 0}
+            self.oripin_dict = {'x': 0, 'y': 0, 'z': 0}
+            self.axipin_dict = {'x': 0, 'y': 0, 'z': 0}
+            return
+
         self.input_file = input_file
         self.parser = Parser(input_file)
 
         self.oriball_dict = self._find_oriball()
         self.diagball_dict = self._find_diagball()
         self.axiball_dict = self._find_axiball()
+        self.base_plane_dict = self._find_base_plane()
+        self.oripin_dict = self._find_oripin()
+        self.axipin_dict = self._find_axipin()
 
     def _find_oriball(self):
         """Find oriball coordinates in survey data file
@@ -89,7 +104,15 @@ class Fixture:
         return axipin
 
     def set_ball(self, ball_coords, type):
-        """Set ball coordinates for a given layer and ball type"""
+        """Set ball coordinates for a given layer and ball type
+
+        Parameters
+        ----------
+        ball_coords : dict
+            Dictionary of ball coordinates
+        type : str
+            Type of ball to set coordinates for
+        """
         if not isinstance(ball_coords, dict):
             raise ValueError('Invalid ball coordinate type: {}'.format(ball_coords))
 
@@ -140,6 +163,19 @@ class Fixture:
 
         return basis, origin
 
+    def set_base_plane(self, base_plane_coords):
+        """Set base plane coordinates
+
+        Parameters
+        ----------
+        base_plane_coords : dict
+            Dictionary of base plane coordinates
+        """
+        if not isinstance(base_plane_coords, dict):
+            raise ValueError('Invalid base plane coordinate type: {}'.format(base_plane_coords))
+
+        self.base_plane_dict = base_plane_coords
+
     def get_base_plane(self):
         """Get base plane coordinates from survey data file
 
@@ -152,9 +188,8 @@ class Fixture:
         normal : np.array
             Normal vector of base plane
         """
-        base_plane = self._find_base_plane()
-        origin = np.array([base_plane['x'], base_plane['y'], base_plane['z']])
-        normal = normal_vector(math.radians(base_plane['xy_angle']), math.radians(base_plane['elevation']))
+        origin = np.array([self.base_plane_dict['x'], self.base_plane_dict['y'], self.base_plane_dict['z']])
+        normal = normal_vector(math.radians(self.base_plane_dict['xy_angle']), math.radians(self.base_plane_dict['elevation']))
         return origin, normal
 
     def set_pin(self, pin_coords, type):
@@ -192,9 +227,9 @@ class Fixture:
             Array of pin coordinates
         """
         if type == 'oripin':
-            pin = self._find_oripin()
+            pin = self.oripin_dict
         elif type == 'axipin':
-            pin = self._find_axipin()
+            pin = self.axipin_dict
         else:
             raise ValueError('Invalid pin type: {}'.format(type))
         return np.array([pin['x'], pin['y'], pin['z']])
@@ -232,5 +267,33 @@ class Fixture:
         hole_to_slot = slot_pin_projected - hole_pin_projected
         basis = make_basis(hole_to_slot, plane_normal)
         origin = hole_pin_projected
+
+        return basis, origin
+
+    def get_pin_in_ball(self, volume, use_matt_basis=False):
+        """Get basis vectors for pin frame in fixture ball coordinates
+
+        Parameters
+        ----------
+        volume : str
+            "top" or "bottom"
+        use_matt_basis : bool
+            If True, use Matt's survey data file
+        Returns
+        -------
+        basis : np.array
+            Array of basis vectors
+        origin : np.array
+            Array of origin coordinates
+        """
+        pin_basis, pin_origin = self.get_pin_basis(volume)
+        if use_matt_basis:
+            ball_basis, ball_origin = np.identity(3), np.zeros(3)
+        else:
+            ball_basis, ball_origin = self.get_ball_basis()
+
+        basis = np.matmul(np.linalg.inv(ball_basis), pin_basis)
+        origin = pin_origin - ball_origin
+        origin = np.matmul(origin, np.linalg.inv(ball_basis))
 
         return basis, origin

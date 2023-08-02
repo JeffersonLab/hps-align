@@ -126,16 +126,3 @@ class SensorEdge:
         L3_stereo_backedge = self.parser.find_coords(
             self.parser.find_names(['L3 stereo back edge'])['L3 stereo back edge'] + 1)
         return L3_stereo_backedge
-
-
-# if __name__ == '__main__':
-#     edge = SensorEdge('/Users/schababi/workspace/hps/hps-align/survey_data/meas1/uchannel_full_top_1.txt')
-
-#     print(edge._find_L0_axial_frontedge())
-#     print(edge._find_L0_stereo_backedge())
-#     print(edge._find_L1_axial_frontedge())
-#     print(edge._find_L1_stereo_backedge())
-#     print(edge._find_L2_axial_frontedge())
-#     print(edge._find_L2_stereo_backedge())
-#     print(edge._find_L3_axial_frontedge())
-#     print(edge._find_L3_stereo_backedge())
