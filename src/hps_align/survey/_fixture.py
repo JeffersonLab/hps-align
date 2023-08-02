@@ -158,7 +158,6 @@ class Fixture:
             Array of origin coordinates
         """
         origin = self.get_ball('oriball')
-
         basis = make_basis(self.get_ball('axiball') - origin, self.get_ball('diagball') - origin)
 
         return basis, origin
