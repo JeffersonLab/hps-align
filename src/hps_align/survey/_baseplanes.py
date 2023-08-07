@@ -27,58 +27,10 @@ class BasePlane:
         self.input_file = input_file
         self.parser = Parser(input_file)
 
-        self.L0_base_plane_dict = self._find_L0_base_plane()
-        self.L1_base_plane_dict = self._find_L1_base_plane()
-        self.L2_base_plane_dict = self._find_L2_base_plane()
-        self.L3_base_plane_dict = self._find_L3_base_plane()
-
-    def _find_L0_base_plane(self):
-        """Find L0 base plane coordinates in survey data file
-
-        Returns
-        -------
-        L0_base_plane : dict
-            Dictionary of L0 base plane coordinates
-        """
-        L0_base_plane = self.parser.find_coords(
-            self.parser.find_names(['L0 base plane'])['L0 base plane'] + 1)
-        return L0_base_plane
-
-    def _find_L1_base_plane(self):
-        """Find L1 base plane coordinates in survey data file
-
-        Returns
-        -------
-        L1_base_plane : dict
-            Dictionary of L1 base plane coordinates
-        """
-        L1_base_plane = self.parser.find_coords(
-            self.parser.find_names(['L1 base plane'])['L1 base plane'] + 1)
-        return L1_base_plane
-
-    def _find_L2_base_plane(self):
-        """Find L2 base plane coordinates in survey data file
-
-        Returns
-        -------
-        L2_base_plane : dict
-            Dictionary of L2 base plane coordinates
-        """
-        L2_base_plane = self.parser.find_coords(
-            self.parser.find_names(['L2 base plane'])['L2 base plane'] + 1)
-        return L2_base_plane
-
-    def _find_L3_base_plane(self):
-        """Find L3 base plane coordinates in survey data file
-
-        Returns
-        -------
-        L3_base_plane : dict
-            Dictionary of L3 base plane coordinates
-        """
-        L3_base_plane = self.parser.find_coords(
-            self.parser.find_names(['L3 base plane'])['L3 base plane'] + 1)
-        return L3_base_plane
+        self.L0_base_plane_dict = self.parser.get_coords('L0 base plane')
+        self.L1_base_plane_dict = self.parser.get_coords('L1 base plane')
+        self.L2_base_plane_dict = self.parser.get_coords('L2 base plane')
+        self.L3_base_plane_dict = self.parser.get_coords('L3 base plane')
 
     def set_base_plane_dict(self, base_plane_coords, layer):
         """Set base plane coordinates for a given layer

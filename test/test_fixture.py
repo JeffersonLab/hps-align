@@ -296,3 +296,7 @@ class TestGetPinInBall(unittest.TestCase):
     #     print('top origin: ', origin_top)
     #     print('axipin:', fixture.get_pin('axipin'))
     #     print('oripin:', fixture.get_pin('oripin'))
+
+
+if __name__ == '__main__':
+    unittest.main()

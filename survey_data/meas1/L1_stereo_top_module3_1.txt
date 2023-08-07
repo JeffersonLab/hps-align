@@ -143,7 +143,7 @@ Features: 1
 -------------------------------------------------------------------------------
  Step:  9     MM     Cart  Decimal Degree   Measure                     ANSI 
 Comment:    
-sensor plane                                                                
+Sensor plane                                                                
 Prompt:     
                                                                             
  Plane         Best Fit       

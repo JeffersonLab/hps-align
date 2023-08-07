@@ -74,6 +74,18 @@ class Parser:
                 elif "XY Angle" in line:
                     coordinates["xy_angle"] = math.radians(float(line.split()[2]))
                 elif "Elevation" in line:
-                    coordinates["elevation"] = math.radians(float(line.split()[2]))
+                    coordinates["elevation"] = math.radians(float(line.split()[1]))
 
         return coordinates
+    
+    def get_coords(self, input_string, num_lines_to_read=15):
+        """Find coordinates of feature of name input_string in survey data file
+        
+        Parameters
+        ----------
+        input_string : str
+            Name of feature to find coordinates of
+        num_lines_to_read : int
+            Number of lines to read from first appearance of input_string
+        """
+        return self.find_coords(self.find_names([input_string])[input_string] + 1, num_lines_to_read)

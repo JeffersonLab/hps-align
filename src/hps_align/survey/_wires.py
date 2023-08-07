@@ -24,29 +24,5 @@ class Wire:
         self.input_file = input_file
         self.parser = Parser(input_file)
 
-        self.parallel_wire_dict = self._find_parallel_wire()
-        self.diagonal_wire_dict = self._find_diagonal_wire()
-
-    def _find_parallel_wire(self):
-        """Find parallel wire coordinates in survey data file
-
-        Returns
-        -------
-        parallel_wire : dict
-            Dictionary of parallel wire coordinates
-        """
-        parallel_wire = self.parser.find_coords(
-            self.parser.find_names(['Parallel wire'])['Parallel wire'] + 1)
-        return parallel_wire
-
-    def _find_diagonal_wire(self):
-        """Find diagonal wire coordinates in survey data file
-
-        Returns
-        -------
-        diagonal_wire : dict
-            Dictionary of diagonal wire coordinates
-        """
-        diagonal_wire = self.parser.find_coords(
-            self.parser.find_names(['Diagonal wire'])['Diagonal wire'] + 1)
-        return diagonal_wire
+        self.parallel_wire_dict = self.parser.get_coords('Parallel wire')
+        self.diagonal_wire_dict = self.parser.get_coords('Diagonal wire')

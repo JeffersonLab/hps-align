@@ -213,3 +213,7 @@ class TestSensorNormal(unittest.TestCase):
 
     #     print('bottom origin: ', origin_bot)
     #     print('top origin: ', origin_top)
+
+
+if __name__ == '__main__':
+    unittest.main()

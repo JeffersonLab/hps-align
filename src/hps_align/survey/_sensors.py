@@ -3,17 +3,16 @@ import numpy as np
 import warnings
 
 from ._parser import Parser
-from ._fixture import Fixture
+from ._fixture import *
 from ._utils import *
 from ._cli import app
 
 
 class Sensor:
 
-    def __init__(self, input_file=None, input_file_fixture=None):
-
-        self.fixture = Fixture(input_file_fixture)
-
+    def __init__(self, fixture, input_file=None):
+        
+        self.fixture = fixture
         if input_file is None:
             warnings.warn('No input file specified')
             self.oriball_dict = {'x': 0, 'y': 0, 'z': 0}
@@ -24,72 +23,6 @@ class Sensor:
             return
 
         self.parser = Parser(input_file)
-
-        self.oriball_dict = self._find_oriball()
-        self.diagball_dict = self._find_diagball()
-        self.axiball_dict = self._find_axiball()
-        self.sensor_origin_dict = self._find_sensor_origin()
-        self.sensor_plane_dict = self._find_sensor_plane()
-
-    def _find_oriball(self):
-        """Find oriball coordinates in survey data file
-
-        Returns
-        -------
-        oriball : dict
-            Dictionary of oriball coordinates
-        """
-        oriball = self.parser.find_coords(
-            self.parser.find_names(['oriball'])['oriball'] + 1)
-        return oriball
-
-    def _find_diagball(self):
-        """Find diagball coordinates in survey data file
-
-        Returns
-        -------
-        diagball : dict
-            Dictionary of diagball coordinates
-        """
-        diagball = self.parser.find_coords(
-            self.parser.find_names(['diagball'])['diagball'] + 1)
-        return diagball
-
-    def _find_axiball(self):
-        """Find axiball coordinates in survey data file
-
-        Returns
-        -------
-        axiball : dict
-            Dictionary of axiball coordinates
-        """
-        axiball = self.parser.find_coords(
-            self.parser.find_names(['axiball'])['axiball'] + 1)
-        return axiball
-
-    def _find_sensor_origin(self):
-        """Find sensor origin coordinates in survey data file
-
-        Returns
-        -------
-        sensor_origin : dict
-            Dictionary of sensor origin coordinates
-        """
-        sensor_origin = self.parser.find_coords(
-            self.parser.find_names(['Sensor origin'])['Sensor origin'] + 1)
-        return sensor_origin
-
-    def _find_sensor_plane(self):
-        """Find sensor plane coordinates in survey data file
-
-        Returns
-        -------
-        sensor_plane : dict
-            Dictionary of sensor plane coordinates
-        """
-        sensor_plane = self.parser.find_coords(
-            self.parser.find_names(['Sensor plane'])['Sensor plane'] + 1)
-        return sensor_plane
 
     def _find_sensor_active_edge_beam(self):
         """Find sensor active edge (closer to beam) coordinates in survey data file
@@ -209,39 +142,24 @@ class Sensor:
         """
         return np.array([self.sensor_origin_dict['x'], self.sensor_origin_dict['y'], self.sensor_origin_dict['z']])
 
-    def get_sensor_origin_ballframe(self, use_matt_basis=False):
-        """Get sensor origin coordinates in fixture ball frame
-
-        Parameters
-        ----------
-        use_matt_basis : bool
-            If True, use Matt's survey data file
-        """
-        if use_matt_basis:
-            ball_basis, ball_origin = np.identity(3), np.zeros(3)
-        else:
-            ball_basis, ball_origin = self.get_ball_basis()
+    def get_sensor_origin_ballframe(self):
+        """Get sensor origin coordinates in fixture ball frame"""        
+        ball_basis, ball_origin = self.get_ball_basis()
         origin = self.get_sensor_origin() - ball_origin
         origin = np.matmul(origin, np.linalg.inv(ball_basis))
 
         return origin
 
-    def get_sensor_origin_pinframe(self, volume, use_matt_basis=False):
+    def get_sensor_origin_pinframe(self):
         """Get sensor origin coordinates in pin frame
 
-        Parameters
-        ----------
-        volume : str
-            "top" or "bottom"
-        use_matt_basis : bool
-            If True, use Matt's survey data file
         Returns
         -------
         origin : np.array
             Sensor origin coordinates in pin frame
         """
-        origin = self.get_sensor_origin_ballframe(use_matt_basis)
-        pin_basis, pin_origin = self.fixture.get_pin_in_ball(volume, use_matt_basis)
+        origin = self.get_sensor_origin_ballframe()
+        pin_basis, pin_origin = self.fixture.get_pin_in_ball()
 
         origin = origin - pin_origin
         origin = np.matmul(origin, np.linalg.inv(pin_basis))
@@ -271,44 +189,45 @@ class Sensor:
         """
         return normal_vector(self.sensor_plane_dict["xy_angle"], self.sensor_plane_dict["elevation"])
 
-    def get_sensor_normal_ballframe(self, use_matt_basis=False):
-        """Get sensor origin coordinates in ball frame
-
-        Parameters
-        ----------
-        use_matt_basis : bool
-            If True, use Matt's survey data file
-        Returns
-        -------
-        normal : np.array
-            Normal vector to sensor plane in fixture ball frame
-        """
-        if use_matt_basis:
-            ball_basis = np.identity(3)
-        else:
-            ball_basis = self.get_ball_basis()[0]
+    def get_sensor_normal_ballframe(self):
+        """Get sensor origin coordinates in fixture ball frame"""
+        ball_basis = self.get_ball_basis()[0]
         normal = self.get_sensor_normal()
         normal = np.matmul(normal, np.linalg.inv(ball_basis))
 
         return normal
 
-    def get_sensor_normal_pinframe(self, volume, use_matt_basis=False):
+    def get_sensor_normal_pinframe(self):
         """Get sensor normal vector in pin frame
 
-        Parameters
-        ----------
-        volume : str
-            "top" or "bottom"
-        use_matt_basis : bool
-            If True, use Matt's survey data file
         Returns
         -------
         normal : np.array
             Sensor normal vector in pin frame
         """
-        normal = self.get_sensor_normal_ballframe(use_matt_basis)
-        pin_basis = self.fixture.get_pin_in_ball(volume, use_matt_basis)[0]
+        normal = self.get_sensor_normal_ballframe()
+        pin_basis = self.fixture.get_pin_in_ball()[0]
 
         normal = np.matmul(normal, np.linalg.inv(pin_basis))
 
         return normal
+
+
+class MattSensor(Sensor):
+
+    def __init__(self, fixture, input_file=None):
+        super().__init__(fixture, input_file)
+
+        self.oriball_dict = self.parser.get_coords('oriball')
+        self.diagball_dict = self.parser.get_coords('diagball')
+        self.axiball_dict = self.parser.get_coords('axiball')
+        self.sensor_origin_dict = self.parser.get_coords('Sensor origin')
+        self.sensor_plane_dict = self.parser.get_coords('Sensor plane')
+
+    def get_sensor_origin_ballframe(self):
+        """Get sensor origin coordinates in fixture ball frame"""
+        return self.get_sensor_origin()
+
+    def get_sensor_normal_ballframe(self):
+        """Get sensor origin coordinates in fixture ball frame"""
+        return self.get_sensor_normal()
