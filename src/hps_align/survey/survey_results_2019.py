@@ -74,12 +74,3 @@ class Survey2019(Survey):
         sensor_normal_ball = np.matmul(sensor_normal_pin, basis)
 
         return sensor_origin_ball, sensor_normal_ball
-
-    def print_results(self, output_file):
-        with open(output_file, 'w') as f:
-            f.write('volume,layer,sensor,origin_x,origin_y,origin_z,normal_x,normal_y,normal_z\n')
-            for volume in ['top', 'bottom']:
-                for layer in ['0', '1']:
-                    for sensor in ['axial', 'stereo']:
-                        origin, normal = self.transform_sensor_to_uchannel_ballframe(volume, layer, sensor)
-                        f.write(f'{volume},{layer},{sensor},{origin[0]},{origin[1]},{origin[2]},{normal[0]},{normal[1]},{normal[2]}\n')
