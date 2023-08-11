@@ -150,7 +150,6 @@ class TestPinToBallFrame(unittest.TestCase):
             # uchannel.ballframe_top = ballframe
             # gives ball_basis [[-1, 0, 0], [0, 0, 1], [0, 1, 0]]
 
-
         uchannel = UChannel(pinframe_top=pinframe, ballframe_top=ballframe)
 
         basis, origin = uchannel.pin_in_ballframe(0, 'top')

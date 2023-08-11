@@ -214,10 +214,10 @@ class ShoFixture(Fixture):
     def __init__(self, input_file=None):
         self.parser = None
         super().__init__(input_file)
-        
+
         if self.parser:
             # ball coordinated in pin frame
-            self.oriball_dict = self.parser.get_coords('Step 15 - Origin ball', 5) 
+            self.oriball_dict = self.parser.get_coords('Step 15 - Origin ball', 5)
             self.diagball_dict = self.parser.get_coords('Step 16 - Diagonal ball', 5)
             self.axiball_dict = self.parser.get_coords('Step 17 - Axis ball', 5)
             self.base_plane_dict = self.parser.get_coords('Step 9 - Datum plane', 7)
@@ -227,7 +227,7 @@ class ShoFixture(Fixture):
 
     def get_ball_in_pin(self):
         return self.get_ball_basis()
-    
+
     def get_pin_in_ball(self):
         ball_basis, ball_origin = self.get_ball_in_pin()
         return np.linalg.inv(ball_basis), -np.matmul(ball_origin, np.linalg.inv(ball_basis))
@@ -246,7 +246,7 @@ class MattFixture(Fixture):
             self.base_plane_dict = self.parser.get_coords('L0 base plane')
             self.oripin_dict = self.parser.get_coords('oripin')
             self.axipin_dict = self.parser.get_coords('axipin')
-    
+
     def get_pin_in_ball(self):
         """Get basis vectors for pin frame in fixture ball coordinates
 
@@ -258,7 +258,7 @@ class MattFixture(Fixture):
             Array of origin coordinates
         """
         return self.get_pin_basis()
-    
+
     def get_ball_in_pin(self):
         basis, origin = self.get_pin_in_ball()
         return np.linalg.inv(basis), -np.matmul(origin, np.linalg.inv(basis))

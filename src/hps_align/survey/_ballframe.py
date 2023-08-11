@@ -84,7 +84,7 @@ class BallFrame:
 
     def get_basis(self, volume=''):
         """Get ballframe basis vectors
-        
+
         Returns
         -------
         basis : np.array
@@ -101,7 +101,7 @@ class BallFrame:
         basis = make_basis(vec0 - origin, hole_avg - origin)
 
         return np.array([-basis[1], -basis[2], basis[0]]), origin
-    
+
 
 class MattBallFrame(BallFrame):
 
@@ -138,10 +138,10 @@ class MattBallFrame(BallFrame):
         midpoint = self.parser.find_coords(
             self.parser.find_names(['Step:  6'])['Step:  6'] + 1, 20)
         return midpoint
-    
+
     def get_matt_basis(self, volume):
         """Get basis vectors for Matt's ballframe
-        
+
         Parameters
         ----------
         volume : str
@@ -165,15 +165,15 @@ class MattBallFrame(BallFrame):
             basis = make_basis(L3_midpoint - origin, self.get_ball(1, 'slot') - origin)
 
         return basis, origin
-    
+
     def get_basis(self, volume):
         """Get ballframe basis vectors
-        
+
         Parameters
         ----------
         volume : str
             'top' or 'bottom'
-        
+
         Returns
         -------
         basis : np.array

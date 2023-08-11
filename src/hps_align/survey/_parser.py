@@ -77,10 +77,10 @@ class Parser:
                     coordinates["elevation"] = math.radians(float(line.split()[1]))
 
         return coordinates
-    
+
     def get_coords(self, input_string, num_lines_to_read=15):
         """Find coordinates of feature of name input_string in survey data file
-        
+
         Parameters
         ----------
         input_string : str

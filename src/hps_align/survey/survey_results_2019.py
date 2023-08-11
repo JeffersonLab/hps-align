@@ -20,9 +20,9 @@ class Survey2019(Survey):
         pinframe_bottom = PinFrame(survey_files['pinframe_bottom'])
 
         self.uchannel = UChannel(ballframe_top=ballframe_top,
-                                ballframe_bot=ballframe_bottom,
-                                pinframe_top=pinframe_top,
-                                pinframe_bot=pinframe_bottom)
+                                 ballframe_bot=ballframe_bottom,
+                                 pinframe_top=pinframe_top,
+                                 pinframe_bot=pinframe_bottom)
 
         matt_fixture = MattFixture(survey_files['matt_fixture'])
         sho_fixture = ShoFixture(survey_files['sho_fixture'])
@@ -62,7 +62,7 @@ class Survey2019(Survey):
 
     def get_pin_in_uchannel_ballframe(self, layer, volume):
         return self.uchannel.pin_in_ballframe(int(layer), volume, True)
-    
+
     def transform_sensor_to_uchannel_ballframe(self, volume, layer, sensor_type):
         basis, origin = self.get_pin_in_uchannel_ballframe(layer, volume)
         sensor = self.sensors[volume][layer][sensor_type]

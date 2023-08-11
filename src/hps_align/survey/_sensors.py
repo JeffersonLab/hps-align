@@ -11,7 +11,7 @@ from ._cli import app
 class Sensor:
 
     def __init__(self, fixture, input_file=None):
-        
+
         self.fixture = fixture
         if input_file is None:
             warnings.warn('No input file specified')
@@ -143,7 +143,7 @@ class Sensor:
         return np.array([self.sensor_origin_dict['x'], self.sensor_origin_dict['y'], self.sensor_origin_dict['z']])
 
     def get_sensor_origin_ballframe(self):
-        """Get sensor origin coordinates in fixture ball frame"""        
+        """Get sensor origin coordinates in fixture ball frame"""
         ball_basis, ball_origin = self.get_ball_basis()
         origin = self.get_sensor_origin() - ball_origin
         origin = np.matmul(origin, np.linalg.inv(ball_basis))

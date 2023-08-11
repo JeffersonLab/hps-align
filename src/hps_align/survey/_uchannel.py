@@ -11,7 +11,7 @@ class UChannel:
                  ballframe_bot=BallFrame(),
                  pinframe_top=PinFrame(),
                  pinframe_bot=PinFrame()):
-        
+
         self.ballframe_top = ballframe_top
         self.pinframe_top = pinframe_top
         self.ballframe_bot = ballframe_bot

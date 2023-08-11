@@ -19,7 +19,7 @@ class Survey:
 
     def get_pin_in_uchannel_ballframe(self, layer, volume, use_matt_basis=False):
         return self.uchannel.pin_in_ballframe(layer, volume, use_matt_basis)
-    
+
     def transform_sensor_to_uchannel_ballframe(self, volume, layer, sensor_type, use_matt_basis=False):
         basis, origin = self.get_pin_in_uchannel_ballframe(int(layer), volume, use_matt_basis)
         sensor = self.sensors[volume][layer][sensor_type]

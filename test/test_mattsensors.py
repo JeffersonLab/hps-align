@@ -140,7 +140,7 @@ class TestSensorOrigin(unittest.TestCase):
     def test_get_sensor_origin_ballframe(self):
         with self.assertWarns(UserWarning):
             fixture = Fixture()
-        
+
         with self.assertWarns(UserWarning):
             sensor = MattSensor(fixture)
 
