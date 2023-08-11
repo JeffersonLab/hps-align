@@ -202,7 +202,7 @@ class Fixture:
         pin_basis, pin_origin = self.get_pin_basis()
         ball_basis, ball_origin = self.get_ball_basis()
 
-        basis = np.matmul(np.linalg.inv(ball_basis), pin_basis)
+        basis = np.matmul(pin_basis, np.linalg.inv(ball_basis))
         origin = pin_origin - ball_origin
         origin = np.matmul(origin, np.linalg.inv(ball_basis))
 

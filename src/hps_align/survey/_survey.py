@@ -11,12 +11,18 @@ class Survey:
         self.uchannel = UChannel()
         self.sensors = {'top': {}, 'bottom': {}}  # {volume: {layer: {sensor (ax/st): Sensor()}}}
 
+    def set_uchannel(self, uchannel):
+        self.uchannel = uchannel
+
+    def set_sensors(self, sensors):
+        self.sensors = sensors
+
     def get_pin_in_uchannel_ballframe(self, layer, volume, use_matt_basis=False):
         return self.uchannel.pin_in_ballframe(layer, volume, use_matt_basis)
     
-    def transform_sensor_to_uchannel_ballframe(self, volume, layer, sensor, use_matt_basis=False):
-        basis, origin = self.get_pin_in_uchannel_ballframe(layer, volume, use_matt_basis)
-        sensor = self.sensors[volume][layer][sensor]
+    def transform_sensor_to_uchannel_ballframe(self, volume, layer, sensor_type, use_matt_basis=False):
+        basis, origin = self.get_pin_in_uchannel_ballframe(int(layer), volume, use_matt_basis)
+        sensor = self.sensors[volume][layer][sensor_type]
 
         sensor_origin_pin = sensor.get_sensor_origin_pinframe()
         sensor_normal_pin = sensor.get_sensor_normal_pinframe()
