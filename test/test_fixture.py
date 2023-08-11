@@ -158,13 +158,6 @@ class TestSetBasePlane(unittest.TestCase):
 
 class TestGetPinBasis(unittest.TestCase):
 
-    def test_invalid_input(self):
-        with self.assertWarns(UserWarning):
-            fixture = Fixture()
-
-        with self.assertRaises(ValueError):
-            fixture.get_pin_basis('foo')
-
     def test_valid_input(self):
         with self.assertWarns(UserWarning):
             fixture = Fixture()
@@ -173,21 +166,7 @@ class TestGetPinBasis(unittest.TestCase):
         fixture.set_pin({'x': 1, 'y': 1, 'z': 1}, 'axipin')
         fixture.set_base_plane({'x': 0, 'y': 0, 'z': 0, 'xy_angle': 0, 'elevation': np.pi/2})
 
-        basis, origin = fixture.get_pin_basis('bottom')
-        self.assertAlmostEqual(0, basis[0][0])
-        self.assertAlmostEqual(1, basis[0][1])
-        self.assertAlmostEqual(0, basis[0][2])
-        self.assertAlmostEqual(0, basis[1][0])
-        self.assertAlmostEqual(0, basis[1][1])
-        self.assertAlmostEqual(1, basis[1][2])
-        self.assertAlmostEqual(1, basis[2][0])
-        self.assertAlmostEqual(0, basis[2][1])
-        self.assertAlmostEqual(0, basis[2][2])
-        self.assertAlmostEqual(1, origin[0])
-        self.assertAlmostEqual(0, origin[1])
-        self.assertAlmostEqual(0, origin[2])
-
-        basis, origin = fixture.get_pin_basis('top')
+        basis, origin = fixture.get_pin_basis()
         self.assertAlmostEqual(0, basis[0][0])
         self.assertAlmostEqual(-1, basis[0][1])
         self.assertAlmostEqual(0, basis[0][2])
@@ -204,49 +183,6 @@ class TestGetPinBasis(unittest.TestCase):
 
 class TestGetPinInBall(unittest.TestCase):
 
-    def test_invalid_input(self):
-        with self.assertWarns(UserWarning):
-            fixture = Fixture()
-
-        with self.assertRaises(ValueError):
-            fixture.get_pin_in_ball('foo')
-
-    def test_matt_coords(self):
-        with self.assertWarns(UserWarning):
-            fixture = Fixture()
-
-        fixture.set_pin({'x': 1, 'y': 0, 'z': 1}, 'oripin')
-        fixture.set_pin({'x': 1, 'y': 1, 'z': 1}, 'axipin')
-        fixture.set_base_plane({'x': 0, 'y': 0, 'z': 0, 'xy_angle': 0, 'elevation': np.pi/2})
-
-        basis, origin = fixture.get_pin_in_ball('bottom', True)
-        self.assertAlmostEqual(0, basis[0][0])
-        self.assertAlmostEqual(1, basis[0][1])
-        self.assertAlmostEqual(0, basis[0][2])
-        self.assertAlmostEqual(0, basis[1][0])
-        self.assertAlmostEqual(0, basis[1][1])
-        self.assertAlmostEqual(1, basis[1][2])
-        self.assertAlmostEqual(1, basis[2][0])
-        self.assertAlmostEqual(0, basis[2][1])
-        self.assertAlmostEqual(0, basis[2][2])
-        self.assertAlmostEqual(1, origin[0])
-        self.assertAlmostEqual(0, origin[1])
-        self.assertAlmostEqual(0, origin[2])
-
-        basis, origin = fixture.get_pin_in_ball('top', True)
-        self.assertAlmostEqual(0, basis[0][0])
-        self.assertAlmostEqual(-1, basis[0][1])
-        self.assertAlmostEqual(0, basis[0][2])
-        self.assertAlmostEqual(0, basis[1][0])
-        self.assertAlmostEqual(0, basis[1][1])
-        self.assertAlmostEqual(1, basis[1][2])
-        self.assertAlmostEqual(-1, basis[2][0])
-        self.assertAlmostEqual(0, basis[2][1])
-        self.assertAlmostEqual(0, basis[2][2])
-        self.assertAlmostEqual(1, origin[0])
-        self.assertAlmostEqual(1, origin[1])
-        self.assertAlmostEqual(0, origin[2])
-
     def test_generic_coords(self):
         with self.assertWarns(UserWarning):
             fixture = Fixture()
@@ -255,31 +191,17 @@ class TestGetPinInBall(unittest.TestCase):
         fixture.set_pin({'x': 1, 'y': 1, 'z': 1}, 'axipin')
         fixture.set_base_plane({'x': 0, 'y': 0, 'z': 0, 'xy_angle': 0, 'elevation': np.pi/2})
         fixture.set_ball({'x': 0, 'y': 0, 'z': 0}, 'oriball')
-        fixture.set_ball({'x': -1, 'y': 0, 'z': 0}, 'axiball')
-        fixture.set_ball({'x': 0, 'y': -1, 'z': 0}, 'diagball')
+        fixture.set_ball({'x': -5, 'y': 0, 'z': 0}, 'axiball')
+        fixture.set_ball({'x': 0, 'y': -2, 'z': 0}, 'diagball')
 
-        basis, origin = fixture.get_pin_in_ball('bottom')
-        self.assertAlmostEqual(0, basis[0][0])
-        self.assertAlmostEqual(-1, basis[0][1])
-        self.assertAlmostEqual(0, basis[0][2])
-        self.assertAlmostEqual(0, basis[1][0])
-        self.assertAlmostEqual(0, basis[1][1])
-        self.assertAlmostEqual(-1, basis[1][2])
-        self.assertAlmostEqual(1, basis[2][0])
-        self.assertAlmostEqual(0, basis[2][1])
-        self.assertAlmostEqual(0, basis[2][2])
-        self.assertAlmostEqual(-1, origin[0])
-        self.assertAlmostEqual(0, origin[1])
-        self.assertAlmostEqual(0, origin[2])
-
-        basis, origin = fixture.get_pin_in_ball('top')
+        basis, origin = fixture.get_pin_in_ball()
         self.assertAlmostEqual(0, basis[0][0])
         self.assertAlmostEqual(1, basis[0][1])
         self.assertAlmostEqual(0, basis[0][2])
         self.assertAlmostEqual(0, basis[1][0])
         self.assertAlmostEqual(0, basis[1][1])
-        self.assertAlmostEqual(-1, basis[1][2])
-        self.assertAlmostEqual(-1, basis[2][0])
+        self.assertAlmostEqual(1, basis[1][2])
+        self.assertAlmostEqual(1, basis[2][0])
         self.assertAlmostEqual(0, basis[2][1])
         self.assertAlmostEqual(0, basis[2][2])
         self.assertAlmostEqual(-1, origin[0])

@@ -70,9 +70,6 @@ class Survey2019(Survey):
         sensor_origin_pin = sensor.get_sensor_origin_pinframe()
         sensor_normal_pin = sensor.get_sensor_normal_pinframe()
 
-        print(sensor_origin_pin)
-        print(origin)
-        print(basis)
         sensor_origin_ball = origin + np.matmul(sensor_origin_pin, basis)
         sensor_normal_ball = np.matmul(sensor_normal_pin, basis)
 

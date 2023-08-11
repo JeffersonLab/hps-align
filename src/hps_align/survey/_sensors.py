@@ -160,7 +160,6 @@ class Sensor:
         """
         origin = self.get_sensor_origin_ballframe()
         pin_basis, pin_origin = self.fixture.get_pin_in_ball()
-
         origin = origin - pin_origin
         origin = np.matmul(origin, np.linalg.inv(pin_basis))
 
@@ -216,13 +215,15 @@ class Sensor:
 class MattSensor(Sensor):
 
     def __init__(self, fixture, input_file=None):
+        self.parser = None
         super().__init__(fixture, input_file)
 
-        self.oriball_dict = self.parser.get_coords('oriball')
-        self.diagball_dict = self.parser.get_coords('diagball')
-        self.axiball_dict = self.parser.get_coords('axiball')
-        self.sensor_origin_dict = self.parser.get_coords('Sensor origin')
-        self.sensor_plane_dict = self.parser.get_coords('Sensor plane')
+        if self.parser:
+            self.oriball_dict = self.parser.get_coords('oriball')
+            self.diagball_dict = self.parser.get_coords('diagball')
+            self.axiball_dict = self.parser.get_coords('axiball')
+            self.sensor_origin_dict = self.parser.get_coords('Sensor origin')
+            self.sensor_plane_dict = self.parser.get_coords('Sensor plane')
 
     def get_sensor_origin_ballframe(self):
         """Get sensor origin coordinates in fixture ball frame"""

@@ -212,16 +212,18 @@ class Fixture:
 class ShoFixture(Fixture):
 
     def __init__(self, input_file=None):
+        self.parser = None
         super().__init__(input_file)
-
-        # ball coordinated in pin frame
-        self.oriball_dict = self.parser.get_coords('Step 15 - Origin ball', 5) 
-        self.diagball_dict = self.parser.get_coords('Step 16 - Diagonal ball', 5)
-        self.axiball_dict = self.parser.get_coords('Step 17 - Axis ball', 5)
-        self.base_plane_dict = self.parser.get_coords('Step 9 - Datum plane', 7)
-        # pin coordinates in OGP frame
-        self.oripin_dict = self.parser.get_coords('Step 11 - Slot pin', 6)
-        self.axipin_dict = self.parser.get_coords('Step 10 - Hole pin', 6)
+        
+        if self.parser:
+            # ball coordinated in pin frame
+            self.oriball_dict = self.parser.get_coords('Step 15 - Origin ball', 5) 
+            self.diagball_dict = self.parser.get_coords('Step 16 - Diagonal ball', 5)
+            self.axiball_dict = self.parser.get_coords('Step 17 - Axis ball', 5)
+            self.base_plane_dict = self.parser.get_coords('Step 9 - Datum plane', 7)
+            # pin coordinates in OGP frame
+            self.oripin_dict = self.parser.get_coords('Step 11 - Slot pin', 6)
+            self.axipin_dict = self.parser.get_coords('Step 10 - Hole pin', 6)
 
     def get_ball_in_pin(self):
         return self.get_ball_basis()
@@ -234,14 +236,16 @@ class ShoFixture(Fixture):
 class MattFixture(Fixture):
 
     def __init__(self, input_file=None):
+        self.parser = None
         super().__init__(input_file)
 
-        self.oriball_dict = self.parser.get_coords('oriball')
-        self.diagball_dict = self.parser.get_coords('diagball')
-        self.axiball_dict = self.parser.get_coords('axiball')
-        self.base_plane_dict = self.parser.get_coords('L0 base plane')
-        self.oripin_dict = self.parser.get_coords('oripin')
-        self.axipin_dict = self.parser.get_coords('axipin')
+        if self.parser:
+            self.oriball_dict = self.parser.get_coords('oriball')
+            self.diagball_dict = self.parser.get_coords('diagball')
+            self.axiball_dict = self.parser.get_coords('axiball')
+            self.base_plane_dict = self.parser.get_coords('L0 base plane')
+            self.oripin_dict = self.parser.get_coords('oripin')
+            self.axipin_dict = self.parser.get_coords('axipin')
     
     def get_pin_in_ball(self):
         """Get basis vectors for pin frame in fixture ball coordinates
