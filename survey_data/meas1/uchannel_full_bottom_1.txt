@@ -13,7 +13,7 @@
  ===============================================================================
  Step:  1     MM     Cart  Decimal Degree   Measure                     ANSI 
 Comment:    
-L1 Hole Ball                                                                
+L1 hole ball                                                                
 Prompt:     
                                                                             
  Sphere      
@@ -33,7 +33,7 @@ DSM : 2MM_20MM  Tip # 1
 -------------------------------------------------------------------------------
  Step:  2     MM     Cart  Decimal Degree   Measure                     ANSI 
 Comment:    
-L3 Hole Ball                                                                
+L3 hole ball                                                                
 Prompt:     
                                                                             
  Sphere      
@@ -53,7 +53,7 @@ DSM : 2MM_20MM  Tip # 1
 -------------------------------------------------------------------------------
  Step:  3     MM     Cart  Decimal Degree   Measure                     ANSI 
 Comment:    
-L3 Slot Ball                                                                
+L3 slot ball                                                                
 Prompt:     
                                                                             
  Sphere      
@@ -73,7 +73,7 @@ DSM : 2MM_20MM  Tip # 1
 -------------------------------------------------------------------------------
  Step:  4     MM     Cart  Decimal Degree   Measure                     ANSI 
 Comment:    
-L1 Slot Ball                                                                
+L1 slot ball                                                                
 Prompt:     
                                                                             
  Sphere      
@@ -93,7 +93,7 @@ DSM : 2MM_20MM  Tip # 1
 -------------------------------------------------------------------------------
  Step:  5     MM     Cart  Decimal Degree  Construct                    ANSI 
 Comment:    
-L1 Ball Midpoint (origin)                                                   
+L1 ball midpoint (origin)                                                   
 Prompt:     
                                                                             
  Midpoint    
@@ -112,7 +112,7 @@ Features: 2           Hide:    No
 -------------------------------------------------------------------------------
  Step:  6     MM     Cart  Decimal Degree  Construct                    ANSI 
 Comment:    
-L3 Ball Midpoint (z-axis)                                                   
+L3 ball midpoint (z-axis)                                                   
 Prompt:     
                                                                             
  Midpoint    

@@ -23,109 +23,8 @@ class BallFrame:
             self.L3_slot_ball_dict = {'x': 0, 'y': 0, 'z': 0}
             return
 
-        self.input_file = input_file
+        # self.input_file = input_file
         self.parser = Parser(input_file)
-
-        self.L1_hole_ball_dict = self._find_L1_hole_ball()
-        self.L1_slot_ball_dict = self._find_L1_slot_ball()
-        self.L3_hole_ball_dict = self._find_L3_hole_ball()
-        self.L3_slot_ball_dict = self._find_L3_slot_ball()
-
-    def _find_L1_hole_ball(self):
-        """Find L1 hole ball coordinates in survey data file
-
-        Returns
-        -------
-        L1_hole_ball : dict
-            Dictionary of L1 hole ball coordinates
-        """
-        if self.parser.find_names(['L1 hole ball']):
-            first_line = self.parser.find_names(['L1 hole ball'])['L1 hole ball']
-        else:
-            first_line = self.parser.find_names(['L1 Hole Ball'])['L1 Hole Ball'] + 1
-        L1_hole_ball = self.parser.find_coords(first_line)
-        return L1_hole_ball
-
-    def _find_L1_slot_ball(self):
-        """Find L1 slot ball coordinates in survey data file
-
-        Returns
-        -------
-        L1_slot_ball : dict
-            Dictionary of L1 slot ball coordinates
-        """
-        if self.parser.find_names(['L1 slot ball']):
-            first_line = self.parser.find_names(['L1 slot ball'])['L1 slot ball']
-        else:
-            first_line = self.parser.find_names(['L1 Slot Ball'])['L1 Slot Ball'] + 1
-        L1_slot_ball = self.parser.find_coords(first_line)
-        return L1_slot_ball
-
-    def _find_L3_hole_ball(self):
-        """Find L3 hole ball coordinates in survey data file
-
-        Returns
-        -------
-        L3_hole_ball : dict
-            Dictionary of L3 hole ball coordinates
-        """
-        if self.parser.find_names(['L3 hole ball']):
-            first_line = self.parser.find_names(['L3 hole ball'])['L3 hole ball']
-        else:
-            first_line = self.parser.find_names(['L3 Hole Ball'])['L3 Hole Ball'] + 1
-        L3_hole_ball = self.parser.find_coords(first_line)
-        return L3_hole_ball
-
-    def _find_L3_slot_ball(self):
-        """Find L3 slot ball coordinates in survey data file
-
-        Returns
-        -------
-        L3_slot_ball : dict
-            Dictionary of L3 slot ball coordinates
-        """
-        if self.parser.find_names(['L3 slot ball']):
-            first_line = self.parser.find_names(['L3 slot ball'])['L3 slot ball']
-        else:
-            first_line = self.parser.find_names(['L3 Slot Ball'])['L3 Slot Ball'] + 1
-        L3_slot_ball = self.parser.find_coords(first_line)
-        return L3_slot_ball
-
-    def _find_ball_plane(self):
-        """Find ball plane coordinates in survey data file
-
-        Returns
-        -------
-        ball_plane : dict
-            Dictionary of ball plane coordinates
-        """
-        ball_plane = self.parser.find_coords(
-            self.parser.find_names(['Step:  8'])['Step:  8'] + 1, 20)
-        return ball_plane
-
-    def _find_L1_midpoint(self):
-        """Find L1 midpoint (slot and hole) coordinates in survey data file
-
-        Returns
-        -------
-        midpoint : dict
-            Dictionary of L1 midpoint coordinates
-        """
-        midpoint = self.parser.find_coords(
-            self.parser.find_names(['Step:  5'])['Step:  5'] + 1, 20)
-        return midpoint
-
-    def _find_L3_midpoint(self):
-        """Find L3 midpoint (slot and hole) coordinates in survey data file
-
-        Returns
-        -------
-        midpoint : dict
-            Dictionary of L3 midpoint coordinates
-        """
-        midpoint = self.parser.find_coords(
-            self.parser.find_names(['Step:  6'])['Step:  6'] + 1, 20)
-        return midpoint
 
     def set_ball(self, ball_coords, layer, ball_type):
         """Set ball coordinates for a given layer and ball type"""
@@ -183,7 +82,78 @@ class BallFrame:
 
         return np.array([ball['x'], ball['y'], ball['z']])
 
-    def get_matt_basis(self, volume='top'):
+    def get_basis(self, volume=''):
+        """Get ballframe basis vectors
+        
+        Returns
+        -------
+        basis : np.array
+            Numpy array of basis vectors
+        origin : np.array
+            Numpy array of origin coordinates
+        """
+        origin = self.get_ball(1, 'slot')
+
+        vec1 = self.get_ball(1, 'hole')
+        vec2 = self.get_ball(3, 'hole')
+        hole_avg = (vec1 + vec2) / 2
+        vec0 = self.get_ball(3, 'slot')
+        basis = make_basis(vec0 - origin, hole_avg - origin)
+
+        return np.array([-basis[1], -basis[2], basis[0]]), origin
+    
+
+class MattBallFrame(BallFrame):
+
+    def __init__(self, input_file=None):
+        self.parser = None
+        super().__init__(input_file)
+
+        if self.parser:
+            self.L1_hole_ball_dict = self.parser.get_coords('L1 hole ball')
+            self.L1_slot_ball_dict = self.parser.get_coords('L1 slot ball')
+            self.L3_hole_ball_dict = self.parser.get_coords('L3 hole ball')
+            self.L3_slot_ball_dict = self.parser.get_coords('L3 slot ball')
+
+    def _find_L1_midpoint(self):
+        """Find L1 midpoint (slot and hole) coordinates in survey data file
+
+        Returns
+        -------
+        midpoint : dict
+            Dictionary of L1 midpoint coordinates
+        """
+        midpoint = self.parser.find_coords(
+            self.parser.find_names(['Step:  5'])['Step:  5'] + 1, 20)
+        return midpoint
+
+    def _find_L3_midpoint(self):
+        """Find L3 midpoint (slot and hole) coordinates in survey data file
+
+        Returns
+        -------
+        midpoint : dict
+            Dictionary of L3 midpoint coordinates
+        """
+        midpoint = self.parser.find_coords(
+            self.parser.find_names(['Step:  6'])['Step:  6'] + 1, 20)
+        return midpoint
+    
+    def get_matt_basis(self, volume):
+        """Get basis vectors for Matt's ballframe
+        
+        Parameters
+        ----------
+        volume : str
+            'top' or 'bottom'
+
+        Returns
+        -------
+        basis : np.array
+            Numpy array of basis vectors
+        origin : np.array
+            Numpy array of origin coordinates
+        """
         origin = self._find_L1_midpoint()
         origin = np.array([origin['x'], origin['y'], origin['z']])
         L3_midpoint = self._find_L3_midpoint()
@@ -195,13 +165,23 @@ class BallFrame:
             basis = make_basis(L3_midpoint - origin, self.get_ball(1, 'slot') - origin)
 
         return basis, origin
-
-    def get_basis(self, use_matt_basis=False, volume='top'):
-        if use_matt_basis:
-            basis_matt, origin_matt = self.get_matt_basis(volume)
-        else:
-            basis_matt = np.identity(3)
-            origin_matt = np.array([0, 0, 0])
+    
+    def get_basis(self, volume):
+        """Get ballframe basis vectors
+        
+        Parameters
+        ----------
+        volume : str
+            'top' or 'bottom'
+        
+        Returns
+        -------
+        basis : np.array
+            Numpy array of basis vectors
+        origin : np.array
+            Numpy array of origin coordinates
+        """
+        basis_matt, origin_matt = self.get_matt_basis(volume)
 
         origin = self.get_ball(1, 'slot') - origin_matt
         origin = np.matmul(origin, np.linalg.inv(basis_matt))

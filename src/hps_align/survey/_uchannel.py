@@ -17,17 +17,13 @@ class UChannel:
         self.ballframe_bot = ballframe_bot
         self.pinframe_bot = pinframe_bot
 
-    def get_ball_basis(self, volume, use_matt_basis=False):
+    def get_ball_basis(self, volume):
         """Get basis vectors and origin for ball frame
 
         Parameters
         ----------
         volume : str
             Volume ('top' or 'bottom')
-        use_matt_basis : bool
-            Use Matt's basis vectors and origin (default: False);
-            This is used when using Matt's OGP measurements for the empty UChannel
-            that change coordinate systems halfway through
 
         Returns
         -------
@@ -37,13 +33,13 @@ class UChannel:
             Numpy array of origin coordinates
         """
         if volume == 'top':
-            ball_frame = self.ballframe_top
+            ballframe = self.ballframe_top
         elif volume == 'bottom':
-            ball_frame = self.ballframe_bot
+            ballframe = self.ballframe_bot
         else:
             raise ValueError('Invalid volume: {}'.format(volume))
 
-        basis, origin = ball_frame.get_basis(use_matt_basis, volume)
+        basis, origin = ballframe.get_basis(volume)
 
         return basis, origin
 
@@ -90,7 +86,7 @@ class UChannel:
             Numpy array of pin coordinates in ball frame
         """
         pin_basis, pin_origin = self.get_pin_basis(layer, volume)
-        ball_basis, ball_origin = self.get_ball_basis(volume, use_matt_basis)
+        ball_basis, ball_origin = self.get_ball_basis(volume)
         inv_ball_basis = np.linalg.inv(ball_basis)
         # rotation of basis vectors from pin frame to ball frame
         basis = np.matmul(inv_ball_basis, pin_basis)

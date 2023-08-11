@@ -14,8 +14,8 @@ class Survey2019(Survey):
     def __init__(self, survey_files):
         """Initialize Survey object with 2019 configuration"""
 
-        ballframe_top = BallFrame(survey_files['ballframe_top'])
-        ballframe_bottom = BallFrame(survey_files['ballframe_bottom'])
+        ballframe_top = MattBallFrame(survey_files['ballframe_top'])
+        ballframe_bottom = MattBallFrame(survey_files['ballframe_bottom'])
         pinframe_top = PinFrame(survey_files['pinframe_top'])
         pinframe_bottom = PinFrame(survey_files['pinframe_bottom'])
 
