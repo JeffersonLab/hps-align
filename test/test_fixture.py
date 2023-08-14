@@ -187,37 +187,26 @@ class TestGetPinInBall(unittest.TestCase):
         with self.assertWarns(UserWarning):
             fixture = Fixture()
 
-        fixture.set_pin({'x': 1, 'y': 0, 'z': 1}, 'oripin')
-        fixture.set_pin({'x': 1, 'y': 1, 'z': 1}, 'axipin')
+        fixture.set_pin({'x': -1, 'y': -1, 'z': -1}, 'oripin')
+        fixture.set_pin({'x': -4, 'y': -1, 'z': 1}, 'axipin')
         fixture.set_base_plane({'x': 0, 'y': 0, 'z': 0, 'xy_angle': 0, 'elevation': np.pi/2})
         fixture.set_ball({'x': 0, 'y': 0, 'z': 0}, 'oriball')
         fixture.set_ball({'x': -5, 'y': 0, 'z': 0}, 'axiball')
         fixture.set_ball({'x': 0, 'y': -2, 'z': 0}, 'diagball')
 
         basis, origin = fixture.get_pin_in_ball()
-        self.assertAlmostEqual(0, basis[0][0])
-        self.assertAlmostEqual(1, basis[0][1])
+        self.assertAlmostEqual(-1, basis[0][0])
+        self.assertAlmostEqual(0, basis[0][1])
         self.assertAlmostEqual(0, basis[0][2])
         self.assertAlmostEqual(0, basis[1][0])
         self.assertAlmostEqual(0, basis[1][1])
         self.assertAlmostEqual(1, basis[1][2])
-        self.assertAlmostEqual(1, basis[2][0])
-        self.assertAlmostEqual(0, basis[2][1])
+        self.assertAlmostEqual(0, basis[2][0])
+        self.assertAlmostEqual(1, basis[2][1])
         self.assertAlmostEqual(0, basis[2][2])
-        self.assertAlmostEqual(-1, origin[0])
-        self.assertAlmostEqual(-1, origin[1])
+        self.assertAlmostEqual(4, origin[0])
+        self.assertAlmostEqual(1, origin[1])
         self.assertAlmostEqual(0, origin[2])
-
-    # def test_input_file(self):
-    #     fixture = Fixture('/Users/schababi/workspace/hps/hps-align/survey_data/meas1/L0_fixture_empty_1.txt')
-
-    #     basis_bot, origin_bot = fixture.get_pin_in_ball('bottom', True)
-    #     basis_top, origin_top = fixture.get_pin_in_ball('top', True)
-
-    #     print('bottom origin: ', origin_bot)
-    #     print('top origin: ', origin_top)
-    #     print('axipin:', fixture.get_pin('axipin'))
-    #     print('oripin:', fixture.get_pin('oripin'))
 
 
 if __name__ == '__main__':

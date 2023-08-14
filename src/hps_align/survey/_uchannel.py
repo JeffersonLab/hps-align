@@ -70,7 +70,7 @@ class UChannel:
         basis, origin = pin_frame.get_basis(layer)
         return basis, origin
 
-    def pin_in_ballframe(self, layer, volume, use_matt_basis=False):
+    def pin_in_ballframe(self, layer, volume):
         """Transform pin coordinates to ball frame coordinates
 
         Parameters
@@ -89,9 +89,9 @@ class UChannel:
         ball_basis, ball_origin = self.get_ball_basis(volume)
         inv_ball_basis = np.linalg.inv(ball_basis)
         # rotation of basis vectors from pin frame to ball frame
-        basis = np.matmul(inv_ball_basis, pin_basis)
+        basis = np.matmul(pin_basis, inv_ball_basis)
 
-        if use_matt_basis:
+        if (volume == 'top' and self.ballframe_top.__class__.__name__ == 'MattBallFrame') or (volume == 'bottom' and self.ballframe_bot.__class__.__name__ == 'MattBallFrame'):
             origin = pin_origin
         else:
             # translation of origin in ball frame

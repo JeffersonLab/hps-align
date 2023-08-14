@@ -86,7 +86,7 @@ class TestPinInUchannelBallframe(unittest.TestCase):
         survey = Survey()
         survey.set_uchannel(uchannel)
 
-        basis, origin = survey.get_pin_in_uchannel_ballframe(1, 'top')
+        basis, origin = survey.get_pin_in_uchannel_ballframe('top', 1)
 
         self.assertAlmostEqual(-6, origin[0])
         self.assertAlmostEqual(1, origin[1])
@@ -272,8 +272,15 @@ class TestSurvey2019(unittest.TestCase):
                         'L1_stereo_bottom': '/Users/schababi/workspace/hps/hps-align/survey_data/meas1/L1_stereo_bottom_module5_1.txt'}
 
         survey = Survey2019(survey_files)
-        # print(survey.get_pin_in_uchannel_ballframe('0', 'top'))
-        # print(survey.get_pin_in_uchannel_ballframe('0', 'bottom'))
+        print()
+        print('pin in uchannel, L1 top: ', survey.get_pin_in_uchannel_ballframe('top', '1')[1])
+        print('pin in uchannel, L2 top: ', survey.get_pin_in_uchannel_ballframe('top', '2')[1])
+        print('pin in uchannel, L3 top: ', survey.get_pin_in_uchannel_ballframe('top', '3')[1])
+        print('pin in uchannel, L1 bottom: ', survey.get_pin_in_uchannel_ballframe('bottom', '1')[1])
+        print('pin in uchannel, L2 bottom: ', survey.get_pin_in_uchannel_ballframe('bottom', '2')[1])
+        print('pin in uchannel, L3 bottom: ', survey.get_pin_in_uchannel_ballframe('bottom', '3')[1])
+        # print(survey.get_pin_in_uchannel_ballframe('bottom', '0'))
 
-#         print(survey.transform_sensor_to_uchannel_ballframe('top', '1', 'axial')[0])
-#         survey.print_results('survey_results_2019.csv')
+        # sensor_origin_ball = survey.transform_sensor_to_uchannel_ballframe('top', '1', 'axial')
+        # print('sensor in uchannel: ', sensor_origin_ball)
+        # survey.print_results('survey_results_2019.csv')

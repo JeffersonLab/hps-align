@@ -6,7 +6,7 @@ from hps_align.survey._uchannel import UChannel
 from hps_align.survey._baseplanes import BasePlane
 from hps_align.survey._pins import Pin
 from hps_align.survey._pinframe import PinFrame
-from hps_align.survey._ballframe import BallFrame
+from hps_align.survey._ballframe import BallFrame, MattBallFrame
 
 
 class TestInit(unittest.TestCase):
@@ -121,7 +121,7 @@ class TestGetPinBasis(unittest.TestCase):
         self.assertAlmostEqual(0, basis[2][2])
 
 
-class TestPinToBallFrame(unittest.TestCase):
+class TestPinInBallFrame(unittest.TestCase):
 
     def test_valid_input(self):
 
@@ -159,11 +159,11 @@ class TestPinToBallFrame(unittest.TestCase):
         self.assertAlmostEqual(0, basis[0][1])
         self.assertAlmostEqual(0, basis[0][2])
         self.assertAlmostEqual(0, basis[1][0])
-        self.assertAlmostEqual(-1, basis[1][1])
+        self.assertAlmostEqual(1, basis[1][1])
         self.assertAlmostEqual(0, basis[1][2])
         self.assertAlmostEqual(0, basis[2][0])
         self.assertAlmostEqual(0, basis[2][1])
-        self.assertAlmostEqual(1, basis[2][2])
+        self.assertAlmostEqual(-1, basis[2][2])
 
     def test_valid_input_top(self):
         with self.assertWarns(UserWarning):
@@ -248,27 +248,6 @@ class TestPinToBallFrame(unittest.TestCase):
         self.assertAlmostEqual(0, basis[2][0])
         self.assertAlmostEqual(0, basis[2][1])
         self.assertAlmostEqual(1, basis[2][2])
-
-    # def test_txt_input(self):
-    #     input_files = {'top': '/Users/schababi/workspace/hps/hps-align/survey_data/meas1/uchannel_empty_top_1.txt',
-    #                      'bottom': '/Users/schababi/workspace/hps/hps-align/survey_data/meas1/uchannel_empty_bottom_1.txt'}
-
-    #     ballframe_top = BallFrame(input_files['top'])
-    #     ballframe_bot = BallFrame(input_files['bottom'])
-    #     pinframe_top = PinFrame(input_files['top'])
-    #     pinframe_bot = PinFrame(input_files['bottom'])
-    #     uchannel = UChannel(ballframe_top=ballframe_top, ballframe_bot=ballframe_bot, pinframe_top=pinframe_top, pinframe_bot=pinframe_bot)
-
-    #     print('top')
-    #     print(uchannel.pin_in_ballframe(0, 'top', True)[1])
-    #     print(uchannel.pin_in_ballframe(1, 'top', True)[1])
-    #     print(uchannel.pin_in_ballframe(2, 'top', True)[1])
-    #     print(uchannel.pin_in_ballframe(3, 'top', True)[1])
-    #     print('bottom')
-    #     print(uchannel.pin_in_ballframe(0, 'bottom', True)[1])
-    #     print(uchannel.pin_in_ballframe(1, 'bottom', True)[1])
-    #     print(uchannel.pin_in_ballframe(2, 'bottom', True)[1])
-    #     print(uchannel.pin_in_ballframe(3, 'bottom', True)[1])
 
 
 if __name__ == '__main__':

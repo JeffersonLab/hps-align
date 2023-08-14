@@ -107,6 +107,8 @@ class MattBallFrame(BallFrame):
 
     def __init__(self, input_file=None):
         self.parser = None
+        self.L1_midpoint_dict = {'x': 0, 'y': 0, 'z': 0}
+        self.L3_midpoint_dict = {'x': 0, 'y': 0, 'z': 0}
         super().__init__(input_file)
 
         if self.parser:
@@ -114,30 +116,42 @@ class MattBallFrame(BallFrame):
             self.L1_slot_ball_dict = self.parser.get_coords('L1 slot ball')
             self.L3_hole_ball_dict = self.parser.get_coords('L3 hole ball')
             self.L3_slot_ball_dict = self.parser.get_coords('L3 slot ball')
+            self.L1_midpoint_dict = self.parser.get_coords('Step:  5', 20)
+            self.L3_midpoint_dict = self.parser.get_coords('Step:  6', 20)
 
-    def _find_L1_midpoint(self):
-        """Find L1 midpoint (slot and hole) coordinates in survey data file
+    def set_midpoint(self, midpoint_coords, layer):
+        """Set midpoint coordinates for a given layer"""
+        if not isinstance(midpoint_coords, dict):
+            raise ValueError('Invalid midpoint coordinate type: {}'.format(midpoint_coords))
+
+        if layer == 1:
+            self.L1_midpoint_dict = midpoint_coords
+        elif layer == 3:
+            self.L3_midpoint_dict = midpoint_coords
+        else:
+            raise ValueError('Invalid layer: {}'.format(layer))
+
+    def get_midpoint(self, layer):
+        """Get midpoint coordinates for a given layer
+
+        Parameters
+        ----------
+        layer : int
+            Layer number
 
         Returns
         -------
-        midpoint : dict
-            Dictionary of L1 midpoint coordinates
+        midpoint : np.array
+            Numpy array of midpoint coordinates
         """
-        midpoint = self.parser.find_coords(
-            self.parser.find_names(['Step:  5'])['Step:  5'] + 1, 20)
-        return midpoint
+        if layer == 1:
+            midpoint = self.L1_midpoint_dict
+        elif layer == 3:
+            midpoint = self.L3_midpoint_dict
+        else:
+            raise ValueError('Invalid layer: {}'.format(layer))
 
-    def _find_L3_midpoint(self):
-        """Find L3 midpoint (slot and hole) coordinates in survey data file
-
-        Returns
-        -------
-        midpoint : dict
-            Dictionary of L3 midpoint coordinates
-        """
-        midpoint = self.parser.find_coords(
-            self.parser.find_names(['Step:  6'])['Step:  6'] + 1, 20)
-        return midpoint
+        return np.array([midpoint['x'], midpoint['y'], midpoint['z']])        
 
     def get_matt_basis(self, volume):
         """Get basis vectors for Matt's ballframe
@@ -154,10 +168,8 @@ class MattBallFrame(BallFrame):
         origin : np.array
             Numpy array of origin coordinates
         """
-        origin = self._find_L1_midpoint()
-        origin = np.array([origin['x'], origin['y'], origin['z']])
-        L3_midpoint = self._find_L3_midpoint()
-        L3_midpoint = np.array([L3_midpoint['x'], L3_midpoint['y'], L3_midpoint['z']])
+        origin = self.get_midpoint(1)
+        L3_midpoint = self.get_midpoint(3)
 
         if (volume == 'top'):
             basis = make_basis(L3_midpoint - origin, self.get_ball(1, 'hole') - origin)
@@ -182,13 +194,9 @@ class MattBallFrame(BallFrame):
             Numpy array of origin coordinates
         """
         basis_matt, origin_matt = self.get_matt_basis(volume)
+        ball_basis, ball_origin = super().get_basis(volume)
 
-        origin = self.get_ball(1, 'slot') - origin_matt
-        origin = np.matmul(origin, np.linalg.inv(basis_matt))
-        vec1 = np.matmul(self.get_ball(1, 'hole') - origin_matt, np.linalg.inv(basis_matt))
-        vec2 = np.matmul(self.get_ball(3, 'hole') - origin_matt, np.linalg.inv(basis_matt))
-        hole_avg = (vec1 + vec2) / 2
-        vec0 = np.matmul(self.get_ball(3, 'slot') - origin_matt, np.linalg.inv(basis_matt))
-        basis = make_basis(vec0 - origin, hole_avg - origin)
+        origin = np.matmul(ball_origin - origin_matt, np.linalg.inv(basis_matt))
+        basis = np.matmul(ball_basis, np.linalg.inv(basis_matt))
 
-        return np.array([-basis[1], -basis[2], basis[0]]), origin
+        return basis, origin

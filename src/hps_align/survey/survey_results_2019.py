@@ -60,15 +60,16 @@ class Survey2019(Survey):
             }
         }
 
-    def get_pin_in_uchannel_ballframe(self, layer, volume):
-        return self.uchannel.pin_in_ballframe(int(layer), volume, True)
+    def get_pin_in_uchannel_ballframe(self, volume, layer):
+        return self.uchannel.pin_in_ballframe(int(layer), volume)
 
     def transform_sensor_to_uchannel_ballframe(self, volume, layer, sensor_type):
-        basis, origin = self.get_pin_in_uchannel_ballframe(layer, volume)
+        basis, origin = self.get_pin_in_uchannel_ballframe(volume, layer)
         sensor = self.sensors[volume][layer][sensor_type]
 
         sensor_origin_pin = sensor.get_sensor_origin_pinframe()
         sensor_normal_pin = sensor.get_sensor_normal_pinframe()
+        print('sensor_origin_pin ', sensor_origin_pin)
 
         sensor_origin_ball = origin + np.matmul(sensor_origin_pin, basis)
         sensor_normal_ball = np.matmul(sensor_normal_pin, basis)

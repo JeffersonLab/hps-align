@@ -17,11 +17,11 @@ class Survey:
     def set_sensors(self, sensors):
         self.sensors = sensors
 
-    def get_pin_in_uchannel_ballframe(self, layer, volume, use_matt_basis=False):
-        return self.uchannel.pin_in_ballframe(layer, volume, use_matt_basis)
+    def get_pin_in_uchannel_ballframe(self, volume, layer):
+        return self.uchannel.pin_in_ballframe(int(layer), volume)
 
-    def transform_sensor_to_uchannel_ballframe(self, volume, layer, sensor_type, use_matt_basis=False):
-        basis, origin = self.get_pin_in_uchannel_ballframe(int(layer), volume, use_matt_basis)
+    def transform_sensor_to_uchannel_ballframe(self, volume, layer, sensor_type):
+        basis, origin = self.get_pin_in_uchannel_ballframe(volume, layer)
         sensor = self.sensors[volume][layer][sensor_type]
 
         sensor_origin_pin = sensor.get_sensor_origin_pinframe()

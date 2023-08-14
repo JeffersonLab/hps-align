@@ -16,6 +16,7 @@ class Fixture:
             self.oriball_dict = {'x': 0, 'y': 0, 'z': 0}
             self.diagball_dict = {'x': 0, 'y': 0, 'z': 0}
             self.axiball_dict = {'x': 0, 'y': 0, 'z': 0}
+            self.ball_plane_dict = {'x': 0, 'y': 0, 'z': 0, 'xy_angle': 0, 'elevation': 0}
             self.base_plane_dict = {'x': 0, 'y': 0, 'z': 0, 'xy_angle': 0, 'elevation': 0}
             self.oripin_dict = {'x': 0, 'y': 0, 'z': 0}
             self.axipin_dict = {'x': 0, 'y': 0, 'z': 0}
@@ -166,15 +167,6 @@ class Fixture:
         origin : np.array
             Array of origin coordinates
         """
-        # if volume == 'top':
-        #     slot_pin = self.get_pin('oripin')
-        #     hole_pin = self.get_pin('axipin')
-        # elif volume == 'bottom':
-        #     slot_pin = self.get_pin('axipin')
-        #     hole_pin = self.get_pin('oripin')
-        # else:
-        #     raise ValueError('Invalid volume: {}'.format(volume))
-
         slot_pin = self.get_pin('oripin')
         hole_pin = self.get_pin('axipin')
 
@@ -243,9 +235,37 @@ class MattFixture(Fixture):
             self.oriball_dict = self.parser.get_coords('oriball')
             self.diagball_dict = self.parser.get_coords('diagball')
             self.axiball_dict = self.parser.get_coords('axiball')
+            self.ball_plane_dict = self.parser.get_coords('Step:  5', 20)
             self.base_plane_dict = self.parser.get_coords('L0 base plane')
             self.oripin_dict = self.parser.get_coords('oripin')
             self.axipin_dict = self.parser.get_coords('axipin')
+
+    def get_matt_basis(self):
+        """Get basis vectors for Matt sensor
+
+        Returns
+        -------
+        basis : np.array
+            Array of basis vectors
+        origin : np.array
+            Array of origin coordinates
+        """
+        origin = self.get_ball('oriball')
+        vec1 = self.get_ball('axiball') - origin
+        vec2 = normal_vector(self.ball_plane_dict["xy_angle"], self.ball_plane_dict["elevation"])
+        basis = make_basis(vec1, vec2)
+
+        return np.array([basis[0], -basis[2], basis[1]]), origin
+
+    def matt_to_ball(self):
+        """Get transformation matrix from Matt to fixture ball frame
+        
+        This is just a rotation, no translation.
+        """
+        ball_basis = self.get_ball_basis()[0]
+        matt_basis = self.get_matt_basis()[0]
+
+        return np.matmul(matt_basis, np.linalg.inv(ball_basis))
 
     def get_pin_in_ball(self):
         """Get basis vectors for pin frame in fixture ball coordinates
@@ -257,7 +277,10 @@ class MattFixture(Fixture):
         origin : np.array
             Array of origin coordinates
         """
-        return self.get_pin_basis()
+        basis, origin = self.get_pin_basis()
+        basis = np.matmul(basis, self.matt_to_ball())
+        origin = np.matmul(origin, self.matt_to_ball())
+        return basis, origin
 
     def get_ball_in_pin(self):
         basis, origin = self.get_pin_in_ball()
