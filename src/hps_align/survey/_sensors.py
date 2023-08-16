@@ -25,42 +25,6 @@ class Sensor:
 
         self.parser = Parser(input_file)
 
-    def _find_sensor_active_edge_beam(self):
-        """Find sensor active edge (closer to beam) coordinates in survey data file
-
-        Returns
-        -------
-        sensor_active_edge : dict
-            Dictionary of sensor active edge coordinates
-        """
-        sensor_active_edge_beam = self.parser.find_coords(
-            self.parser.find_names(['Active edge beam'])['Active edge beam'] + 1)
-        return sensor_active_edge_beam
-
-    def _find_sensor_active_edge_away(self):
-        """Find sensor active edge (away from beam) coordinates in survey data file
-
-        Returns
-        -------
-        sensor_active_edge : dict
-            Dictionary of sensor active edge coordinates
-        """
-        sensor_active_edge_away = self.parser.find_coords(
-            self.parser.find_names(['Active edge away'])['Active edge away'] + 1)
-        return sensor_active_edge_away
-
-    def _find_sensor_physical_edge(self):
-        """Find sensor physical edge coordinates in survey data file
-
-        Returns
-        -------
-        sensor_physical_edge : dict
-            Dictionary of sensor physical edge coordinates
-        """
-        sensor_physical_edge = self.parser.find_coords(
-            self.parser.find_names(['Sensor physical edge'])['Sensor physical edge'] + 1)
-        return sensor_physical_edge
-
     def set_ball(self, ball_coords, balltype):
         """Set ball coordinates for a given layer and ball type
 
@@ -160,10 +124,13 @@ class Sensor:
             Sensor origin coordinates in pin frame
         """
         origin = self.get_sensor_origin_ballframe()
-        pin_basis, pin_origin = self.fixture.get_pin_in_ball()
-        origin = origin - pin_origin
-        origin = np.matmul(origin, np.linalg.inv(pin_basis))
-
+        print('sensor origin in fixture ballframe: ', origin)
+        pin_in_ball_origin = self.fixture.get_pin_in_ball()[1]
+        print('pin in ball origin: ', pin_in_ball_origin)
+        ball_in_pin_basis = self.fixture.get_ball_in_pin()[0]
+        origin = origin - pin_in_ball_origin
+        origin = np.matmul(origin, ball_in_pin_basis)
+        
         return origin
 
     def set_sensor_plane(self, sensor_plane):
@@ -206,9 +173,9 @@ class Sensor:
             Sensor normal vector in pin frame
         """
         normal = self.get_sensor_normal_ballframe()
-        pin_basis = self.fixture.get_pin_in_ball()[0]
+        ball_in_pin_basis = self.fixture.get_ball_in_pin()[0]
 
-        normal = np.matmul(normal, np.linalg.inv(pin_basis))
+        normal = np.matmul(normal, ball_in_pin_basis)
 
         return normal
 
@@ -226,6 +193,42 @@ class MattSensor(Sensor):
             self.ball_plane_dict = self.parser.get_coords('Step:  4', 20)
             self.sensor_origin_dict = self.parser.get_coords('Sensor origin')
             self.sensor_plane_dict = self.parser.get_coords('Sensor plane')
+
+    def _find_sensor_active_edge_beam(self):
+        """Find sensor active edge (closer to beam) coordinates in survey data file
+
+        Returns
+        -------
+        sensor_active_edge : dict
+            Dictionary of sensor active edge coordinates
+        """
+        sensor_active_edge_beam = self.parser.find_coords(
+            self.parser.find_names(['Active edge beam'])['Active edge beam'] + 1)
+        return sensor_active_edge_beam
+
+    def _find_sensor_active_edge_away(self):
+        """Find sensor active edge (away from beam) coordinates in survey data file
+
+        Returns
+        -------
+        sensor_active_edge : dict
+            Dictionary of sensor active edge coordinates
+        """
+        sensor_active_edge_away = self.parser.find_coords(
+            self.parser.find_names(['Active edge away'])['Active edge away'] + 1)
+        return sensor_active_edge_away
+
+    def _find_sensor_physical_edge(self):
+        """Find sensor physical edge coordinates in survey data file
+
+        Returns
+        -------
+        sensor_physical_edge : dict
+            Dictionary of sensor physical edge coordinates
+        """
+        sensor_physical_edge = self.parser.find_coords(
+            self.parser.find_names(['Sensor physical edge'])['Sensor physical edge'] + 1)
+        return sensor_physical_edge
 
     def get_matt_basis(self):
         """Get basis vectors for Matt sensor

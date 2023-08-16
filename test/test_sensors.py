@@ -154,25 +154,25 @@ class TestSensorOrigin(unittest.TestCase):
     def test_get_sensor_origin_pinframe(self):
         with self.assertWarns(UserWarning):
             fixture = Fixture()
-            fixture.set_ball({'x': 1, 'y': 0, 'z': 0}, 'oriball')
-            fixture.set_ball({'x': 1, 'y': 1, 'z': 0}, 'axiball')
-            fixture.set_ball({'x': 1, 'y': 0, 'z': 1}, 'diagball')
-            fixture.set_pin({'x': 1, 'y': 0, 'z': 1}, 'oripin')
-            fixture.set_pin({'x': 1, 'y': 1, 'z': 1}, 'axipin')
+            fixture.set_ball({'x': 0, 'y': 0, 'z': 0}, 'oriball')
+            fixture.set_ball({'x': -5, 'y': 0, 'z': 0}, 'axiball')
+            fixture.set_ball({'x': 0, 'y': -2, 'z': 0}, 'diagball')
+            fixture.set_pin({'x': -1, 'y': -1, 'z': -1}, 'oripin')
+            fixture.set_pin({'x': -4, 'y': -1, 'z': 1}, 'axipin')
             fixture.set_base_plane({'x': 0, 'y': 0, 'z': 0, 'xy_angle': 0, 'elevation': np.pi/2})
 
         with self.assertWarns(UserWarning):
             sensor = Sensor(fixture)
 
-        sensor.set_ball({'x': 1, 'y': 0, 'z': 0}, 'oriball')
-        sensor.set_ball({'x': 1, 'y': 1, 'z': 0}, 'axiball')
-        sensor.set_ball({'x': 1, 'y': 0, 'z': 1}, 'diagball')
-        sensor.set_sensor_origin({'x': 1, 'y': 2, 'z': 3})
+        sensor.set_ball({'x': 0, 'y': 0, 'z': 0}, 'oriball')
+        sensor.set_ball({'x': -5, 'y': 0, 'z': 0}, 'axiball')
+        sensor.set_ball({'x': 0, 'y': -2, 'z': 0}, 'diagball')
+        sensor.set_sensor_origin({'x': -2, 'y': -2, 'z': 5})
 
         origin_pin = sensor.get_sensor_origin_pinframe()
-        self.assertAlmostEqual(-1, origin_pin[0])
-        self.assertAlmostEqual(3, origin_pin[1])
-        self.assertAlmostEqual(0, origin_pin[2])
+        self.assertAlmostEqual(2, origin_pin[0])
+        self.assertAlmostEqual(5, origin_pin[1])
+        self.assertAlmostEqual(1, origin_pin[2])
 
 
 class TestSensorNormal(unittest.TestCase):
@@ -237,16 +237,6 @@ class TestSensorNormal(unittest.TestCase):
         self.assertAlmostEqual(0, normal[0])
         self.assertAlmostEqual(0, normal[1])
         self.assertAlmostEqual(-1, normal[2])
-
-    # def test_input_file(self):
-    #     sensor = Sensor('/Users/schababi/workspace/hps/hps-align/survey_data/meas1/L0_axial1_1.txt',
-    #                     '/Users/schababi/workspace/hps/hps-align/survey_data/meas1/L0_fixture_empty_1.txt')
-
-    #     origin_bot = sensor.get_sensor_origin_pinframe('bottom', True)
-    #     origin_top = sensor.get_sensor_origin_pinframe('top', True)
-
-    #     print('bottom origin: ', origin_bot)
-    #     print('top origin: ', origin_top)
 
 
 if __name__ == '__main__':

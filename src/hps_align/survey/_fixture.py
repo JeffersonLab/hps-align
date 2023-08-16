@@ -199,6 +199,10 @@ class Fixture:
         origin = np.matmul(origin, np.linalg.inv(ball_basis))
 
         return basis, origin
+    
+    def get_ball_in_pin(self):
+        basis, origin = self.get_pin_in_ball()
+        return np.linalg.inv(basis), -np.matmul(origin, np.linalg.inv(basis))
 
 
 class ShoFixture(Fixture):
@@ -239,6 +243,37 @@ class MattFixture(Fixture):
             self.base_plane_dict = self.parser.get_coords('L0 base plane')
             self.oripin_dict = self.parser.get_coords('oripin')
             self.axipin_dict = self.parser.get_coords('axipin')
+            # self.axipin_dict = self.parser.get_coords('oripin')
+            # self.oripin_dict = self.parser.get_coords('axipin')
+
+    def set_ball_plane(self, ball_plane_coords):
+        """Set base plane coordinates
+
+        Parameters
+        ----------
+        base_plane_coords : dict
+            Dictionary of base plane coordinates
+        """
+        if not isinstance(ball_plane_coords, dict):
+            raise ValueError('Invalid base plane coordinate type: {}'.format(ball_plane_coords))
+
+        self.ball_plane_dict = ball_plane_coords
+
+    def get_ball_plane(self):
+        """Get base plane coordinates from survey data file
+
+        This is in fixture ball coordinates if read from Matt's survey data file
+
+        Returns
+        -------
+        origin : np.array
+            Coordinates of base plane origin
+        normal : np.array
+            Normal vector of base plane
+        """
+        origin = np.array([self.ball_plane_dict['x'], self.ball_plane_dict['y'], self.ball_plane_dict['z']])
+        normal = normal_vector(self.ball_plane_dict['xy_angle'], self.ball_plane_dict['elevation'])
+        return origin, normal
 
     def get_matt_basis(self):
         """Get basis vectors for Matt sensor
@@ -252,7 +287,7 @@ class MattFixture(Fixture):
         """
         origin = self.get_ball('oriball')
         vec1 = self.get_ball('axiball') - origin
-        vec2 = normal_vector(self.ball_plane_dict["xy_angle"], self.ball_plane_dict["elevation"])
+        vec2 = self.get_ball_plane()[1]
         basis = make_basis(vec1, vec2)
 
         return np.array([basis[0], -basis[2], basis[1]]), origin
@@ -281,7 +316,3 @@ class MattFixture(Fixture):
         basis = np.matmul(basis, self.matt_to_ball())
         origin = np.matmul(origin, self.matt_to_ball())
         return basis, origin
-
-    def get_ball_in_pin(self):
-        basis, origin = self.get_pin_in_ball()
-        return np.linalg.inv(basis), -np.matmul(origin, np.linalg.inv(basis))
