@@ -75,3 +75,14 @@ class Survey2019(Survey):
         sensor_normal_ball = np.matmul(sensor_normal_pin, basis)
 
         return sensor_origin_ball, sensor_normal_ball
+    
+    def print_results(self, out_name):
+        """Print results to file"""
+        with open(out_name, 'w') as f:
+            f.write('volume layer sensor_type x y z nx ny nz\n')
+            for volume in ['top', 'bottom']:
+                for layer in ['0', '1']:
+                    for sensor_type in ['axial', 'stereo']:
+                        sensor_origin_ball, sensor_normal_ball = self.transform_sensor_to_uchannel_ballframe(volume, layer, sensor_type)
+                        f.write('{} {} {} {} {} {} {} {} {}\n'.format(volume, layer, sensor_type, sensor_origin_ball[0], sensor_origin_ball[1], sensor_origin_ball[2], sensor_normal_ball[0], sensor_normal_ball[1], sensor_normal_ball[2]))
+        

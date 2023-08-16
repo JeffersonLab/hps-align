@@ -10,247 +10,240 @@ from hps_align.survey._survey import Survey
 from hps_align.survey.survey_results_2019 import *
 
 
-# class TestInit(unittest.TestCase):
+class TestPinInUchannelBallframe(unittest.TestCase):
 
-#     def test_no_input(self):
-#         survey = Survey()
-#         empty_point_dict = {'x': 0, 'y': 0, 'z': 0}
-#         empty_plane_dict = {'x': 0, 'y': 0, 'z': 0, 'xy_angle': 0, 'elevation': 0}
+    def test_top(self):
+        with self.assertWarns(UserWarning):
+            pin = Pin()
+            pin.set_pin({'x': 1, 'y': 2, 'z': 0}, 1, 'hole')
+            pin.set_pin({'x': 5, 'y': 2, 'z': 0}, 1, 'slot')
 
-#         self.assertEqual(survey.uchannel.ballframe_top.L1_hole_ball_dict, empty_point_dict)
-#         self.assertEqual(survey.uchannel.ballframe_top.L1_slot_ball_dict, empty_point_dict)
-#         self.assertEqual(survey.uchannel.ballframe_top.L3_hole_ball_dict, empty_point_dict)
-#         self.assertEqual(survey.uchannel.ballframe_top.L3_slot_ball_dict, empty_point_dict)
-#         self.assertEqual(survey.uchannel.ballframe_bot.L1_hole_ball_dict, empty_point_dict)
-#         self.assertEqual(survey.uchannel.ballframe_bot.L1_slot_ball_dict, empty_point_dict)
-#         self.assertEqual(survey.uchannel.ballframe_bot.L3_hole_ball_dict, empty_point_dict)
-#         self.assertEqual(survey.uchannel.ballframe_bot.L3_slot_ball_dict, empty_point_dict)
+        with self.assertWarns(UserWarning):
+            baseplane = BasePlane()
+            baseplane.set_base_plane_dict({'x': 0, 'y': 0, 'z': 0, 'xy_angle': 0, 'elevation': np.pi/2}, 1)
 
-#         self.assertEqual(survey.uchannel.pinframe_top.pins.L0_hole_pin_dict, empty_point_dict)
-#         self.assertEqual(survey.uchannel.pinframe_top.pins.L0_slot_pin_dict, empty_point_dict)
-#         self.assertEqual(survey.uchannel.pinframe_top.pins.L1_hole_pin_dict, empty_point_dict)
-#         self.assertEqual(survey.uchannel.pinframe_top.pins.L1_slot_pin_dict, empty_point_dict)
-#         self.assertEqual(survey.uchannel.pinframe_top.pins.L2_hole_pin_dict, empty_point_dict)
-#         self.assertEqual(survey.uchannel.pinframe_top.pins.L2_slot_pin_dict, empty_point_dict)
-#         self.assertEqual(survey.uchannel.pinframe_top.pins.L3_hole_pin_dict, empty_point_dict)
-#         self.assertEqual(survey.uchannel.pinframe_top.pins.L3_slot_pin_dict, empty_point_dict)
-#         self.assertEqual(survey.uchannel.pinframe_bot.pins.L0_hole_pin_dict, empty_point_dict)
-#         self.assertEqual(survey.uchannel.pinframe_bot.pins.L0_slot_pin_dict, empty_point_dict)
-#         self.assertEqual(survey.uchannel.pinframe_bot.pins.L1_hole_pin_dict, empty_point_dict)
-#         self.assertEqual(survey.uchannel.pinframe_bot.pins.L1_slot_pin_dict, empty_point_dict)
-#         self.assertEqual(survey.uchannel.pinframe_bot.pins.L2_hole_pin_dict, empty_point_dict)
-#         self.assertEqual(survey.uchannel.pinframe_bot.pins.L2_slot_pin_dict, empty_point_dict)
-#         self.assertEqual(survey.uchannel.pinframe_bot.pins.L3_hole_pin_dict, empty_point_dict)
-#         self.assertEqual(survey.uchannel.pinframe_bot.pins.L3_slot_pin_dict, empty_point_dict)
+        with self.assertWarns(UserWarning):
+            pinframe = PinFrame()
+            pinframe.pins = pin
+            pinframe.base_planes = baseplane
+            # gives pin_basis [[-1, 0, 0], [0, 0, 1], [0, 1, 0]]
 
-#         self.assertEqual(survey.uchannel.pinframe_top.base_planes.L0_base_plane_dict, empty_plane_dict)
-#         self.assertEqual(survey.uchannel.pinframe_top.base_planes.L1_base_plane_dict, empty_plane_dict)
-#         self.assertEqual(survey.uchannel.pinframe_top.base_planes.L2_base_plane_dict, empty_plane_dict)
-#         self.assertEqual(survey.uchannel.pinframe_top.base_planes.L3_base_plane_dict, empty_plane_dict)
-#         self.assertEqual(survey.uchannel.pinframe_bot.base_planes.L0_base_plane_dict, empty_plane_dict)
-#         self.assertEqual(survey.uchannel.pinframe_bot.base_planes.L1_base_plane_dict, empty_plane_dict)
-#         self.assertEqual(survey.uchannel.pinframe_bot.base_planes.L2_base_plane_dict, empty_plane_dict)
-#         self.assertEqual(survey.uchannel.pinframe_bot.base_planes.L3_base_plane_dict, empty_plane_dict)
+        with self.assertWarns(UserWarning):
+            ballframe = BallFrame()
+            ballframe.set_ball({'x': 0, 'y': 1, 'z': 1}, 1, 'hole')
+            ballframe.set_ball({'x': 6, 'y': 1, 'z': 1}, 1, 'slot')
+            ballframe.set_ball({'x': 0, 'y': 5, 'z': 1}, 3, 'hole')
+            ballframe.set_ball({'x': 6, 'y': 5, 'z': 1}, 3, 'slot')
+            # gives ball_basis [[1, 0, 0], [0, 0, -1], [0, 1, 0]]
 
+        uchannel = UChannel(pinframe_top=pinframe, ballframe_top=ballframe)
 
-# class TestPinInUchannelBallframe(unittest.TestCase):
+        survey = Survey()
+        survey.set_uchannel(uchannel)
 
-#     def test_top(self):
-#         with self.assertWarns(UserWarning):
-#             pin = Pin()
-#             pin.set_pin({'x': 1, 'y': 2, 'z': 0}, 1, 'hole')
-#             pin.set_pin({'x': 6, 'y': 2, 'z': 0}, 1, 'slot')
+        basis, origin = survey.get_pin_in_uchannel_ballframe('top', 1)
 
-#         with self.assertWarns(UserWarning):
-#             baseplane = BasePlane()
-#             baseplane.set_base_plane_dict({'x': 0, 'y': 0, 'z': 0, 'xy_angle': 0, 'elevation': np.pi/2}, 1)
-
-#         with self.assertWarns(UserWarning):
-#             pinframe = PinFrame()
-#             pinframe.pins = pin
-#             pinframe.base_planes = baseplane
-#             # uchannel.pinframe_top = pinframe
-#             # gives pin_basis [[1, 0, 0], [0, 0, 1], [0, -1, 0]]
-
-#         with self.assertWarns(UserWarning):
-#             ballframe = BallFrame()
-#             ballframe.set_ball({'x': 0, 'y': 1, 'z': 1}, 1, 'hole')
-#             ballframe.set_ball({'x': 7, 'y': 1, 'z': 1}, 1, 'slot')
-#             ballframe.set_ball({'x': 0, 'y': 5, 'z': 1}, 3, 'hole')
-#             ballframe.set_ball({'x': 7, 'y': 5, 'z': 1}, 3, 'slot')
-#             # uchannel.ballframe_top = ballframe
-#             # gives ball_basis [[1, 0, 0], [0, 0, -1], [0, 1, 0]]
-
-#         uchannel = UChannel(pinframe_top=pinframe, ballframe_top=ballframe)
-
-#         survey = Survey()
-#         survey.set_uchannel(uchannel)
-
-#         basis, origin = survey.get_pin_in_uchannel_ballframe('top', 1)
-
-#         self.assertAlmostEqual(-6, origin[0])
-#         self.assertAlmostEqual(1, origin[1])
-#         self.assertAlmostEqual(1, origin[2])
-#         self.assertAlmostEqual(1, basis[0][0])
-#         self.assertAlmostEqual(0, basis[0][1])
-#         self.assertAlmostEqual(0, basis[0][2])
-#         self.assertAlmostEqual(0, basis[1][0])
-#         self.assertAlmostEqual(-1, basis[1][1])
-#         self.assertAlmostEqual(0, basis[1][2])
-#         self.assertAlmostEqual(0, basis[2][0])
-#         self.assertAlmostEqual(0, basis[2][1])
-#         self.assertAlmostEqual(-1, basis[2][2])
+        self.assertAlmostEqual(-2, origin[0])
+        self.assertAlmostEqual(1, origin[1])
+        self.assertAlmostEqual(1, origin[2])
+        self.assertAlmostEqual(-1, basis[0][0])
+        self.assertAlmostEqual(0, basis[0][1])
+        self.assertAlmostEqual(0, basis[0][2])
+        self.assertAlmostEqual(0, basis[1][0])
+        self.assertAlmostEqual(-1, basis[1][1])
+        self.assertAlmostEqual(0, basis[1][2])
+        self.assertAlmostEqual(0, basis[2][0])
+        self.assertAlmostEqual(0, basis[2][1])
+        self.assertAlmostEqual(1, basis[2][2])
 
 
-# class TestTransformSensorToUchannelBallframe(unittest.TestCase):
+class TestTransformSensorToUchannelBallframe(unittest.TestCase):
 
-#     def test_top(self):
-#         with self.assertWarns(UserWarning):
-#             pin = Pin()
-#             pin.set_pin({'x': 1, 'y': 2, 'z': 0}, 1, 'hole')
-#             pin.set_pin({'x': 6, 'y': 2, 'z': 0}, 1, 'slot')
+    def test_top(self):
+        with self.assertWarns(UserWarning):
+            pin = Pin()
+            pin.set_pin({'x': 1, 'y': 2, 'z': 0}, 1, 'hole')
+            pin.set_pin({'x': 5, 'y': 2, 'z': 0}, 1, 'slot')
 
-#         with self.assertWarns(UserWarning):
-#             baseplane = BasePlane()
-#             baseplane.set_base_plane_dict({'x': 0, 'y': 0, 'z': 0, 'xy_angle': 0, 'elevation': np.pi/2}, 1)
+        with self.assertWarns(UserWarning):
+            baseplane = BasePlane()
+            baseplane.set_base_plane_dict({'x': 0, 'y': 0, 'z': 0, 'xy_angle': 0, 'elevation': np.pi/2}, 1)
 
-#         with self.assertWarns(UserWarning):
-#             pinframe = PinFrame()
-#             pinframe.pins = pin
-#             pinframe.base_planes = baseplane
-#             # uchannel.pinframe_top = pinframe
-#             # gives pin_basis [[1, 0, 0], [0, 0, 1], [0, -1, 0]]
+        with self.assertWarns(UserWarning):
+            pinframe = PinFrame()
+            pinframe.pins = pin
+            pinframe.base_planes = baseplane
+            # gives pin_basis [[-1, 0, 0], [0, 0, 1], [0, 1, 0]]
 
-#         with self.assertWarns(UserWarning):
-#             ballframe = BallFrame()
-#             ballframe.set_ball({'x': 0, 'y': 1, 'z': 1}, 1, 'hole')
-#             ballframe.set_ball({'x': 7, 'y': 1, 'z': 1}, 1, 'slot')
-#             ballframe.set_ball({'x': 0, 'y': 5, 'z': 1}, 3, 'hole')
-#             ballframe.set_ball({'x': 7, 'y': 5, 'z': 1}, 3, 'slot')
-#             # uchannel.ballframe_top = ballframe
-#             # gives ball_basis [[1, 0, 0], [0, 0, -1], [0, 1, 0]]
+        with self.assertWarns(UserWarning):
+            ballframe = BallFrame()
+            ballframe.set_ball({'x': 0, 'y': 1, 'z': 1}, 1, 'hole')
+            ballframe.set_ball({'x': 6, 'y': 1, 'z': 1}, 1, 'slot')
+            ballframe.set_ball({'x': 0, 'y': 5, 'z': 1}, 3, 'hole')
+            ballframe.set_ball({'x': 6, 'y': 5, 'z': 1}, 3, 'slot')
+            # gives ball_basis [[1, 0, 0], [0, 0, -1], [0, 1, 0]]
 
-#         uchannel = UChannel(pinframe_top=pinframe, ballframe_top=ballframe)
+        uchannel = UChannel(pinframe_top=pinframe, ballframe_top=ballframe)
+        
+        with self.assertWarns(UserWarning):
+            fixture = Fixture()
+            fixture.set_ball({'x': 1, 'y': 1, 'z': 5}, 'oriball')
+            fixture.set_ball({'x': 8, 'y': 1, 'z': 5}, 'axiball')
+            fixture.set_ball({'x': 1, 'y': 1, 'z': 6}, 'diagball')
+            fixture.set_pin({'x': 2, 'y': 1, 'z': 1}, 'oripin')
+            fixture.set_pin({'x': 7, 'y': 1, 'z': 1}, 'axipin')
+            fixture.set_base_plane({'x': 0, 'y': 0, 'z': 0, 'xy_angle': 0, 'elevation': np.pi/2})
 
-#         with self.assertWarns(UserWarning):
-#             fixture = Fixture()
-#             fixture.set_ball({'x': 1, 'y': 1, 'z': 5}, 'oriball')
-#             fixture.set_ball({'x': 8, 'y': 1, 'z': 5}, 'axiball')
-#             fixture.set_ball({'x': 1, 'y': 1, 'z': 6}, 'diagball')
-#             fixture.set_pin({'x': 2, 'y': 1, 'z': 1}, 'oripin')
-#             fixture.set_pin({'x': 7, 'y': 1, 'z': 1}, 'axipin')
-#             fixture.set_base_plane({'x': 0, 'y': 0, 'z': 0, 'xy_angle': 0, 'elevation': np.pi/2})
+        with self.assertWarns(UserWarning):
+            stereo_sensor = Sensor(fixture)
+            stereo_sensor.set_ball({'x': 1, 'y': 1, 'z': 0}, 'oriball')
+            stereo_sensor.set_ball({'x': 8, 'y': 1, 'z': 0}, 'axiball')
+            stereo_sensor.set_ball({'x': 1, 'y': 2, 'z': 0}, 'diagball')
+            stereo_sensor.set_sensor_plane({'x': 4, 'y': 1, 'z': 1, 'xy_angle': 0, 'elevation': np.pi/2})
+            stereo_sensor.set_sensor_origin({'x': 4, 'y': 1, 'z': 1})
 
-#         with self.assertWarns(UserWarning):
-#             stereo_sensor = Sensor(fixture)
-#             stereo_sensor.set_ball({'x': 1, 'y': 1, 'z': 0}, 'oriball')
-#             stereo_sensor.set_ball({'x': 8, 'y': 1, 'z': 0}, 'axiball')
-#             stereo_sensor.set_ball({'x': 1, 'y': 2, 'z': 0}, 'diagball')
-#             stereo_sensor.set_sensor_plane({'x': 4, 'y': 1, 'z': 1, 'xy_angle': 0, 'elevation': np.pi/2})
-#             stereo_sensor.set_sensor_origin({'x': 4, 'y': 1, 'z': 1})
+            axial_sensor = Sensor(fixture)
+            axial_sensor.set_ball({'x': 8, 'y': 1, 'z': 0}, 'oriball')
+            axial_sensor.set_ball({'x': 1, 'y': 1, 'z': 0}, 'axiball')
+            axial_sensor.set_ball({'x': 8, 'y': 2, 'z': 0}, 'diagball')
+            axial_sensor.set_sensor_plane({'x': 4, 'y': 1, 'z': 1, 'xy_angle': 0, 'elevation': np.pi/2})
+            axial_sensor.set_sensor_origin({'x': 4, 'y': 1, 'z': 1})
 
-#             axial_sensor = Sensor(fixture)
-#             axial_sensor.set_ball({'x': 8, 'y': 1, 'z': 0}, 'oriball')
-#             axial_sensor.set_ball({'x': 1, 'y': 1, 'z': 0}, 'axiball')
-#             axial_sensor.set_ball({'x': 8, 'y': 2, 'z': 0}, 'diagball')
-#             axial_sensor.set_sensor_plane({'x': 4, 'y': 1, 'z': 1, 'xy_angle': 0, 'elevation': np.pi/2})
-#             axial_sensor.set_sensor_origin({'x': 4, 'y': 1, 'z': 1})
+        stereo_origin_ball = stereo_sensor.get_sensor_origin_ballframe()
+        self.assertAlmostEqual(3, stereo_origin_ball[0])
+        self.assertAlmostEqual(0, stereo_origin_ball[1])
+        self.assertAlmostEqual(1, stereo_origin_ball[2])
 
-#         survey = Survey()
-#         survey.set_uchannel(uchannel)
-#         survey.set_sensors({'top': {'1': {'stereo': stereo_sensor, 'axial': axial_sensor}}, 'bottom': {}})
+        stereo_origin_pin = stereo_sensor.get_sensor_origin_pinframe()
+        self.assertAlmostEqual(-3, stereo_origin_pin[0])
+        self.assertAlmostEqual(5, stereo_origin_pin[1])
+        self.assertAlmostEqual(1, stereo_origin_pin[2])
 
-#         sensor_origin_ball, sensor_normal_ball = survey.transform_sensor_to_uchannel_ballframe('top', '1', 'stereo')
+        axial_origin_ball = axial_sensor.get_sensor_origin_ballframe()
+        self.assertAlmostEqual(4, axial_origin_ball[0])
+        self.assertAlmostEqual(0, axial_origin_ball[1])
+        self.assertAlmostEqual(-1, axial_origin_ball[2])
 
-#         self.assertAlmostEqual(-3, sensor_origin_ball[0])
-#         self.assertAlmostEqual(-4, sensor_origin_ball[1])
-#         self.assertAlmostEqual(2, sensor_origin_ball[2])
-#         self.assertAlmostEqual(0, sensor_normal_ball[0])
-#         self.assertAlmostEqual(0, sensor_normal_ball[1])
-#         self.assertAlmostEqual(1, sensor_normal_ball[2])
+        axial_origin_pin = axial_sensor.get_sensor_origin_pinframe()
+        self.assertAlmostEqual(-2, axial_origin_pin[0])
+        self.assertAlmostEqual(5, axial_origin_pin[1])
+        self.assertAlmostEqual(-1, axial_origin_pin[2])
 
-#         sensor_origin_ball, sensor_normal_ball = survey.transform_sensor_to_uchannel_ballframe('top', '1', 'axial')
+        stereo_normal_ball = stereo_sensor.get_sensor_normal_ballframe()
+        self.assertAlmostEqual(0, stereo_normal_ball[0])
+        self.assertAlmostEqual(0, stereo_normal_ball[1])
+        self.assertAlmostEqual(1, stereo_normal_ball[2])
 
-#         self.assertAlmostEqual(-4, sensor_origin_ball[0])
-#         self.assertAlmostEqual(-4, sensor_origin_ball[1])
-#         self.assertAlmostEqual(0, sensor_origin_ball[2])
-#         self.assertAlmostEqual(0, sensor_normal_ball[0])
-#         self.assertAlmostEqual(0, sensor_normal_ball[1])
-#         self.assertAlmostEqual(-1, sensor_normal_ball[2])
+        stereo_normal_pin = stereo_sensor.get_sensor_normal_pinframe()
+        self.assertAlmostEqual(0, stereo_normal_pin[0])
+        self.assertAlmostEqual(0, stereo_normal_pin[1])
+        self.assertAlmostEqual(1, stereo_normal_pin[2])
 
-#     def test_bottom(self):
-#         with self.assertWarns(UserWarning):
-#             pin = Pin()
-#             pin.set_pin({'x': 1, 'y': 2, 'z': 0}, 1, 'slot')
-#             pin.set_pin({'x': 6, 'y': 2, 'z': 0}, 1, 'hole')
+        axial_normal_ball = axial_sensor.get_sensor_normal_ballframe()
+        self.assertAlmostEqual(0, axial_normal_ball[0])
+        self.assertAlmostEqual(0, axial_normal_ball[1])
+        self.assertAlmostEqual(-1, axial_normal_ball[2])
 
-#         with self.assertWarns(UserWarning):
-#             baseplane = BasePlane()
-#             baseplane.set_base_plane_dict({'x': 0, 'y': 0, 'z': 0, 'xy_angle': 0, 'elevation': np.pi/2}, 1)
+        axial_normal_pin = axial_sensor.get_sensor_normal_pinframe()
+        self.assertAlmostEqual(0, axial_normal_pin[0])
+        self.assertAlmostEqual(0, axial_normal_pin[1])
+        self.assertAlmostEqual(-1, axial_normal_pin[2])        
 
-#         with self.assertWarns(UserWarning):
-#             pinframe = PinFrame()
-#             pinframe.pins = pin
-#             pinframe.base_planes = baseplane
-#             # uchannel.pinframe_top = pinframe
-#             # gives pin_basis [[1, 0, 0], [0, 0, 1], [0, -1, 0]]
+        survey = Survey()
+        survey.set_uchannel(uchannel)
+        survey.set_sensors({'top': {'1': {'stereo': stereo_sensor, 'axial': axial_sensor}}, 'bottom': {}})
 
-#         with self.assertWarns(UserWarning):
-#             ballframe = BallFrame()
-#             ballframe.set_ball({'x': 0, 'y': 1, 'z': 1}, 1, 'slot')
-#             ballframe.set_ball({'x': 7, 'y': 1, 'z': 1}, 1, 'hole')
-#             ballframe.set_ball({'x': 0, 'y': 5, 'z': 1}, 3, 'slot')
-#             ballframe.set_ball({'x': 7, 'y': 5, 'z': 1}, 3, 'hole')
-#             # uchannel.ballframe_top = ballframe
-#             # gives ball_basis [[1, 0, 0], [0, 0, -1], [0, 1, 0]]
+        sensor_origin_ball, sensor_normal_ball = survey.transform_sensor_to_uchannel_ballframe('top', '1', 'stereo')
 
-#         uchannel = UChannel(pinframe_bot=pinframe, ballframe_bot=ballframe)
+        self.assertAlmostEqual(1, sensor_origin_ball[0])
+        self.assertAlmostEqual(-4, sensor_origin_ball[1])
+        self.assertAlmostEqual(2, sensor_origin_ball[2])
+        self.assertAlmostEqual(0, sensor_normal_ball[0])
+        self.assertAlmostEqual(0, sensor_normal_ball[1])
+        self.assertAlmostEqual(1, sensor_normal_ball[2])
 
-#         with self.assertWarns(UserWarning):
-#             fixture = Fixture()
-#             fixture.set_ball({'x': 1, 'y': 1, 'z': 5}, 'oriball')
-#             fixture.set_ball({'x': 8, 'y': 1, 'z': 5}, 'axiball')
-#             fixture.set_ball({'x': 1, 'y': 1, 'z': 6}, 'diagball')
-#             fixture.set_pin({'x': 2, 'y': 1, 'z': 1}, 'oripin')
-#             fixture.set_pin({'x': 7, 'y': 1, 'z': 1}, 'axipin')
-#             fixture.set_base_plane({'x': 0, 'y': 0, 'z': 0, 'xy_angle': 0, 'elevation': np.pi/2})
+        sensor_origin_ball, sensor_normal_ball = survey.transform_sensor_to_uchannel_ballframe('top', '1', 'axial')
 
-#         with self.assertWarns(UserWarning):
-#             axial_sensor = Sensor(fixture)
-#             axial_sensor.set_ball({'x': 1, 'y': 1, 'z': 0}, 'oriball')
-#             axial_sensor.set_ball({'x': 8, 'y': 1, 'z': 0}, 'axiball')
-#             axial_sensor.set_ball({'x': 1, 'y': 2, 'z': 0}, 'diagball')
-#             axial_sensor.set_sensor_plane({'x': 4, 'y': 1, 'z': 1, 'xy_angle': 0, 'elevation': np.pi/2})
-#             axial_sensor.set_sensor_origin({'x': 4, 'y': 1, 'z': 1})
+        self.assertAlmostEqual(0, sensor_origin_ball[0])
+        self.assertAlmostEqual(-4, sensor_origin_ball[1])
+        self.assertAlmostEqual(0, sensor_origin_ball[2])
+        self.assertAlmostEqual(0, sensor_normal_ball[0])
+        self.assertAlmostEqual(0, sensor_normal_ball[1])
+        self.assertAlmostEqual(-1, sensor_normal_ball[2])
 
-#             stereo_sensor = Sensor(fixture)
-#             stereo_sensor.set_ball({'x': 8, 'y': 1, 'z': 0}, 'oriball')
-#             stereo_sensor.set_ball({'x': 1, 'y': 1, 'z': 0}, 'axiball')
-#             stereo_sensor.set_ball({'x': 8, 'y': 2, 'z': 0}, 'diagball')
-#             stereo_sensor.set_sensor_plane({'x': 4, 'y': 1, 'z': 1, 'xy_angle': 0, 'elevation': np.pi/2})
-#             stereo_sensor.set_sensor_origin({'x': 4, 'y': 1, 'z': 1})
+    # def test_bottom(self):
+    #     with self.assertWarns(UserWarning):
+    #         pin = Pin()
+    #         pin.set_pin({'x': 1, 'y': 2, 'z': 0}, 1, 'slot')
+    #         pin.set_pin({'x': 6, 'y': 2, 'z': 0}, 1, 'hole')
 
-#         survey = Survey()
-#         survey.set_uchannel(uchannel)
-#         survey.set_sensors({'bottom': {'1': {'axial': axial_sensor, 'stereo': stereo_sensor}}, 'top': {}})
+    #     with self.assertWarns(UserWarning):
+    #         baseplane = BasePlane()
+    #         baseplane.set_base_plane_dict({'x': 0, 'y': 0, 'z': 0, 'xy_angle': 0, 'elevation': np.pi/2}, 1)
 
-#         sensor_origin_ball, sensor_normal_ball = survey.transform_sensor_to_uchannel_ballframe('bottom', '1', 'stereo')
+    #     with self.assertWarns(UserWarning):
+    #         pinframe = PinFrame()
+    #         pinframe.pins = pin
+    #         pinframe.base_planes = baseplane
+    #         # uchannel.pinframe_top = pinframe
+    #         # gives pin_basis [[1, 0, 0], [0, 0, 1], [0, -1, 0]]
 
-#         self.assertAlmostEqual(-4, sensor_origin_ball[0])
-#         self.assertAlmostEqual(4, sensor_origin_ball[1])
-#         self.assertAlmostEqual(2, sensor_origin_ball[2])
-#         self.assertAlmostEqual(0, sensor_normal_ball[0])
-#         self.assertAlmostEqual(0, sensor_normal_ball[1])
-#         self.assertAlmostEqual(1, sensor_normal_ball[2])
+    #     with self.assertWarns(UserWarning):
+    #         ballframe = BallFrame()
+    #         ballframe.set_ball({'x': 0, 'y': 1, 'z': 1}, 1, 'slot')
+    #         ballframe.set_ball({'x': 7, 'y': 1, 'z': 1}, 1, 'hole')
+    #         ballframe.set_ball({'x': 0, 'y': 5, 'z': 1}, 3, 'slot')
+    #         ballframe.set_ball({'x': 7, 'y': 5, 'z': 1}, 3, 'hole')
+    #         # uchannel.ballframe_top = ballframe
+    #         # gives ball_basis [[1, 0, 0], [0, 0, -1], [0, 1, 0]]
 
-#         sensor_origin_ball, sensor_normal_ball = survey.transform_sensor_to_uchannel_ballframe('bottom', '1', 'axial')
+    #     uchannel = UChannel(pinframe_bot=pinframe, ballframe_bot=ballframe)
 
-#         self.assertAlmostEqual(-3, sensor_origin_ball[0])
-#         self.assertAlmostEqual(4, sensor_origin_ball[1])
-#         self.assertAlmostEqual(0, sensor_origin_ball[2])
-#         self.assertAlmostEqual(0, sensor_normal_ball[0])
-#         self.assertAlmostEqual(0, sensor_normal_ball[1])
-#         self.assertAlmostEqual(-1, sensor_normal_ball[2])
+    #     with self.assertWarns(UserWarning):
+    #         fixture = Fixture()
+    #         fixture.set_ball({'x': 1, 'y': 1, 'z': 5}, 'oriball')
+    #         fixture.set_ball({'x': 8, 'y': 1, 'z': 5}, 'axiball')
+    #         fixture.set_ball({'x': 1, 'y': 1, 'z': 6}, 'diagball')
+    #         fixture.set_pin({'x': 2, 'y': 1, 'z': 1}, 'oripin')
+    #         fixture.set_pin({'x': 7, 'y': 1, 'z': 1}, 'axipin')
+    #         fixture.set_base_plane({'x': 0, 'y': 0, 'z': 0, 'xy_angle': 0, 'elevation': np.pi/2})
+
+    #     with self.assertWarns(UserWarning):
+    #         axial_sensor = Sensor(fixture)
+    #         axial_sensor.set_ball({'x': 1, 'y': 1, 'z': 0}, 'oriball')
+    #         axial_sensor.set_ball({'x': 8, 'y': 1, 'z': 0}, 'axiball')
+    #         axial_sensor.set_ball({'x': 1, 'y': 2, 'z': 0}, 'diagball')
+    #         axial_sensor.set_sensor_plane({'x': 4, 'y': 1, 'z': 1, 'xy_angle': 0, 'elevation': np.pi/2})
+    #         axial_sensor.set_sensor_origin({'x': 4, 'y': 1, 'z': 1})
+
+    #         stereo_sensor = Sensor(fixture)
+    #         stereo_sensor.set_ball({'x': 8, 'y': 1, 'z': 0}, 'oriball')
+    #         stereo_sensor.set_ball({'x': 1, 'y': 1, 'z': 0}, 'axiball')
+    #         stereo_sensor.set_ball({'x': 8, 'y': 2, 'z': 0}, 'diagball')
+    #         stereo_sensor.set_sensor_plane({'x': 4, 'y': 1, 'z': 1, 'xy_angle': 0, 'elevation': np.pi/2})
+    #         stereo_sensor.set_sensor_origin({'x': 4, 'y': 1, 'z': 1})
+
+    #     survey = Survey()
+    #     survey.set_uchannel(uchannel)
+    #     survey.set_sensors({'bottom': {'1': {'axial': axial_sensor, 'stereo': stereo_sensor}}, 'top': {}})
+
+    #     sensor_origin_ball, sensor_normal_ball = survey.transform_sensor_to_uchannel_ballframe('bottom', '1', 'stereo')
+
+    #     self.assertAlmostEqual(-4, sensor_origin_ball[0])
+    #     self.assertAlmostEqual(4, sensor_origin_ball[1])
+    #     self.assertAlmostEqual(2, sensor_origin_ball[2])
+    #     self.assertAlmostEqual(0, sensor_normal_ball[0])
+    #     self.assertAlmostEqual(0, sensor_normal_ball[1])
+    #     self.assertAlmostEqual(1, sensor_normal_ball[2])
+
+    #     sensor_origin_ball, sensor_normal_ball = survey.transform_sensor_to_uchannel_ballframe('bottom', '1', 'axial')
+
+    #     self.assertAlmostEqual(-3, sensor_origin_ball[0])
+    #     self.assertAlmostEqual(4, sensor_origin_ball[1])
+    #     self.assertAlmostEqual(0, sensor_origin_ball[2])
+    #     self.assertAlmostEqual(0, sensor_normal_ball[0])
+    #     self.assertAlmostEqual(0, sensor_normal_ball[1])
+    #     self.assertAlmostEqual(-1, sensor_normal_ball[2])
 
 
 class TestSurvey2019(unittest.TestCase):
@@ -279,7 +272,7 @@ class TestSurvey2019(unittest.TestCase):
         # print('pin in uchannel, L1 bottom: ', survey.get_pin_in_uchannel_ballframe('bottom', '1')[1])
         # print('pin in uchannel, L2 bottom: ', survey.get_pin_in_uchannel_ballframe('bottom', '2')[1])
         # print('pin in uchannel, L3 bottom: ', survey.get_pin_in_uchannel_ballframe('bottom', '3')[1])
-        print('pin in uchannel, L0 top: ', survey.get_pin_in_uchannel_ballframe('top', '0')[1])
-        sensor_origin_ball = survey.transform_sensor_to_uchannel_ballframe('top', '1', 'axial')
+        print('pin in uchannel, L0 top: ', survey.get_pin_in_uchannel_ballframe('top', '1')[1])
+        sensor_origin_ball = survey.transform_sensor_to_uchannel_ballframe('top', '1', 'stereo')
         print('sensor in uchannel: ', sensor_origin_ball)
-        # survey.print_results('survey_results_2019.csv')
+        survey.print_results('survey_results_2019.csv')

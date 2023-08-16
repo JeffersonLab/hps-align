@@ -73,7 +73,7 @@ class TestGetBallBasis(unittest.TestCase):
 
         basis, origin = uchannel.get_ball_basis('top')
 
-        self.assertEqual([0, 0, 0], origin.tolist())
+        self.assertEqual([1, 0, 0], origin.tolist())
         self.assertEqual([-1, 0, 0], basis[0].tolist())
         self.assertEqual([0, 0, 1], basis[1].tolist())
         self.assertEqual([0, 1, 0], basis[2].tolist())
@@ -103,21 +103,21 @@ class TestGetPinBasis(unittest.TestCase):
             pinframe = PinFrame()
             pinframe.pins = pin
             pinframe.base_planes = baseplane
-            # gives pin_basis [[1, 0, 0], [0, 0, 1], [0, -1, 0]]
+            # gives pin_basis [[-1, 0, 0], [0, 0, 1], [0, 1, 0]]
 
         uchannel = UChannel(pinframe_top=pinframe)
 
         basis, origin = uchannel.get_pin_basis(0, 'top')
 
         self.assertEqual([0, 0, 0], origin.tolist())
-        self.assertAlmostEqual(1, basis[0][0])
+        self.assertAlmostEqual(-1, basis[0][0])
         self.assertAlmostEqual(0, basis[0][1])
         self.assertAlmostEqual(0, basis[0][2])
         self.assertAlmostEqual(0, basis[1][0])
         self.assertAlmostEqual(0, basis[1][1])
         self.assertAlmostEqual(1, basis[1][2])
         self.assertAlmostEqual(0, basis[2][0])
-        self.assertAlmostEqual(-1, basis[2][1])
+        self.assertAlmostEqual(1, basis[2][1])
         self.assertAlmostEqual(0, basis[2][2])
 
 
@@ -139,7 +139,7 @@ class TestPinInBallFrame(unittest.TestCase):
             pinframe.pins = pin
             pinframe.base_planes = baseplane
             # uchannel.pinframe_top = pinframe
-            # gives pin_basis [[1, 0, 0], [0, 0, 1], [0, -1, 0]]
+            # gives pin_basis [[-1, 0, 0], [0, 0, 1], [0, 1, 0]]
 
         with self.assertWarns(UserWarning):
             ballframe = BallFrame()
@@ -154,8 +154,8 @@ class TestPinInBallFrame(unittest.TestCase):
 
         basis, origin = uchannel.pin_in_ballframe(0, 'top')
 
-        self.assertEqual([0, 0, 0], origin.tolist())
-        self.assertAlmostEqual(-1, basis[0][0])
+        self.assertEqual([1, 0, 0], origin.tolist())
+        self.assertAlmostEqual(1, basis[0][0])
         self.assertAlmostEqual(0, basis[0][1])
         self.assertAlmostEqual(0, basis[0][2])
         self.assertAlmostEqual(0, basis[1][0])
@@ -163,56 +163,14 @@ class TestPinInBallFrame(unittest.TestCase):
         self.assertAlmostEqual(0, basis[1][2])
         self.assertAlmostEqual(0, basis[2][0])
         self.assertAlmostEqual(0, basis[2][1])
-        self.assertAlmostEqual(-1, basis[2][2])
+        self.assertAlmostEqual(1, basis[2][2])
 
     def test_valid_input_top(self):
         with self.assertWarns(UserWarning):
             pin = Pin()
 
             pin.set_pin({'x': 1, 'y': 2, 'z': 0}, 0, 'hole')
-            pin.set_pin({'x': 2, 'y': 2, 'z': 0}, 0, 'slot')
-
-        with self.assertWarns(UserWarning):
-            baseplane = BasePlane()
-
-            baseplane.set_base_plane_dict({'x': 0, 'y': 0, 'z': 0, 'xy_angle': 0, 'elevation': np.pi/2}, 0)
-
-        with self.assertWarns(UserWarning):
-            pinframe = PinFrame()
-            pinframe.pins = pin
-            pinframe.base_planes = baseplane
-            # gives pin_basis [[1, 0, 0], [0, 0, 1], [0, -1, 0]]
-
-        with self.assertWarns(UserWarning):
-            ballframe = BallFrame()
-            ballframe.set_ball({'x': 0, 'y': 1, 'z': 0}, 1, 'hole')
-            ballframe.set_ball({'x': 3, 'y': 1, 'z': 0}, 1, 'slot')
-            ballframe.set_ball({'x': 0, 'y': 4, 'z': 0}, 3, 'hole')
-            ballframe.set_ball({'x': 3, 'y': 4, 'z': 0}, 3, 'slot')
-            # gives ball_basis [[1, 0, 0], [0, 0, -1], [0, 1, 0]]
-
-        uchannel = UChannel(pinframe_top=pinframe, ballframe_top=ballframe)
-        basis, origin = uchannel.pin_in_ballframe(0, 'top')
-
-        self.assertAlmostEqual(-2, origin[0])
-        self.assertAlmostEqual(0, origin[1])
-        self.assertAlmostEqual(1, origin[2])
-        self.assertAlmostEqual(1, basis[0][0])
-        self.assertAlmostEqual(0, basis[0][1])
-        self.assertAlmostEqual(0, basis[0][2])
-        self.assertAlmostEqual(0, basis[1][0])
-        self.assertAlmostEqual(-1, basis[1][1])
-        self.assertAlmostEqual(0, basis[1][2])
-        self.assertAlmostEqual(0, basis[2][0])
-        self.assertAlmostEqual(0, basis[2][1])
-        self.assertAlmostEqual(-1, basis[2][2])
-
-    def test_valid_input_bot(self):
-        with self.assertWarns(UserWarning):
-            pin = Pin()
-
-            pin.set_pin({'x': 1, 'y': 2, 'z': 0}, 0, 'slot')
-            pin.set_pin({'x': 2, 'y': 2, 'z': 0}, 0, 'hole')
+            pin.set_pin({'x': 3, 'y': 2, 'z': 0}, 0, 'slot')
 
         with self.assertWarns(UserWarning):
             baseplane = BasePlane()
@@ -227,19 +185,61 @@ class TestPinInBallFrame(unittest.TestCase):
 
         with self.assertWarns(UserWarning):
             ballframe = BallFrame()
+            ballframe.set_ball({'x': 0, 'y': 1, 'z': 0}, 1, 'hole')
+            ballframe.set_ball({'x': 4, 'y': 1, 'z': 0}, 1, 'slot')
+            ballframe.set_ball({'x': 0, 'y': 4, 'z': 0}, 3, 'hole')
+            ballframe.set_ball({'x': 4, 'y': 4, 'z': 0}, 3, 'slot')
+            # gives ball_basis [[1, 0, 0], [0, 0, -1], [0, 1, 0]]
+
+        uchannel = UChannel(pinframe_top=pinframe, ballframe_top=ballframe)
+        basis, origin = uchannel.pin_in_ballframe(0, 'top')
+
+        self.assertAlmostEqual(-1, origin[0])
+        self.assertAlmostEqual(0, origin[1])
+        self.assertAlmostEqual(1, origin[2])
+        self.assertAlmostEqual(-1, basis[0][0])
+        self.assertAlmostEqual(0, basis[0][1])
+        self.assertAlmostEqual(0, basis[0][2])
+        self.assertAlmostEqual(0, basis[1][0])
+        self.assertAlmostEqual(-1, basis[1][1])
+        self.assertAlmostEqual(0, basis[1][2])
+        self.assertAlmostEqual(0, basis[2][0])
+        self.assertAlmostEqual(0, basis[2][1])
+        self.assertAlmostEqual(1, basis[2][2])
+
+    def test_valid_input_bot(self):
+        with self.assertWarns(UserWarning):
+            pin = Pin()
+
+            pin.set_pin({'x': 1, 'y': 2, 'z': 0}, 0, 'slot')
+            pin.set_pin({'x': 3, 'y': 2, 'z': 0}, 0, 'hole')
+
+        with self.assertWarns(UserWarning):
+            baseplane = BasePlane()
+
+            baseplane.set_base_plane_dict({'x': 0, 'y': 0, 'z': 0, 'xy_angle': 0, 'elevation': np.pi/2}, 0)
+
+        with self.assertWarns(UserWarning):
+            pinframe = PinFrame()
+            pinframe.pins = pin
+            pinframe.base_planes = baseplane
+            # gives pin_basis [[1, 0, 0], [0, 0, 1], [0, -1, 0]]
+
+        with self.assertWarns(UserWarning):
+            ballframe = BallFrame()
             ballframe.set_ball({'x': 0, 'y': 1, 'z': 0}, 1, 'slot')
-            ballframe.set_ball({'x': 3, 'y': 1, 'z': 0}, 1, 'hole')
+            ballframe.set_ball({'x': 4, 'y': 1, 'z': 0}, 1, 'hole')
             ballframe.set_ball({'x': 0, 'y': 4, 'z': 0}, 3, 'slot')
-            ballframe.set_ball({'x': 3, 'y': 4, 'z': 0}, 3, 'hole')
+            ballframe.set_ball({'x': 4, 'y': 4, 'z': 0}, 3, 'hole')
             # gives ball_basis [[-1, 0, 0], [0, 0, 1], [0, 1, 0]]
 
         uchannel = UChannel(pinframe_bot=pinframe, ballframe_bot=ballframe)
         basis, origin = uchannel.pin_in_ballframe(0, 'bottom')
 
-        self.assertAlmostEqual(-2, origin[0])
+        self.assertAlmostEqual(-1, origin[0])
         self.assertAlmostEqual(0, origin[1])
         self.assertAlmostEqual(1, origin[2])
-        self.assertAlmostEqual(1, basis[0][0])
+        self.assertAlmostEqual(-1, basis[0][0])
         self.assertAlmostEqual(0, basis[0][1])
         self.assertAlmostEqual(0, basis[0][2])
         self.assertAlmostEqual(0, basis[1][0])
@@ -247,7 +247,7 @@ class TestPinInBallFrame(unittest.TestCase):
         self.assertAlmostEqual(0, basis[1][2])
         self.assertAlmostEqual(0, basis[2][0])
         self.assertAlmostEqual(0, basis[2][1])
-        self.assertAlmostEqual(1, basis[2][2])
+        self.assertAlmostEqual(-1, basis[2][2])
 
 
 if __name__ == '__main__':

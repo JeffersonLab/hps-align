@@ -47,7 +47,7 @@ class PinFrame:
         hole_pin_projected = project_to_plane(hole_pin, plane_origin, plane_normal)
         slot_pin_projected = project_to_plane(slot_pin, plane_origin, plane_normal)
 
-        hole_to_slot = slot_pin_projected - hole_pin_projected
-        basis = make_basis(hole_to_slot, plane_normal)
+        slot_to_hole = hole_pin_projected - slot_pin_projected
+        basis = make_basis(slot_to_hole, plane_normal)
 
         return basis, hole_pin_projected

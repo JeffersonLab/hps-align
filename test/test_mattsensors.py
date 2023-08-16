@@ -141,9 +141,9 @@ class TestSensorOrigin(unittest.TestCase):
         sensor.set_sensor_origin({'x': 1, 'y': -1, 'z': 0})
 
         origin_pin = sensor.get_sensor_origin_pinframe()
-        self.assertAlmostEqual(1, origin_pin[0])
+        self.assertAlmostEqual(-1, origin_pin[0])
         self.assertAlmostEqual(1, origin_pin[1])
-        self.assertAlmostEqual(-1, origin_pin[2])
+        self.assertAlmostEqual(1, origin_pin[2])
 
 
 class TestSensorNormal(unittest.TestCase):
@@ -190,7 +190,7 @@ class TestSensorNormal(unittest.TestCase):
         sensor.set_sensor_plane({'x': 0, 'y': 0, 'z': 0, 'xy_angle': 0, 'elevation': 0})
 
         normal = sensor.get_sensor_normal_pinframe()
-        self.assertAlmostEqual(-1, normal[0])
+        self.assertAlmostEqual(1, normal[0])
         self.assertAlmostEqual(0, normal[1])
         self.assertAlmostEqual(0, normal[2])
 

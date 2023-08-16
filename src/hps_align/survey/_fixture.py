@@ -175,8 +175,8 @@ class Fixture:
         hole_pin_projected = project_to_plane(hole_pin, plane_origin, plane_normal)
         slot_pin_projected = project_to_plane(slot_pin, plane_origin, plane_normal)
 
-        hole_to_slot = slot_pin_projected - hole_pin_projected
-        basis = make_basis(hole_to_slot, plane_normal)
+        slot_to_hole = hole_pin_projected - slot_pin_projected
+        basis = make_basis(slot_to_hole, plane_normal)
         origin = hole_pin_projected
 
         return basis, origin
@@ -221,8 +221,34 @@ class ShoFixture(Fixture):
             self.oripin_dict = self.parser.get_coords('Step 11 - Slot pin', 6)
             self.axipin_dict = self.parser.get_coords('Step 10 - Hole pin', 6)
 
+    def get_sho_basis(self):
+        slot_pin = self.get_pin('oripin')
+        hole_pin = self.get_pin('axipin')
+
+        plane_origin, plane_normal = self.get_base_plane()
+
+        hole_pin_projected = project_to_plane(hole_pin, plane_origin, plane_normal)
+        slot_pin_projected = project_to_plane(slot_pin, plane_origin, plane_normal)
+
+        hole_to_slot = slot_pin_projected - hole_pin_projected
+        basis = make_basis(hole_to_slot, plane_normal)
+        origin = hole_pin_projected
+
+        return np.array([basis[0], -basis[2], basis[1]]), origin
+
+    def sho_to_pin(self):
+        pin_basis = self.get_pin_basis()[0]
+        sho_basis = self.get_sho_basis()[0]
+
+        return np.matmul(sho_basis, np.linalg.inv(pin_basis))
+
     def get_ball_in_pin(self):
-        return self.get_ball_basis()
+        # this is in sho coordinates
+        ball_basis, ball_origin = self.get_ball_basis()
+        ball_basis = np.matmul(ball_basis, self.sho_to_pin())
+        ball_origin = np.matmul(ball_origin, self.sho_to_pin())
+
+        return ball_basis, ball_origin
 
     def get_pin_in_ball(self):
         ball_basis, ball_origin = self.get_ball_in_pin()
@@ -241,10 +267,8 @@ class MattFixture(Fixture):
             self.axiball_dict = self.parser.get_coords('axiball')
             self.ball_plane_dict = self.parser.get_coords('Step:  5', 20)
             self.base_plane_dict = self.parser.get_coords('L0 base plane')
-            self.oripin_dict = self.parser.get_coords('oripin')
-            self.axipin_dict = self.parser.get_coords('axipin')
-            # self.axipin_dict = self.parser.get_coords('oripin')
-            # self.oripin_dict = self.parser.get_coords('axipin')
+            self.oripin_dict = self.parser.get_coords('axipin')
+            self.axipin_dict = self.parser.get_coords('oripin')
 
     def set_ball_plane(self, ball_plane_coords):
         """Set base plane coordinates

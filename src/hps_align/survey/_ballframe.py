@@ -82,6 +82,25 @@ class BallFrame:
 
         return np.array([ball['x'], ball['y'], ball['z']])
 
+    def get_midpoint(self, layer):
+        """Get midpoint between hole and slot balls for a given layer
+
+        Parameters
+        ----------
+        layer : int
+            Layer number
+
+        Returns
+        -------
+        midpoint : np.array
+            Numpy array of midpoint coordinates
+        """
+        hole_ball = self.get_ball(layer, 'hole')
+        slot_ball = self.get_ball(layer, 'slot')
+        midpoint = (hole_ball + slot_ball) / 2
+
+        return midpoint
+
     def get_basis(self, volume=''):
         """Get ballframe basis vectors
 
@@ -92,15 +111,17 @@ class BallFrame:
         origin : np.array
             Numpy array of origin coordinates
         """
-        origin = self.get_ball(1, 'slot')
 
-        vec1 = self.get_ball(1, 'hole')
-        vec2 = self.get_ball(3, 'hole')
-        hole_avg = (vec1 + vec2) / 2
-        vec0 = self.get_ball(3, 'slot')
-        basis = make_basis(vec0 - origin, hole_avg - origin)
+        origin = self.get_midpoint(1)
 
-        return np.array([-basis[1], -basis[2], basis[0]]), origin
+        vec1 = self.get_midpoint(3) - origin
+        hole_to_slot1 = self.get_ball(1, 'slot') - self.get_ball(1, 'hole')
+        hole_to_slot3 = self.get_ball(3, 'slot') - self.get_ball(3, 'hole')
+        vec2 = (hole_to_slot1 + hole_to_slot3) / 2
+
+        basis = make_basis(vec1, vec2)
+
+        return np.array([basis[1], basis[2], basis[0]]), origin
 
 
 class MattBallFrame(BallFrame):
@@ -131,7 +152,7 @@ class MattBallFrame(BallFrame):
         else:
             raise ValueError('Invalid layer: {}'.format(layer))
 
-    def get_midpoint(self, layer):
+    def get_meas_midpoint(self, layer):
         """Get midpoint coordinates for a given layer
 
         Parameters
@@ -168,8 +189,8 @@ class MattBallFrame(BallFrame):
         origin : np.array
             Numpy array of origin coordinates
         """
-        origin = self.get_midpoint(1)
-        L3_midpoint = self.get_midpoint(3)
+        origin = self.get_meas_midpoint(1)
+        L3_midpoint = self.get_meas_midpoint(3)
 
         if (volume == 'top'):
             basis = make_basis(L3_midpoint - origin, self.get_ball(1, 'hole') - origin)

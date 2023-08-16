@@ -124,9 +124,9 @@ class Sensor:
             Sensor origin coordinates in pin frame
         """
         origin = self.get_sensor_origin_ballframe()
-        print('sensor origin in fixture ballframe: ', origin)
+        # print('sensor origin in fixture ballframe: ', origin)
         pin_in_ball_origin = self.fixture.get_pin_in_ball()[1]
-        print('pin in ball origin: ', pin_in_ball_origin)
+        # print('pin in ball origin: ', pin_in_ball_origin)
         ball_in_pin_basis = self.fixture.get_ball_in_pin()[0]
         origin = origin - pin_in_ball_origin
         origin = np.matmul(origin, ball_in_pin_basis)
