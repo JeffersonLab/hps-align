@@ -110,20 +110,29 @@ class Survey2019(Survey):
                     short_name = 't'
                 else:
                     short_name = 'b'
-                for layer in [1,2]:
-                    f.write('<SurveyVolume name="module_L' + str(layer) + short_name + '" desc="' + volume + ' L' + str(layer) + ' pin basis in U-channel fiducial frame:">\n')
+                for layer in [1, 2]:
+                    f.write('<SurveyVolume name="module_L' + str(layer) + short_name + '" desc="'
+                            + volume + ' L' + str(layer) + ' pin basis in U-channel fiducial frame:">\n')
                     basis, origin = self.get_pin_in_uchannel_ballframe(volume, layer-1)
                     f.write('<origin x="' + str(origin[0]) + '" y="' + str(origin[1]) + '" z="' + str(origin[2]) + '" />\n')
-                    f.write('<unitvec name="X" x="' + str(basis[0][0]) + '" y="' + str(basis[0][1]) + '" z="' + str(basis[0][2]) + '" />\n')
-                    f.write('<unitvec name="Y" x="' + str(basis[1][0]) + '" y="' + str(basis[1][1]) + '" z="' + str(basis[1][2]) + '" />\n')
-                    f.write('<unitvec name="Z" x="' + str(basis[2][0]) + '" y="' + str(basis[2][1]) + '" z="' + str(basis[2][2]) + '" />\n')
+                    f.write('<unitvec name="X" x="' + str(basis[0][0]) + '" y="' + str(basis[0][1])
+                            + '" z="' + str(basis[0][2]) + '" />\n')
+                    f.write('<unitvec name="Y" x="' + str(basis[1][0]) + '" y="' + str(basis[1][1])
+                            + '" z="' + str(basis[1][2]) + '" />\n')
+                    f.write('<unitvec name="Z" x="' + str(basis[2][0]) + '" y="' + str(basis[2][1])
+                            + '" z="' + str(basis[2][2]) + '" />\n')
                     f.write('</SurveyVolume>\n')
 
                     for sensor in ['axial', 'stereo']:
-                        f.write('<SurveyVolume name="module_L' + str(layer) + short_name + '_halfmodule_' + sensor +'" desc="' + volume + ' L' + str(layer) + ' ' + sensor +' sensor basis in pin frame:">\n')
+                        f.write('<SurveyVolume name="module_L' + str(layer) + short_name + '_halfmodule_' + sensor
+                                + '" desc="' + volume + ' L' + str(layer) + ' ' + sensor + ' sensor basis in pin frame:">\n')
                         sensor_basis_pin, sensor_origin_pin = self.sensors[volume][str(layer-1)][sensor].get_sensor_basis_pinframe(volume, sensor)
-                        f.write('<origin x="' + str(sensor_origin_pin[0]) + '" y=" ' + str(sensor_origin_pin[1]) + '" z="' + str(sensor_origin_pin[2]) + '" />\n')
-                        f.write('<unitvec name="X" x="' + str(sensor_basis_pin[0][0]) + '" y="' + str(sensor_basis_pin[0][1]) + '" z="' + str(sensor_basis_pin[0][2]) + '" />\n')
-                        f.write('<unitvec name="Y" x="' + str(sensor_basis_pin[1][0]) + '" y="' + str(sensor_basis_pin[1][1]) + '" z="' + str(sensor_basis_pin[1][2]) + '" />\n')
-                        f.write('<unitvec name="Z" x="' + str(sensor_basis_pin[2][0]) + '" y="' + str(sensor_basis_pin[2][1]) + '" z="' + str(sensor_basis_pin[2][2]) + '" />\n')
+                        f.write('<origin x="' + str(sensor_origin_pin[0]) + '" y=" ' + str(sensor_origin_pin[1])
+                                + '" z="' + str(sensor_origin_pin[2]) + '" />\n')
+                        f.write('<unitvec name="X" x="' + str(sensor_basis_pin[0][0]) + '" y="' + str(sensor_basis_pin[0][1])
+                                + '" z="' + str(sensor_basis_pin[0][2]) + '" />\n')
+                        f.write('<unitvec name="Y" x="' + str(sensor_basis_pin[1][0]) + '" y="' + str(sensor_basis_pin[1][1])
+                                + '" z="' + str(sensor_basis_pin[1][2]) + '" />\n')
+                        f.write('<unitvec name="Z" x="' + str(sensor_basis_pin[2][0]) + '" y="' + str(sensor_basis_pin[2][1])
+                                + '" z="' + str(sensor_basis_pin[2][2]) + '" />\n')
                         f.write('</SurveyVolume>\n')

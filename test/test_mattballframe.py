@@ -70,8 +70,8 @@ class TestGetBasis(unittest.TestCase):
 
         # top
         ballframe.set_ball({'x': 2, 'y': 1, 'z': 0}, 1, 'hole')
-        ballframe.set_ball({'x': 0, 'y': 1, 'z': 0}, 1, 'slot') 
-        ballframe.set_midpoint({'x': 1, 'y': 1, 'z': 0}, 1) 
+        ballframe.set_ball({'x': 0, 'y': 1, 'z': 0}, 1, 'slot')
+        ballframe.set_midpoint({'x': 1, 'y': 1, 'z': 0}, 1)
         ballframe.set_ball({'x': 2, 'y': 5, 'z': 0}, 3, 'hole')
         ballframe.set_ball({'x': 0, 'y': 5, 'z': 0}, 3, 'slot')
         ballframe.set_midpoint({'x': 1, 'y': 5, 'z': 0}, 3)
@@ -84,8 +84,8 @@ class TestGetBasis(unittest.TestCase):
 
         # bottom
         ballframe.set_ball({'x': 2, 'y': 1, 'z': 0}, 1, 'slot')
-        ballframe.set_ball({'x': 0, 'y': 1, 'z': 0}, 1, 'hole') 
-        ballframe.set_midpoint({'x': 1, 'y': 1, 'z': 0}, 1) 
+        ballframe.set_ball({'x': 0, 'y': 1, 'z': 0}, 1, 'hole')
+        ballframe.set_midpoint({'x': 1, 'y': 1, 'z': 0}, 1)
         ballframe.set_ball({'x': 2, 'y': 5, 'z': 0}, 3, 'slot')
         ballframe.set_ball({'x': 0, 'y': 5, 'z': 0}, 3, 'hole')
         ballframe.set_midpoint({'x': 1, 'y': 5, 'z': 0}, 3)
@@ -102,8 +102,8 @@ class TestGetBasis(unittest.TestCase):
 
         # top
         ballframe.set_ball({'x': 2, 'y': 1, 'z': 0}, 1, 'hole')
-        ballframe.set_ball({'x': 0, 'y': 1, 'z': 0}, 1, 'slot') 
-        ballframe.set_midpoint({'x': 1, 'y': 1, 'z': 0}, 1) 
+        ballframe.set_ball({'x': 0, 'y': 1, 'z': 0}, 1, 'slot')
+        ballframe.set_midpoint({'x': 1, 'y': 1, 'z': 0}, 1)
         ballframe.set_ball({'x': 2, 'y': 5, 'z': 0}, 3, 'hole')
         ballframe.set_ball({'x': 0, 'y': 5, 'z': 0}, 3, 'slot')
         ballframe.set_midpoint({'x': 1, 'y': 5, 'z': 0}, 3)
@@ -116,8 +116,8 @@ class TestGetBasis(unittest.TestCase):
 
         # bottom
         ballframe.set_ball({'x': 2, 'y': 1, 'z': 0}, 1, 'slot')
-        ballframe.set_ball({'x': 0, 'y': 1, 'z': 0}, 1, 'hole') 
-        ballframe.set_midpoint({'x': 1, 'y': 1, 'z': 0}, 1) 
+        ballframe.set_ball({'x': 0, 'y': 1, 'z': 0}, 1, 'hole')
+        ballframe.set_midpoint({'x': 1, 'y': 1, 'z': 0}, 1)
         ballframe.set_ball({'x': 2, 'y': 5, 'z': 0}, 3, 'slot')
         ballframe.set_ball({'x': 0, 'y': 5, 'z': 0}, 3, 'hole')
         ballframe.set_midpoint({'x': 1, 'y': 5, 'z': 0}, 3)

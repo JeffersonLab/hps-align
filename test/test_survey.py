@@ -83,7 +83,7 @@ class TestTransformSensorToUchannelBallframe(unittest.TestCase):
             # gives ball_basis [[1, 0, 0], [0, 0, -1], [0, 1, 0]]
 
         uchannel = UChannel(pinframe_top=pinframe, ballframe_top=ballframe)
-        
+
         with self.assertWarns(UserWarning):
             fixture = Fixture()
             fixture.set_ball({'x': 1, 'y': 1, 'z': 5}, 'oriball')

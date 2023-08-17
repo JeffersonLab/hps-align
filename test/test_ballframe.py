@@ -77,7 +77,7 @@ class TestGetMidpoint(unittest.TestCase):
     def test_valid_input(self):
         with self.assertWarns(UserWarning):
             ballframe = BallFrame()
-    
+
         ballframe.set_ball({'x': 1, 'y': 2, 'z': 0}, 1, 'hole')
         ballframe.set_ball({'x': 1, 'y': 0, 'z': 0}, 1, 'slot')
         ballframe.set_ball({'x': 5, 'y': 3, 'z': 0}, 3, 'hole')

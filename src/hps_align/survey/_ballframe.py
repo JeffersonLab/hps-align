@@ -172,7 +172,7 @@ class MattBallFrame(BallFrame):
         else:
             raise ValueError('Invalid layer: {}'.format(layer))
 
-        return np.array([midpoint['x'], midpoint['y'], midpoint['z']])        
+        return np.array([midpoint['x'], midpoint['y'], midpoint['z']])
 
     def get_matt_basis(self, volume):
         """Get basis vectors for Matt's ballframe

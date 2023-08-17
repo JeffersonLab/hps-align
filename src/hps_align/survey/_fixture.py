@@ -199,7 +199,7 @@ class Fixture:
         origin = np.matmul(origin, np.linalg.inv(ball_basis))
 
         return basis, origin
-    
+
     def get_ball_in_pin(self):
         basis, origin = self.get_pin_in_ball()
         return np.linalg.inv(basis), -np.matmul(origin, np.linalg.inv(basis))
@@ -318,7 +318,7 @@ class MattFixture(Fixture):
 
     def matt_to_ball(self):
         """Get transformation matrix from Matt to fixture ball frame
-        
+
         This is just a rotation, no translation.
         """
         ball_basis = self.get_ball_basis()[0]

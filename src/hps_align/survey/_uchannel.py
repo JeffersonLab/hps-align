@@ -91,8 +91,9 @@ class UChannel:
         # rotation of basis vectors from pin frame to ball frame
         basis = np.matmul(pin_basis, inv_ball_basis)
 
-        if (volume == 'top' and self.ballframe_top.__class__.__name__ == 'MattBallFrame') or (volume == 'bottom' and self.ballframe_bot.__class__.__name__ == 'MattBallFrame'):
-            # origin = pin_origin - ball_origin
+        if volume == 'top' and self.ballframe_top.__class__.__name__ == 'MattBallFrame':
+            origin = pin_origin
+        elif volume == 'bottom' and self.ballframe_bot.__class__.__name__ == 'MattBallFrame':
             origin = pin_origin
         else:
             # translation of origin in ball frame

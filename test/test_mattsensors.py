@@ -39,7 +39,7 @@ class TestMattToBall(unittest.TestCase):
 
         with self.assertWarns(UserWarning):
             sensor = MattSensor(fixture)
-        
+
         sensor.set_ball({'x': 0, 'y': 0, 'z': 0}, 'oriball')
         sensor.set_ball({'x': 5, 'y': 0, 'z': 0}, 'axiball')
         sensor.set_ball({'x': 0, 'y': 1, 'z': 1}, 'diagball')
@@ -73,7 +73,7 @@ class TestMattToBall(unittest.TestCase):
 
         with self.assertWarns(UserWarning):
             sensor = MattSensor(fixture)
-        
+
         sensor.set_ball({'x': 0, 'y': 0, 'z': 0}, 'oriball')
         sensor.set_ball({'x': 5, 'y': 0, 'z': 0}, 'axiball')
         sensor.set_ball({'x': 0, 'y': -1, 'z': 0}, 'diagball')

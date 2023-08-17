@@ -9,6 +9,7 @@ from .._cli import typer_unpacker
 
 from . import _survey
 
+
 @app.command()
 @typer_unpacker
 def data(
@@ -27,6 +28,5 @@ def data(
         survey = _survey.Survey2019(survey_files)
     else:
         raise ValueError(f'year {year} not supported')
-    
-    survey.print_results(output_file)
 
+    survey.print_results(output_file)
