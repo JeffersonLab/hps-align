@@ -266,3 +266,30 @@ class MattSensor(Sensor):
         """Get sensor origin coordinates in fixture ball frame"""
         normal =  self.get_sensor_normal()
         return np.matmul(normal, self.matt_to_ball())
+    
+    def get_active_edge_dir(self):
+        active_edge_dict = self._find_sensor_active_edge_beam()
+        direction = normal_vector(active_edge_dict['xy_angle'], active_edge_dict['elevation'])
+        return direction
+    
+    def get_strip_direction_ballframe(self, volume, sensor_type):
+        strip_direction = self.get_active_edge_dir()
+        if volume == 'top' and sensor_type == 'axial':
+            strip_direction = -strip_direction
+        return np.matmul(strip_direction, self.matt_to_ball())
+    
+    def get_strip_direction_pinframe(self, volume, sensor_type):
+        strip_direction = self.get_strip_direction_ballframe(volume, sensor_type)
+        ball_in_pin_basis = self.fixture.get_ball_in_pin()[0]
+
+        return np.matmul(strip_direction, ball_in_pin_basis)
+
+    def get_sensor_basis_pinframe(self, volume, sensor_type):
+        origin = self.get_sensor_origin_pinframe()
+        normal = self.get_sensor_normal_pinframe()
+        strip_direction = self.get_strip_direction_pinframe(volume, sensor_type)
+        
+        basis = make_basis(normal, strip_direction)
+        basis = np.array([basis[1], basis[2], basis[0]])
+
+        return basis, origin
