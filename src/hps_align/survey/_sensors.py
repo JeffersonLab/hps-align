@@ -274,7 +274,8 @@ class MattSensor(Sensor):
 
     def get_strip_direction_ballframe(self, volume, sensor_type):
         strip_direction = self.get_active_edge_dir()
-        if volume == 'top' and sensor_type == 'axial':
+        basis = self.fixture.get_pin_in_ball()[0]
+        if np.dot(strip_direction, basis[0]) < 0:
             strip_direction = -strip_direction
         return np.matmul(strip_direction, self.matt_to_ball())
 

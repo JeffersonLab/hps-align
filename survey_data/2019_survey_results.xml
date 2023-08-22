@@ -1,0 +1,7 @@
+<SurveyVolume name="module_L1t" desc="top L1 pin basis in U-channel fiducial frame:">
+<origin x="-25.88158514973287" y="42.99892517760935" z="-50.03301801659981" />
+<unitvec name="X" x="-0.9999996964781495" y="-0.0006954241430035897" z="-0.0003513244515531291" />
+<unitvec name="Y" x="0.0006959187979433173" y="-0.999998764055625" z="-0.0014098170979412582" />
+<unitvec name="Z" x="-0.00035034359648852185" y="-0.0014100611633209774" z="0.9999989444928828" />
+</SurveyVolume>
+<SurveyVolume name="module_L1t_halfmodule_axial" desc="top L1 axial sensor basis in pin frame:">
