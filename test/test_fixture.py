@@ -8,8 +8,7 @@ from hps_align.survey._fixture import Fixture
 class TestInit(unittest.TestCase):
 
     def test_no_input(self):
-        with self.assertWarns(UserWarning):
-            fixture = Fixture()
+        fixture = Fixture()
 
         empty_dict = {'x': 0, 'y': 0, 'z': 0}
         empty_plane_dict = {'x': 0, 'y': 0, 'z': 0, 'xy_angle': 0, 'elevation': 0}
@@ -24,15 +23,13 @@ class TestInit(unittest.TestCase):
 class TestGetBall(unittest.TestCase):
 
     def test_invalid_input(self):
-        with self.assertWarns(UserWarning):
-            fixture = Fixture()
+        fixture = Fixture()
 
         with self.assertRaises(ValueError):
             fixture.get_ball('foo')
 
     def test_valid_input(self):
-        with self.assertWarns(UserWarning):
-            fixture = Fixture()
+        fixture = Fixture()
 
         empty_array = [0, 0, 0]
         self.assertEqual(empty_array, fixture.get_ball('oriball').tolist())
@@ -43,8 +40,7 @@ class TestGetBall(unittest.TestCase):
 class TestSetBall(unittest.TestCase):
 
     def test_invalid_input(self):
-        with self.assertWarns(UserWarning):
-            fixture = Fixture()
+        fixture = Fixture()
 
         with self.assertRaises(ValueError):
             fixture.set_ball('oriball', [0, 0, 0])
@@ -53,8 +49,7 @@ class TestSetBall(unittest.TestCase):
             fixture.set_ball('foo', {'x': 0, 'y': 0, 'z': 0})
 
     def test_valid_input(self):
-        with self.assertWarns(UserWarning):
-            fixture = Fixture()
+        fixture = Fixture()
 
         fixture.set_ball({'x': 1, 'y': 2, 'z': 3}, 'oriball')
         fixture.set_ball({'x': 4, 'y': 5, 'z': 6}, 'diagball')
@@ -68,8 +63,7 @@ class TestSetBall(unittest.TestCase):
 class TestGetBallBasis(unittest.TestCase):
 
     def test_valid_input(self):
-        with self.assertWarns(UserWarning):
-            fixture = Fixture()
+        fixture = Fixture()
 
         fixture.set_ball({'x': 1, 'y': 0, 'z': 0}, 'oriball')
         fixture.set_ball({'x': 1, 'y': 1, 'z': 0}, 'axiball')
@@ -85,15 +79,13 @@ class TestGetBallBasis(unittest.TestCase):
 class TestGetPin(unittest.TestCase):
 
     def test_invalid_input(self):
-        with self.assertWarns(UserWarning):
-            fixture = Fixture()
+        fixture = Fixture()
 
         with self.assertRaises(ValueError):
             fixture.get_pin('foo')
 
     def test_valid_input(self):
-        with self.assertWarns(UserWarning):
-            fixture = Fixture()
+        fixture = Fixture()
 
         empty_array = [0, 0, 0]
         self.assertEqual(empty_array, fixture.get_pin('oripin').tolist())
@@ -103,8 +95,7 @@ class TestGetPin(unittest.TestCase):
 class TestSetPin(unittest.TestCase):
 
     def test_invalid_input(self):
-        with self.assertWarns(UserWarning):
-            fixture = Fixture()
+        fixture = Fixture()
 
         with self.assertRaises(ValueError):
             fixture.set_pin('oripin', [0, 0, 0])
@@ -113,8 +104,7 @@ class TestSetPin(unittest.TestCase):
             fixture.set_pin('foo', {'x': 0, 'y': 0, 'z': 0})
 
     def test_valid_input(self):
-        with self.assertWarns(UserWarning):
-            fixture = Fixture()
+        fixture = Fixture()
 
         fixture.set_pin({'x': 1, 'y': 2, 'z': 3}, 'oripin')
         fixture.set_pin({'x': 4, 'y': 5, 'z': 6}, 'axipin')
@@ -126,8 +116,7 @@ class TestSetPin(unittest.TestCase):
 class TestGetBasePlane(unittest.TestCase):
 
     def test_valid_input(self):
-        with self.assertWarns(UserWarning):
-            fixture = Fixture()
+        fixture = Fixture()
 
         plane_origin, plane_normal = fixture.get_base_plane()
         self.assertEqual([0, 0, 0], plane_origin.tolist())
@@ -137,15 +126,13 @@ class TestGetBasePlane(unittest.TestCase):
 class TestSetBasePlane(unittest.TestCase):
 
     def test_invalid_input(self):
-        with self.assertWarns(UserWarning):
-            fixture = Fixture()
+        fixture = Fixture()
 
         with self.assertRaises(ValueError):
             fixture.set_base_plane([0, 0, 0])
 
     def test_valid_input(self):
-        with self.assertWarns(UserWarning):
-            fixture = Fixture()
+        fixture = Fixture()
 
         fixture.set_base_plane({'x': 1, 'y': 2, 'z': 3, 'xy_angle': np.pi/2, 'elevation': 0})
 
@@ -159,8 +146,7 @@ class TestSetBasePlane(unittest.TestCase):
 class TestGetPinBasis(unittest.TestCase):
 
     def test_valid_input(self):
-        with self.assertWarns(UserWarning):
-            fixture = Fixture()
+        fixture = Fixture()
 
         fixture.set_pin({'x': 1, 'y': 0, 'z': 1}, 'oripin')
         fixture.set_pin({'x': 1, 'y': 1, 'z': 1}, 'axipin')
@@ -184,8 +170,7 @@ class TestGetPinBasis(unittest.TestCase):
 class TestGetPinInBall(unittest.TestCase):
 
     def test_generic_coords(self):
-        with self.assertWarns(UserWarning):
-            fixture = Fixture()
+        fixture = Fixture()
 
         fixture.set_pin({'x': -1, 'y': -1, 'z': -1}, 'oripin')
         fixture.set_pin({'x': -4, 'y': -1, 'z': 1}, 'axipin')

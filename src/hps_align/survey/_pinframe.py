@@ -1,6 +1,4 @@
 
-import warnings
-
 from ._utils import *
 from ._pins import Pin
 from ._baseplanes import BasePlane
@@ -17,9 +15,6 @@ class PinFrame:
         input_file : str
             Survey data file
         """
-        if input_file is None:
-            warnings.warn('No input file specified')
-
         self.input_file = input_file
         self.pins = Pin(input_file)
         self.base_planes = BasePlane(input_file)
@@ -35,14 +30,13 @@ class PinFrame:
         Returns
         -------
         basis : np.array
-            Numpy array of basis vectors
+            Basis vectors in OGP (or other global) coordinates
         hole_pin_projected : np.array
-            Origin coordinates
+            Origin in OGP (or other global) coordinates
         """
         hole_pin = self.pins.get_pin(layer, 'hole')
         slot_pin = self.pins.get_pin(layer, 'slot')
-        plane_origin = self.base_planes.get_base_plane_origin(layer)
-        plane_normal = self.base_planes.get_base_plane_normal(layer)
+        plane_origin, plane_normal = self.base_planes.get_base_plane(layer)
 
         hole_pin_projected = project_to_plane(hole_pin, plane_origin, plane_normal)
         slot_pin_projected = project_to_plane(slot_pin, plane_origin, plane_normal)

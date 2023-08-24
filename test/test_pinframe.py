@@ -10,8 +10,7 @@ from hps_align.survey._baseplanes import BasePlane
 class TestInit(unittest.TestCase):
 
     def test_no_input(self):
-        with self.assertWarns(UserWarning):
-            pinframe = PinFrame()
+        pinframe = PinFrame()
 
         empty_pin_dict = {'x': 0, 'y': 0, 'z': 0}
         self.assertEqual(empty_pin_dict, pinframe.pins.L0_hole_pin_dict)
@@ -33,25 +32,19 @@ class TestInit(unittest.TestCase):
 class TestGetBasis(unittest.TestCase):
 
     def test_invalid_input(self):
-        with self.assertWarns(UserWarning):
-            pinframe = PinFrame()
+        pinframe = PinFrame()
 
         with self.assertRaises(ValueError):
             pinframe.get_basis(4)
 
     def test_valid_input(self):
-        with self.assertWarns(UserWarning):
-            pinframe = PinFrame()
+        pinframe = PinFrame()
 
-        with self.assertWarns(UserWarning):
-            pin = Pin()
-
+        pin = Pin()
         pin.set_pin({'x': 0, 'y': 0, 'z': 0}, 0, 'hole')
         pin.set_pin({'x': 1, 'y': 0, 'z': 0}, 0, 'slot')
 
-        with self.assertWarns(UserWarning):
-            baseplane = BasePlane()
-
+        baseplane = BasePlane()
         baseplane.set_base_plane_dict({'x': 0, 'y': 0, 'z': 0, 'xy_angle': 0, 'elevation': np.pi/2}, 0)
 
         pinframe.pins = pin
@@ -72,9 +65,7 @@ class TestGetBasis(unittest.TestCase):
         pin.set_pin({'x': 1, 'y': 0, 'z': -2}, 0, 'hole')
         pin.set_pin({'x': 1, 'y': 1, 'z': 3}, 0, 'slot')
 
-        with self.assertWarns(UserWarning):
-            baseplane = BasePlane()
-
+        baseplane = BasePlane()
         baseplane.set_base_plane_dict({'x': 0, 'y': 0, 'z': 0, 'xy_angle': 0, 'elevation': np.pi/2}, 0)
 
         pinframe.pins = pin

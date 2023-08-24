@@ -1,8 +1,6 @@
 
 import numpy as np
 
-import warnings
-
 from ._utils import *
 from ._parser import Parser
 from ._cli import app
@@ -12,7 +10,6 @@ class Fixture:
 
     def __init__(self, input_file=None):
         if input_file is None:
-            warnings.warn('No input file specified')
             self.oriball_dict = {'x': 0, 'y': 0, 'z': 0}
             self.diagball_dict = {'x': 0, 'y': 0, 'z': 0}
             self.axiball_dict = {'x': 0, 'y': 0, 'z': 0}
@@ -22,11 +19,12 @@ class Fixture:
             self.axipin_dict = {'x': 0, 'y': 0, 'z': 0}
             return
 
-        self.input_file = input_file
         self.parser = Parser(input_file)
 
     def set_ball(self, ball_coords, type):
-        """Set ball coordinates for a given layer and ball type
+        """Set fixture ball coordinates for a given layer and ball type
+
+        Overwrites the fixture ball coordinates from the survey data file.
 
         Parameters
         ----------
@@ -48,7 +46,9 @@ class Fixture:
             raise ValueError('Invalid ball type: {}'.format(type))
 
     def get_ball(self, type):
-        """Get ball coordinates from survey data file
+        """Get fixture ball coordinates from survey data file
+
+        The coordinates are either read from survey data file or have been set manually before.
 
         Parameters
         ----------
@@ -57,7 +57,7 @@ class Fixture:
         Returns
         -------
         ball : np.array
-            Array of ball coordinates
+            Ball position in OGP (or other global) coordinates
         """
         if type == 'oriball':
             ball = self.oriball_dict
@@ -75,9 +75,9 @@ class Fixture:
         Returns
         -------
         basis : np.array
-            Array of basis vectors
+            Basis vectors in OGP (or other global) coordinates
         origin : np.array
-            Array of origin coordinates
+            Origin in OGP (or other global) coordinates
         """
         origin = self.get_ball('oriball')
         basis = make_basis(self.get_ball('axiball') - origin, self.get_ball('diagball') - origin)
@@ -86,6 +86,8 @@ class Fixture:
 
     def set_base_plane(self, base_plane_coords):
         """Set base plane coordinates
+
+        Overwrites the base plane coordinates from the survey data file.
 
         Parameters
         ----------
@@ -98,16 +100,16 @@ class Fixture:
         self.base_plane_dict = base_plane_coords
 
     def get_base_plane(self):
-        """Get base plane coordinates from survey data file
+        """Get base plane coordinates.
 
-        This is in fixture ball coordinates if read from Matt's survey data file
+        The coordinates are either read from survey data file or have been set manually before.
 
         Returns
         -------
         origin : np.array
-            Coordinates of base plane origin
+            Base plane origin in OGP (or other global) coordinates
         normal : np.array
-            Normal vector of base plane
+            Normal vector of base plane in OGP (or other global) coordinates
         """
         origin = np.array([self.base_plane_dict['x'], self.base_plane_dict['y'], self.base_plane_dict['z']])
         normal = normal_vector(self.base_plane_dict['xy_angle'], self.base_plane_dict['elevation'])
@@ -115,6 +117,8 @@ class Fixture:
 
     def set_pin(self, pin_coords, type):
         """Set pin coordinates for a given layer and pin type
+
+        Overwrites the pin coordinates from the survey data file.
 
         Parameters
         ----------
@@ -134,9 +138,9 @@ class Fixture:
             raise ValueError('Invalid pin type: {}'.format(type))
 
     def get_pin(self, type):
-        """Get pin coordinates from survey data file
+        """Get pin coordinates.
 
-        This is in fixture ball coordinates if read from Matt's survey data file
+        The coordinates are either read from survey data file or have been set manually before.
 
         Parameters
         ----------
@@ -145,7 +149,7 @@ class Fixture:
         Returns
         -------
         pin : np.array
-            Array of pin coordinates
+            Pin position in OGP (or other global) coordinates
         """
         if type == 'oripin':
             pin = self.oripin_dict
@@ -158,14 +162,12 @@ class Fixture:
     def get_pin_basis(self):
         """Get basis vectors for pin frame
 
-        This is in fixture ball coordinates if read from Matt's survey data file
-
         Returns
         -------
         basis : np.array
-            Array of basis vectors
+            Basis vectors in OGP (or other global) coordinates
         origin : np.array
-            Array of origin coordinates
+            Origin in OGP (or other global) coordinates
         """
         slot_pin = self.get_pin('oripin')
         hole_pin = self.get_pin('axipin')
@@ -187,9 +189,9 @@ class Fixture:
         Returns
         -------
         basis : np.array
-            Array of basis vectors
+            Basis vectors in fixture ball frame
         origin : np.array
-            Array of origin coordinates
+            Origin in fixture ball frame
         """
         pin_basis, pin_origin = self.get_pin_basis()
         ball_basis, ball_origin = self.get_ball_basis()
@@ -206,6 +208,12 @@ class Fixture:
 
 
 class ShoFixture(Fixture):
+    """Fixture class for Sho's survey measurement
+
+    The coordinate system was changed during the measurement.
+    The pin positions are in OGP coordinates, the ball positions are in the new coordinate system.
+    It appears like the new coordinate system is related to the pin frame.
+    """
 
     def __init__(self, input_file=None):
         self.parser = None
@@ -222,6 +230,15 @@ class ShoFixture(Fixture):
             self.axipin_dict = self.parser.get_coords('Step 10 - Hole pin', 6)
 
     def get_sho_basis(self):
+        """Get basis vectors for Sho's coordinate system
+
+        Returns
+        -------
+        basis : np.array
+            Basis vectors in OGP (or other global) coordinates
+        origin : np.array
+            Origin in OGP (or other global) coordinates
+        """
         slot_pin = self.get_pin('oripin')
         hole_pin = self.get_pin('axipin')
 
@@ -237,106 +254,43 @@ class ShoFixture(Fixture):
         return np.array([basis[0], -basis[2], basis[1]]), origin
 
     def sho_to_pin(self):
-        pin_basis = self.get_pin_basis()[0]
-        sho_basis = self.get_sho_basis()[0]
+        """Get transformation matrix from Sho to fixture pin frame
+
+        Returns
+        -------
+        transformation : np.array
+            Transformation matrix from Sho to fixture pin frame
+        """
+        pin_basis = self.get_pin_basis()[0]  # this is in OGP coordinates
+        sho_basis = self.get_sho_basis()[0]  # this is in OGP coordinates
 
         return np.matmul(sho_basis, np.linalg.inv(pin_basis))
 
     def get_ball_in_pin(self):
-        # this is in sho coordinates
-        ball_basis, ball_origin = self.get_ball_basis()
+        """Get basis vectors for ball frame in fixture pin frame
+
+        Returns
+        -------
+        basis : np.array
+            Ball basis vectors in fixture pin frame
+        origin : np.array
+            Origin in fixture pin frame
+        """
+        ball_basis, ball_origin = self.get_ball_basis()  # this is in sho coordinates
         ball_basis = np.matmul(ball_basis, self.sho_to_pin())
         ball_origin = np.matmul(ball_origin, self.sho_to_pin())
 
         return ball_basis, ball_origin
 
     def get_pin_in_ball(self):
+        """Get basis vectors for pin frame in fixture ball frame
+
+        Returns
+        -------
+        basis : np.array
+            Pin basis vectors in fixture ball frame
+        origin : np.array
+            Origin in fixture ball frame
+        """
         ball_basis, ball_origin = self.get_ball_in_pin()
         return np.linalg.inv(ball_basis), -np.matmul(ball_origin, np.linalg.inv(ball_basis))
-
-
-class MattFixture(Fixture):
-
-    def __init__(self, input_file=None):
-        self.parser = None
-        super().__init__(input_file)
-
-        if self.parser:
-            self.oriball_dict = self.parser.get_coords('oriball')
-            self.diagball_dict = self.parser.get_coords('diagball')
-            self.axiball_dict = self.parser.get_coords('axiball')
-            self.ball_plane_dict = self.parser.get_coords('Step:  5', 20)
-            self.base_plane_dict = self.parser.get_coords('L0 base plane')
-            self.oripin_dict = self.parser.get_coords('axipin')
-            self.axipin_dict = self.parser.get_coords('oripin')
-
-    def set_ball_plane(self, ball_plane_coords):
-        """Set base plane coordinates
-
-        Parameters
-        ----------
-        base_plane_coords : dict
-            Dictionary of base plane coordinates
-        """
-        if not isinstance(ball_plane_coords, dict):
-            raise ValueError('Invalid base plane coordinate type: {}'.format(ball_plane_coords))
-
-        self.ball_plane_dict = ball_plane_coords
-
-    def get_ball_plane(self):
-        """Get base plane coordinates from survey data file
-
-        This is in fixture ball coordinates if read from Matt's survey data file
-
-        Returns
-        -------
-        origin : np.array
-            Coordinates of base plane origin
-        normal : np.array
-            Normal vector of base plane
-        """
-        origin = np.array([self.ball_plane_dict['x'], self.ball_plane_dict['y'], self.ball_plane_dict['z']])
-        normal = normal_vector(self.ball_plane_dict['xy_angle'], self.ball_plane_dict['elevation'])
-        return origin, normal
-
-    def get_matt_basis(self):
-        """Get basis vectors for Matt sensor
-
-        Returns
-        -------
-        basis : np.array
-            Array of basis vectors
-        origin : np.array
-            Array of origin coordinates
-        """
-        origin = self.get_ball('oriball')
-        vec1 = self.get_ball('axiball') - origin
-        vec2 = self.get_ball_plane()[1]
-        basis = make_basis(vec1, vec2)
-
-        return np.array([basis[0], -basis[2], basis[1]]), origin
-
-    def matt_to_ball(self):
-        """Get transformation matrix from Matt to fixture ball frame
-
-        This is just a rotation, no translation.
-        """
-        ball_basis = self.get_ball_basis()[0]
-        matt_basis = self.get_matt_basis()[0]
-
-        return np.matmul(matt_basis, np.linalg.inv(ball_basis))
-
-    def get_pin_in_ball(self):
-        """Get basis vectors for pin frame in fixture ball coordinates
-
-        Returns
-        -------
-        basis : np.array
-            Array of basis vectors
-        origin : np.array
-            Array of origin coordinates
-        """
-        basis, origin = self.get_pin_basis()
-        basis = np.matmul(basis, self.matt_to_ball())
-        origin = np.matmul(origin, self.matt_to_ball())
-        return basis, origin

@@ -7,8 +7,7 @@ from hps_align.survey._pins import Pin
 class TestInit(unittest.TestCase):
 
     def test_no_input(self):
-        with self.assertWarns(UserWarning):
-            pin = Pin()
+        pin = Pin()
 
         empty_dict = {'x': 0, 'y': 0, 'z': 0}
         self.assertEqual(empty_dict, pin.L0_hole_pin_dict)
@@ -24,8 +23,7 @@ class TestInit(unittest.TestCase):
 class TestGetPin(unittest.TestCase):
 
     def test_valid_input(self):
-        with self.assertWarns(UserWarning):
-            pin = Pin()
+        pin = Pin()
 
         self.assertEqual(pin.get_pin(0, 'hole').tolist(), [0.0, 0.0, 0.0])
         self.assertEqual(pin.get_pin(0, 'slot').tolist(), [0.0, 0.0, 0.0])
@@ -37,8 +35,7 @@ class TestGetPin(unittest.TestCase):
         self.assertEqual(pin.get_pin(3, 'slot').tolist(), [0.0, 0.0, 0.0])
 
     def test_invalid_input(self):
-        with self.assertWarns(UserWarning):
-            pin = Pin()
+        pin = Pin()
 
         with self.assertRaises(ValueError):
             pin.get_pin(4, 'hole')
@@ -50,8 +47,7 @@ class TestGetPin(unittest.TestCase):
 class TestSetPin(unittest.TestCase):
 
     def test_valid_input(self):
-        with self.assertWarns(UserWarning):
-            pin = Pin()
+        pin = Pin()
 
         pin.set_pin({'x': 1, 'y': 2, 'z': 0}, 0, 'hole')
         pin.set_pin({'x': 1, 'y': 0, 'z': 0.2}, 0, 'slot')
@@ -71,8 +67,7 @@ class TestSetPin(unittest.TestCase):
         self.assertEqual(pin.get_pin(3, 'slot').tolist(), [13, -0.3, 0])
 
     def test_invalid_input(self):
-        with self.assertWarns(UserWarning):
-            pin = Pin()
+        pin = Pin()
 
         with self.assertRaises(ValueError):
             pin.set_pin(2, 3, 'hole')

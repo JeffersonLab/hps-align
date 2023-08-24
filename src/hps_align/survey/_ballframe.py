@@ -1,5 +1,4 @@
 
-import warnings
 from ._utils import *
 from ._parser import Parser
 from ._cli import app
@@ -16,18 +15,28 @@ class BallFrame:
             Survey data file
         """
         if input_file is None:
-            warnings.warn('No input file specified')
             self.L1_hole_ball_dict = {'x': 0, 'y': 0, 'z': 0}
             self.L1_slot_ball_dict = {'x': 0, 'y': 0, 'z': 0}
             self.L3_hole_ball_dict = {'x': 0, 'y': 0, 'z': 0}
             self.L3_slot_ball_dict = {'x': 0, 'y': 0, 'z': 0}
             return
 
-        # self.input_file = input_file
         self.parser = Parser(input_file)
 
     def set_ball(self, ball_coords, layer, ball_type):
-        """Set ball coordinates for a given layer and ball type"""
+        """Set ball coordinates for a given layer and ball type
+
+        Overwrites the ball coordinates from the survey data file.
+
+        Parameters
+        ----------
+        ball_coords : dict
+            Dictionary of ball coordinates {'x': x, 'y': y, 'z': z}
+        layer : int
+            Layer number
+        ball_type : str
+            Ball type ('hole' or 'slot')
+        """
         if not isinstance(ball_coords, dict):
             raise ValueError('Invalid ball coordinate type: {}'.format(ball_coords))
 
@@ -51,6 +60,8 @@ class BallFrame:
     def get_ball(self, layer, ball_type):
         """Get ball coordinates for a given layer and ball type
 
+        The coordinates are either read from survey data file or have been set manually before.
+
         Parameters
         ----------
         layer : int
@@ -61,7 +72,7 @@ class BallFrame:
         Returns
         -------
         ball : np.array
-            Numpy array of ball coordinates
+            Ball position in OGP (or other global) coordinates
         """
         if layer == 1:
             if ball_type == 'hole':
@@ -93,7 +104,7 @@ class BallFrame:
         Returns
         -------
         midpoint : np.array
-            Numpy array of midpoint coordinates
+            Position of midpoint in OGP (or other global) coordinates
         """
         hole_ball = self.get_ball(layer, 'hole')
         slot_ball = self.get_ball(layer, 'slot')
@@ -107,11 +118,10 @@ class BallFrame:
         Returns
         -------
         basis : np.array
-            Numpy array of basis vectors
+            Basis vectors in OGP (or other global) coordinates
         origin : np.array
-            Numpy array of origin coordinates
+            Origin coordinates in OGP (or other global) coordinates
         """
-
         origin = self.get_midpoint(1)
 
         vec1 = self.get_midpoint(3) - origin
@@ -125,8 +135,22 @@ class BallFrame:
 
 
 class MattBallFrame(BallFrame):
+    """Ballframe class for Matt's survey measurements.
 
+    The coordinate system was changed during the measurement.
+    Ball positions and midpoints are given in the OGP system, but the pin positions,
+    that have been measured in the same measurement, are given in a new system.
+    To get the correct relation between the ballframe and the pinframe,
+    the ballframe basis is returned in the new system and not in the OGP system.
+    """
     def __init__(self, input_file=None):
+        """Initialize MattBallFrame object
+
+        Parameters
+        ----------
+        input_file : str
+            Survey data file
+        """
         self.parser = None
         self.L1_midpoint_dict = {'x': 0, 'y': 0, 'z': 0}
         self.L3_midpoint_dict = {'x': 0, 'y': 0, 'z': 0}
@@ -141,7 +165,17 @@ class MattBallFrame(BallFrame):
             self.L3_midpoint_dict = self.parser.get_coords('Step:  6', 20)
 
     def set_midpoint(self, midpoint_coords, layer):
-        """Set midpoint coordinates for a given layer"""
+        """Set midpoint coordinates for a given layer
+
+        Overwrites the midpoint coordinates from the survey data file.
+
+        Parameters
+        ----------
+        midpoint_coords : dict
+            Dictionary of midpoint coordinates {'x': x, 'y': y, 'z': z}
+        layer : int
+            Layer number
+        """
         if not isinstance(midpoint_coords, dict):
             raise ValueError('Invalid midpoint coordinate type: {}'.format(midpoint_coords))
 
@@ -163,7 +197,7 @@ class MattBallFrame(BallFrame):
         Returns
         -------
         midpoint : np.array
-            Numpy array of midpoint coordinates
+            Midpoint position in OGP (or other global) coordinates
         """
         if layer == 1:
             midpoint = self.L1_midpoint_dict
@@ -185,9 +219,9 @@ class MattBallFrame(BallFrame):
         Returns
         -------
         basis : np.array
-            Numpy array of basis vectors
+            Basis vectors in OGP (or other global) coordinates
         origin : np.array
-            Numpy array of origin coordinates
+            Origin in OGP (or other global) coordinates
         """
         origin = self.get_meas_midpoint(1)
         L3_midpoint = self.get_meas_midpoint(3)
@@ -200,7 +234,7 @@ class MattBallFrame(BallFrame):
         return basis, origin
 
     def get_basis(self, volume):
-        """Get ballframe basis vectors
+        """Get ballframe basis vectors in Matt system
 
         Parameters
         ----------
@@ -210,9 +244,9 @@ class MattBallFrame(BallFrame):
         Returns
         -------
         basis : np.array
-            Numpy array of basis vectors
+            Basis vectors in Matt coordinates
         origin : np.array
-            Numpy array of origin coordinates
+            Origin in Matt coordinates
         """
         basis_matt, origin_matt = self.get_matt_basis(volume)
         ball_basis, ball_origin = super().get_basis(volume)

@@ -2,8 +2,10 @@
 from ._utils import *
 from ._uchannel import UChannel
 from ._sensors import *
+from ._mattsensor import *
 from ._ballframe import *
 from ._pinframe import *
+from ._mattfixture import *
 from ._cli import app
 
 

@@ -7,8 +7,7 @@ from hps_align.survey._ballframe import MattBallFrame
 class TestInit(unittest.TestCase):
 
     def test_no_input(self):
-        with self.assertWarns(UserWarning):
-            ballframe = MattBallFrame()
+        ballframe = MattBallFrame()
 
         empty_dict = {'x': 0, 'y': 0, 'z': 0}
         self.assertEqual(empty_dict, ballframe.L1_hole_ball_dict)
@@ -22,15 +21,13 @@ class TestInit(unittest.TestCase):
 class TestGetMidpoint(unittest.TestCase):
 
     def test_valid_input(self):
-        with self.assertWarns(UserWarning):
-            ballframe = MattBallFrame()
+        ballframe = MattBallFrame()
 
         self.assertEqual(ballframe.get_midpoint(1).tolist(), [0.0, 0.0, 0.0])
         self.assertEqual(ballframe.get_midpoint(3).tolist(), [0.0, 0.0, 0.0])
 
     def test_invalid_input(self):
-        with self.assertWarns(UserWarning):
-            ballframe = MattBallFrame()
+        ballframe = MattBallFrame()
 
         with self.assertRaises(ValueError):
             ballframe.get_meas_midpoint(2)
@@ -39,8 +36,7 @@ class TestGetMidpoint(unittest.TestCase):
 class TestSetMidpoint(unittest.TestCase):
 
     def test_valid_input(self):
-        with self.assertWarns(UserWarning):
-            ballframe = MattBallFrame()
+        ballframe = MattBallFrame()
 
         ballframe.set_midpoint({'x': 1, 'y': 2, 'z': 0}, 1)
         ballframe.set_midpoint({'x': 5, 'y': 3, 'z': 0}, 3)
@@ -49,8 +45,7 @@ class TestSetMidpoint(unittest.TestCase):
         self.assertEqual(ballframe.get_meas_midpoint(3).tolist(), [5, 3, 0])
 
     def test_invalid_input(self):
-        with self.assertWarns(UserWarning):
-            ballframe = MattBallFrame()
+        ballframe = MattBallFrame()
 
         with self.assertRaises(ValueError):
             ballframe.set_midpoint(1, 1)
@@ -65,8 +60,7 @@ class TestSetMidpoint(unittest.TestCase):
 class TestGetBasis(unittest.TestCase):
 
     def test_get_matt_basis(self):
-        with self.assertWarns(UserWarning):
-            ballframe = MattBallFrame()
+        ballframe = MattBallFrame()
 
         # top
         ballframe.set_ball({'x': 2, 'y': 1, 'z': 0}, 1, 'hole')
@@ -97,8 +91,7 @@ class TestGetBasis(unittest.TestCase):
         self.assertEqual(basis[2].tolist(), [0, 0, -1])
 
     def test_get_basis(self):
-        with self.assertWarns(UserWarning):
-            ballframe = MattBallFrame()
+        ballframe = MattBallFrame()
 
         # top
         ballframe.set_ball({'x': 2, 'y': 1, 'z': 0}, 1, 'hole')

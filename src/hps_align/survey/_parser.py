@@ -18,6 +18,9 @@ class Parser:
     """
 
     def __init__(self, input_file):
+        if input_file is None:
+            raise ValueError('Invalid survey data file: {}'.format(input_file))
+
         self.input_file = input_file
 
     def find_names(self, input_strings):

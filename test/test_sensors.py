@@ -9,11 +9,8 @@ from hps_align.survey._fixture import Fixture
 class TestInit(unittest.TestCase):
 
     def test_no_input(self):
-        with self.assertWarns(UserWarning):
-            fixture = Fixture()
-
-        with self.assertWarns(UserWarning):
-            sensor = Sensor(fixture)
+        fixture = Fixture()
+        sensor = Sensor(fixture)
 
         empty_dict = {'x': 0, 'y': 0, 'z': 0}
         empty_plane_dict = {'x': 0, 'y': 0, 'z': 0, 'xy_angle': 0, 'elevation': 0}
@@ -33,21 +30,15 @@ class TestInit(unittest.TestCase):
 class TestGetBall(unittest.TestCase):
 
     def test_invalid_input(self):
-        with self.assertWarns(UserWarning):
-            fixture = Fixture()
-
-        with self.assertWarns(UserWarning):
-            sensor = Sensor(fixture)
+        fixture = Fixture()
+        sensor = Sensor(fixture)
 
         with self.assertRaises(ValueError):
             sensor.get_ball('foo')
 
     def test_valid_input(self):
-        with self.assertWarns(UserWarning):
-            fixture = Fixture()
-
-        with self.assertWarns(UserWarning):
-            sensor = Sensor(fixture)
+        fixture = Fixture()
+        sensor = Sensor(fixture)
 
         empty_array = [0, 0, 0]
         self.assertEqual(empty_array, sensor.get_ball('oriball').tolist())
@@ -58,11 +49,8 @@ class TestGetBall(unittest.TestCase):
 class TestSetBall(unittest.TestCase):
 
     def test_invalid_input(self):
-        with self.assertWarns(UserWarning):
-            fixture = Fixture()
-
-        with self.assertWarns(UserWarning):
-            sensor = Sensor(fixture)
+        fixture = Fixture()
+        sensor = Sensor(fixture)
 
         with self.assertRaises(ValueError):
             sensor.set_ball('oriball', [0, 0, 0])
@@ -71,11 +59,8 @@ class TestSetBall(unittest.TestCase):
             sensor.set_ball('foo', {'x': 0, 'y': 0, 'z': 0})
 
     def test_valid_input(self):
-        with self.assertWarns(UserWarning):
-            fixture = Fixture()
-
-        with self.assertWarns(UserWarning):
-            sensor = Sensor(fixture)
+        fixture = Fixture()
+        sensor = Sensor(fixture)
 
         sensor.set_ball({'x': 1, 'y': 2, 'z': 3}, 'oriball')
         sensor.set_ball({'x': 4, 'y': 5, 'z': 6}, 'diagball')
@@ -89,11 +74,8 @@ class TestSetBall(unittest.TestCase):
 class TestGetBallBasis(unittest.TestCase):
 
     def test_valid_input(self):
-        with self.assertWarns(UserWarning):
-            fixture = Fixture()
-
-        with self.assertWarns(UserWarning):
-            sensor = Sensor(fixture)
+        fixture = Fixture()
+        sensor = Sensor(fixture)
 
         sensor.set_ball({'x': 1, 'y': 0, 'z': 0}, 'oriball')
         sensor.set_ball({'x': 1, 'y': 1, 'z': 0}, 'axiball')
@@ -109,40 +91,28 @@ class TestGetBallBasis(unittest.TestCase):
 class TestSensorOrigin(unittest.TestCase):
 
     def test_get_origin(self):
-        with self.assertWarns(UserWarning):
-            fixture = Fixture()
-
-        with self.assertWarns(UserWarning):
-            sensor = Sensor(fixture)
+        fixture = Fixture()
+        sensor = Sensor(fixture)
 
         self.assertEqual([0, 0, 0], sensor.get_sensor_origin().tolist())
 
     def test_set_origin_invalid_input(self):
-        with self.assertWarns(UserWarning):
-            fixture = Fixture()
-
-        with self.assertWarns(UserWarning):
-            sensor = Sensor(fixture)
+        fixture = Fixture()
+        sensor = Sensor(fixture)
 
         with self.assertRaises(ValueError):
             sensor.set_sensor_origin([0, 0, 0])
 
     def test_set_origin_valid_input(self):
-        with self.assertWarns(UserWarning):
-            fixture = Fixture()
-
-        with self.assertWarns(UserWarning):
-            sensor = Sensor(fixture)
+        fixture = Fixture()
+        sensor = Sensor(fixture)
 
         sensor.set_sensor_origin({'x': 1, 'y': 2, 'z': 3})
         self.assertEqual([1, 2, 3], sensor.get_sensor_origin().tolist())
 
     def test_get_sensor_origin_ballframe(self):
-        with self.assertWarns(UserWarning):
-            fixture = Fixture()
-
-        with self.assertWarns(UserWarning):
-            sensor = Sensor(fixture)
+        fixture = Fixture()
+        sensor = Sensor(fixture)
 
         sensor.set_ball({'x': 1, 'y': 0, 'z': 0}, 'oriball')
         sensor.set_ball({'x': 1, 'y': 1, 'z': 0}, 'axiball')
@@ -152,18 +122,15 @@ class TestSensorOrigin(unittest.TestCase):
         self.assertEqual([2, 3, 0], sensor.get_sensor_origin_ballframe().tolist())
 
     def test_get_sensor_origin_pinframe(self):
-        with self.assertWarns(UserWarning):
-            fixture = Fixture()
-            fixture.set_ball({'x': 0, 'y': 0, 'z': 0}, 'oriball')
-            fixture.set_ball({'x': -5, 'y': 0, 'z': 0}, 'axiball')
-            fixture.set_ball({'x': 0, 'y': -2, 'z': 0}, 'diagball')
-            fixture.set_pin({'x': -1, 'y': -1, 'z': -1}, 'oripin')
-            fixture.set_pin({'x': -4, 'y': -1, 'z': 1}, 'axipin')
-            fixture.set_base_plane({'x': 0, 'y': 0, 'z': 0, 'xy_angle': 0, 'elevation': np.pi/2})
+        fixture = Fixture()
+        fixture.set_ball({'x': 0, 'y': 0, 'z': 0}, 'oriball')
+        fixture.set_ball({'x': -5, 'y': 0, 'z': 0}, 'axiball')
+        fixture.set_ball({'x': 0, 'y': -2, 'z': 0}, 'diagball')
+        fixture.set_pin({'x': -1, 'y': -1, 'z': -1}, 'oripin')
+        fixture.set_pin({'x': -4, 'y': -1, 'z': 1}, 'axipin')
+        fixture.set_base_plane({'x': 0, 'y': 0, 'z': 0, 'xy_angle': 0, 'elevation': np.pi/2})
 
-        with self.assertWarns(UserWarning):
-            sensor = Sensor(fixture)
-
+        sensor = Sensor(fixture)
         sensor.set_ball({'x': 0, 'y': 0, 'z': 0}, 'oriball')
         sensor.set_ball({'x': -5, 'y': 0, 'z': 0}, 'axiball')
         sensor.set_ball({'x': 0, 'y': -2, 'z': 0}, 'diagball')
@@ -178,20 +145,14 @@ class TestSensorOrigin(unittest.TestCase):
 class TestSensorNormal(unittest.TestCase):
 
     def test_get_normal(self):
-        with self.assertWarns(UserWarning):
-            fixture = Fixture()
-
-        with self.assertWarns(UserWarning):
-            sensor = Sensor(fixture)
+        fixture = Fixture()
+        sensor = Sensor(fixture)
 
         self.assertEqual([1, 0, 0], sensor.get_sensor_normal().tolist())
 
     def test_set_sensor_plane(self):
-        with self.assertWarns(UserWarning):
-            fixture = Fixture()
-
-        with self.assertWarns(UserWarning):
-            sensor = Sensor(fixture)
+        fixture = Fixture()
+        sensor = Sensor(fixture)
 
         sensor.set_sensor_plane({'x': 0, 'y': 0, 'z': 0, 'xy_angle': 0, 'elevation': np.pi/2})
         self.assertAlmostEqual(0, sensor.get_sensor_normal()[0])
@@ -199,11 +160,8 @@ class TestSensorNormal(unittest.TestCase):
         self.assertAlmostEqual(1, sensor.get_sensor_normal()[2])
 
     def test_get_sensor_normal_ballframe(self):
-        with self.assertWarns(UserWarning):
-            fixture = Fixture()
-
-        with self.assertWarns(UserWarning):
-            sensor = Sensor(fixture)
+        fixture = Fixture()
+        sensor = Sensor(fixture)
 
         sensor.set_ball({'x': 1, 'y': 0, 'z': 0}, 'oriball')
         sensor.set_ball({'x': 1, 'y': 1, 'z': 0}, 'axiball')
@@ -216,18 +174,15 @@ class TestSensorNormal(unittest.TestCase):
         self.assertAlmostEqual(0, normal_ball[2])
 
     def test_get_sensor_normal_pinframe(self):
-        with self.assertWarns(UserWarning):
-            fixture = Fixture()
-            fixture.set_ball({'x': 1, 'y': 1, 'z': 5}, 'oriball')
-            fixture.set_ball({'x': 7, 'y': 1, 'z': 5}, 'axiball')
-            fixture.set_ball({'x': 1, 'y': 1, 'z': 6}, 'diagball')
-            fixture.set_pin({'x': 2, 'y': 1, 'z': 1}, 'oripin')
-            fixture.set_pin({'x': 5, 'y': 1, 'z': 1}, 'axipin')
-            fixture.set_base_plane({'x': 0, 'y': 0, 'z': 0, 'xy_angle': 0, 'elevation': np.pi/2})
+        fixture = Fixture()
+        fixture.set_ball({'x': 1, 'y': 1, 'z': 5}, 'oriball')
+        fixture.set_ball({'x': 7, 'y': 1, 'z': 5}, 'axiball')
+        fixture.set_ball({'x': 1, 'y': 1, 'z': 6}, 'diagball')
+        fixture.set_pin({'x': 2, 'y': 1, 'z': 1}, 'oripin')
+        fixture.set_pin({'x': 5, 'y': 1, 'z': 1}, 'axipin')
+        fixture.set_base_plane({'x': 0, 'y': 0, 'z': 0, 'xy_angle': 0, 'elevation': np.pi/2})
 
-        with self.assertWarns(UserWarning):
-            sensor = Sensor(fixture)
-
+        sensor = Sensor(fixture)
         sensor.set_ball({'x': 1, 'y': 1, 'z': 0}, 'oriball')
         sensor.set_ball({'x': 7, 'y': 1, 'z': 0}, 'axiball')
         sensor.set_ball({'x': 1, 'y': 2, 'z': 0}, 'diagball')

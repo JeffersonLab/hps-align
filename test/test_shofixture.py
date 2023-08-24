@@ -8,8 +8,7 @@ from hps_align.survey._fixture import ShoFixture
 class TestInit(unittest.TestCase):
 
     def test_no_input(self):
-        with self.assertWarns(UserWarning):
-            fixture = ShoFixture()
+        fixture = ShoFixture()
 
         empty_dict = {'x': 0, 'y': 0, 'z': 0}
         empty_plane_dict = {'x': 0, 'y': 0, 'z': 0, 'xy_angle': 0, 'elevation': 0}
@@ -24,8 +23,7 @@ class TestInit(unittest.TestCase):
 class TestGetBallBasis(unittest.TestCase):
 
     def test_valid_input(self):
-        with self.assertWarns(UserWarning):
-            fixture = ShoFixture()
+        fixture = ShoFixture()
 
         fixture.set_ball({'x': 1, 'y': 0, 'z': 0}, 'oriball')
         fixture.set_ball({'x': 1, 'y': 1, 'z': 0}, 'axiball')
@@ -41,8 +39,7 @@ class TestGetBallBasis(unittest.TestCase):
 class TestGetPinBasis(unittest.TestCase):
 
     def test_valid_input(self):
-        with self.assertWarns(UserWarning):
-            fixture = ShoFixture()
+        fixture = ShoFixture()
 
         fixture.set_pin({'x': 1, 'y': 0, 'z': 1}, 'oripin')
         fixture.set_pin({'x': 1, 'y': 1, 'z': 1}, 'axipin')
@@ -66,8 +63,7 @@ class TestGetPinBasis(unittest.TestCase):
 class TestGetNestedCoords(unittest.TestCase):
 
     def test_ball_in_pin(self):
-        with self.assertWarns(UserWarning):
-            fixture = ShoFixture()
+        fixture = ShoFixture()
 
         fixture.set_pin({'x': 1, 'y': 0, 'z': 1}, 'oripin')
         fixture.set_pin({'x': 1, 'y': 1, 'z': 1}, 'axipin')
@@ -91,8 +87,7 @@ class TestGetNestedCoords(unittest.TestCase):
         self.assertAlmostEqual(0, origin[2])
 
     def test_pin_in_ball(self):
-        with self.assertWarns(UserWarning):
-            fixture = ShoFixture()
+        fixture = ShoFixture()
 
         fixture.set_pin({'x': 1, 'y': 0, 'z': 1}, 'oripin')
         fixture.set_pin({'x': 1, 'y': 1, 'z': 1}, 'axipin')

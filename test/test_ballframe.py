@@ -7,8 +7,7 @@ from hps_align.survey._ballframe import BallFrame
 class TestInit(unittest.TestCase):
 
     def test_no_input(self):
-        with self.assertWarns(UserWarning):
-            ballframe = BallFrame()
+        ballframe = BallFrame()
 
         empty_dict = {'x': 0, 'y': 0, 'z': 0}
         self.assertEqual(empty_dict, ballframe.L1_hole_ball_dict)
@@ -20,8 +19,7 @@ class TestInit(unittest.TestCase):
 class TestGetBall(unittest.TestCase):
 
     def test_valid_input(self):
-        with self.assertWarns(UserWarning):
-            ballframe = BallFrame()
+        ballframe = BallFrame()
 
         self.assertEqual(ballframe.get_ball(1, 'hole').tolist(), [0.0, 0.0, 0.0])
         self.assertEqual(ballframe.get_ball(1, 'slot').tolist(), [0.0, 0.0, 0.0])
@@ -29,8 +27,7 @@ class TestGetBall(unittest.TestCase):
         self.assertEqual(ballframe.get_ball(3, 'slot').tolist(), [0.0, 0.0, 0.0])
 
     def test_invalid_input(self):
-        with self.assertWarns(UserWarning):
-            ballframe = BallFrame()
+        ballframe = BallFrame()
 
         with self.assertRaises(ValueError):
             ballframe.get_ball(2, 'hole')
@@ -42,8 +39,7 @@ class TestGetBall(unittest.TestCase):
 class TestSetBall(unittest.TestCase):
 
     def test_valid_input(self):
-        with self.assertWarns(UserWarning):
-            ballframe = BallFrame()
+        ballframe = BallFrame()
 
         ballframe.set_ball({'x': 1, 'y': 2, 'z': 0}, 1, 'hole')
         ballframe.set_ball({'x': 1, 'y': 0, 'z': 0}, 1, 'slot')
@@ -56,8 +52,7 @@ class TestSetBall(unittest.TestCase):
         self.assertEqual(ballframe.get_ball(3, 'slot').tolist(), [5, 1, 0])
 
     def test_invalid_input(self):
-        with self.assertWarns(UserWarning):
-            ballframe = BallFrame()
+        ballframe = BallFrame()
 
         with self.assertRaises(ValueError):
             ballframe.set_ball(1, 1, 'hole')
@@ -75,8 +70,7 @@ class TestSetBall(unittest.TestCase):
 class TestGetMidpoint(unittest.TestCase):
 
     def test_valid_input(self):
-        with self.assertWarns(UserWarning):
-            ballframe = BallFrame()
+        ballframe = BallFrame()
 
         ballframe.set_ball({'x': 1, 'y': 2, 'z': 0}, 1, 'hole')
         ballframe.set_ball({'x': 1, 'y': 0, 'z': 0}, 1, 'slot')
@@ -87,8 +81,7 @@ class TestGetMidpoint(unittest.TestCase):
         self.assertEqual(ballframe.get_midpoint(3).tolist(), [5, 2, 0])
 
     def test_invalid_input(self):
-        with self.assertWarns(UserWarning):
-            ballframe = BallFrame()
+        ballframe = BallFrame()
 
         with self.assertRaises(ValueError):
             ballframe.get_midpoint(2)
@@ -97,8 +90,7 @@ class TestGetMidpoint(unittest.TestCase):
 class TestGetBasis(unittest.TestCase):
 
     def test_get_basis(self):
-        with self.assertWarns(UserWarning):
-            ballframe = BallFrame()
+        ballframe = BallFrame()
 
         # top
         ballframe.set_ball({'x': 1, 'y': 2, 'z': 0}, 1, 'hole')

@@ -12,28 +12,24 @@ from hps_align.survey._survey import *
 class TestPinInUchannelBallframe(unittest.TestCase):
 
     def test_top(self):
-        with self.assertWarns(UserWarning):
-            pin = Pin()
-            pin.set_pin({'x': 1, 'y': 2, 'z': 0}, 1, 'hole')
-            pin.set_pin({'x': 5, 'y': 2, 'z': 0}, 1, 'slot')
+        pin = Pin()
+        pin.set_pin({'x': 1, 'y': 2, 'z': 0}, 1, 'hole')
+        pin.set_pin({'x': 5, 'y': 2, 'z': 0}, 1, 'slot')
 
-        with self.assertWarns(UserWarning):
-            baseplane = BasePlane()
-            baseplane.set_base_plane_dict({'x': 0, 'y': 0, 'z': 0, 'xy_angle': 0, 'elevation': np.pi/2}, 1)
+        baseplane = BasePlane()
+        baseplane.set_base_plane_dict({'x': 0, 'y': 0, 'z': 0, 'xy_angle': 0, 'elevation': np.pi/2}, 1)
 
-        with self.assertWarns(UserWarning):
-            pinframe = PinFrame()
-            pinframe.pins = pin
-            pinframe.base_planes = baseplane
-            # gives pin_basis [[-1, 0, 0], [0, 0, 1], [0, 1, 0]]
+        pinframe = PinFrame()
+        pinframe.pins = pin
+        pinframe.base_planes = baseplane
+        # gives pin_basis [[-1, 0, 0], [0, 0, 1], [0, 1, 0]]
 
-        with self.assertWarns(UserWarning):
-            ballframe = BallFrame()
-            ballframe.set_ball({'x': 0, 'y': 1, 'z': 1}, 1, 'hole')
-            ballframe.set_ball({'x': 6, 'y': 1, 'z': 1}, 1, 'slot')
-            ballframe.set_ball({'x': 0, 'y': 5, 'z': 1}, 3, 'hole')
-            ballframe.set_ball({'x': 6, 'y': 5, 'z': 1}, 3, 'slot')
-            # gives ball_basis [[1, 0, 0], [0, 0, -1], [0, 1, 0]]
+        ballframe = BallFrame()
+        ballframe.set_ball({'x': 0, 'y': 1, 'z': 1}, 1, 'hole')
+        ballframe.set_ball({'x': 6, 'y': 1, 'z': 1}, 1, 'slot')
+        ballframe.set_ball({'x': 0, 'y': 5, 'z': 1}, 3, 'hole')
+        ballframe.set_ball({'x': 6, 'y': 5, 'z': 1}, 3, 'slot')
+        # gives ball_basis [[1, 0, 0], [0, 0, -1], [0, 1, 0]]
 
         uchannel = UChannel(pinframe_top=pinframe, ballframe_top=ballframe)
 
@@ -59,54 +55,48 @@ class TestPinInUchannelBallframe(unittest.TestCase):
 class TestTransformSensorToUchannelBallframe(unittest.TestCase):
 
     def test_top(self):
-        with self.assertWarns(UserWarning):
-            pin = Pin()
-            pin.set_pin({'x': 1, 'y': 2, 'z': 0}, 1, 'hole')
-            pin.set_pin({'x': 5, 'y': 2, 'z': 0}, 1, 'slot')
+        pin = Pin()
+        pin.set_pin({'x': 1, 'y': 2, 'z': 0}, 1, 'hole')
+        pin.set_pin({'x': 5, 'y': 2, 'z': 0}, 1, 'slot')
 
-        with self.assertWarns(UserWarning):
-            baseplane = BasePlane()
-            baseplane.set_base_plane_dict({'x': 0, 'y': 0, 'z': 0, 'xy_angle': 0, 'elevation': np.pi/2}, 1)
+        baseplane = BasePlane()
+        baseplane.set_base_plane_dict({'x': 0, 'y': 0, 'z': 0, 'xy_angle': 0, 'elevation': np.pi/2}, 1)
 
-        with self.assertWarns(UserWarning):
-            pinframe = PinFrame()
-            pinframe.pins = pin
-            pinframe.base_planes = baseplane
-            # gives pin_basis [[-1, 0, 0], [0, 0, 1], [0, 1, 0]]
+        pinframe = PinFrame()
+        pinframe.pins = pin
+        pinframe.base_planes = baseplane
+        # gives pin_basis [[-1, 0, 0], [0, 0, 1], [0, 1, 0]]
 
-        with self.assertWarns(UserWarning):
-            ballframe = BallFrame()
-            ballframe.set_ball({'x': 0, 'y': 1, 'z': 1}, 1, 'hole')
-            ballframe.set_ball({'x': 6, 'y': 1, 'z': 1}, 1, 'slot')
-            ballframe.set_ball({'x': 0, 'y': 5, 'z': 1}, 3, 'hole')
-            ballframe.set_ball({'x': 6, 'y': 5, 'z': 1}, 3, 'slot')
-            # gives ball_basis [[1, 0, 0], [0, 0, -1], [0, 1, 0]]
+        ballframe = BallFrame()
+        ballframe.set_ball({'x': 0, 'y': 1, 'z': 1}, 1, 'hole')
+        ballframe.set_ball({'x': 6, 'y': 1, 'z': 1}, 1, 'slot')
+        ballframe.set_ball({'x': 0, 'y': 5, 'z': 1}, 3, 'hole')
+        ballframe.set_ball({'x': 6, 'y': 5, 'z': 1}, 3, 'slot')
+        # gives ball_basis [[1, 0, 0], [0, 0, -1], [0, 1, 0]]
 
         uchannel = UChannel(pinframe_top=pinframe, ballframe_top=ballframe)
 
-        with self.assertWarns(UserWarning):
-            fixture = Fixture()
-            fixture.set_ball({'x': 1, 'y': 1, 'z': 5}, 'oriball')
-            fixture.set_ball({'x': 8, 'y': 1, 'z': 5}, 'axiball')
-            fixture.set_ball({'x': 1, 'y': 1, 'z': 6}, 'diagball')
-            fixture.set_pin({'x': 2, 'y': 1, 'z': 1}, 'oripin')
-            fixture.set_pin({'x': 7, 'y': 1, 'z': 1}, 'axipin')
-            fixture.set_base_plane({'x': 0, 'y': 0, 'z': 0, 'xy_angle': 0, 'elevation': np.pi/2})
+        fixture = Fixture()
+        fixture.set_ball({'x': 1, 'y': 1, 'z': 5}, 'oriball')
+        fixture.set_ball({'x': 8, 'y': 1, 'z': 5}, 'axiball')
+        fixture.set_ball({'x': 1, 'y': 1, 'z': 6}, 'diagball')
+        fixture.set_pin({'x': 2, 'y': 1, 'z': 1}, 'oripin')
+        fixture.set_pin({'x': 7, 'y': 1, 'z': 1}, 'axipin')
+        fixture.set_base_plane({'x': 0, 'y': 0, 'z': 0, 'xy_angle': 0, 'elevation': np.pi/2})
 
-        with self.assertWarns(UserWarning):
-            stereo_sensor = Sensor(fixture)
-            stereo_sensor.set_ball({'x': 1, 'y': 1, 'z': 0}, 'oriball')
-            stereo_sensor.set_ball({'x': 8, 'y': 1, 'z': 0}, 'axiball')
-            stereo_sensor.set_ball({'x': 1, 'y': 2, 'z': 0}, 'diagball')
-            stereo_sensor.set_sensor_plane({'x': 4, 'y': 1, 'z': 1, 'xy_angle': 0, 'elevation': np.pi/2})
-            stereo_sensor.set_sensor_origin({'x': 4, 'y': 1, 'z': 1})
+        stereo_sensor = Sensor(fixture)
+        stereo_sensor.set_ball({'x': 1, 'y': 1, 'z': 0}, 'oriball')
+        stereo_sensor.set_ball({'x': 8, 'y': 1, 'z': 0}, 'axiball')
+        stereo_sensor.set_ball({'x': 1, 'y': 2, 'z': 0}, 'diagball')
+        stereo_sensor.set_sensor_plane({'x': 4, 'y': 1, 'z': 1, 'xy_angle': 0, 'elevation': np.pi/2})
+        stereo_sensor.set_sensor_origin({'x': 4, 'y': 1, 'z': 1})
 
-            axial_sensor = Sensor(fixture)
-            axial_sensor.set_ball({'x': 8, 'y': 1, 'z': 0}, 'oriball')
-            axial_sensor.set_ball({'x': 1, 'y': 1, 'z': 0}, 'axiball')
-            axial_sensor.set_ball({'x': 8, 'y': 2, 'z': 0}, 'diagball')
-            axial_sensor.set_sensor_plane({'x': 4, 'y': 1, 'z': 1, 'xy_angle': 0, 'elevation': np.pi/2})
-            axial_sensor.set_sensor_origin({'x': 4, 'y': 1, 'z': 1})
+        axial_sensor = Sensor(fixture)
+        axial_sensor.set_ball({'x': 8, 'y': 1, 'z': 0}, 'oriball')
+        axial_sensor.set_ball({'x': 1, 'y': 1, 'z': 0}, 'axiball')
+        axial_sensor.set_ball({'x': 8, 'y': 2, 'z': 0}, 'diagball')
+        axial_sensor.set_sensor_plane({'x': 4, 'y': 1, 'z': 1, 'xy_angle': 0, 'elevation': np.pi/2})
+        axial_sensor.set_sensor_origin({'x': 4, 'y': 1, 'z': 1})
 
         stereo_origin_ball = stereo_sensor.get_sensor_origin_ballframe()
         self.assertAlmostEqual(3, stereo_origin_ball[0])
@@ -171,56 +161,48 @@ class TestTransformSensorToUchannelBallframe(unittest.TestCase):
         self.assertAlmostEqual(-1, sensor_normal_ball[2])
 
     def test_bottom(self):
-        with self.assertWarns(UserWarning):
-            pin = Pin()
-            pin.set_pin({'x': 1, 'y': 2, 'z': 0}, 1, 'slot')
-            pin.set_pin({'x': 5, 'y': 2, 'z': 0}, 1, 'hole')
+        pin = Pin()
+        pin.set_pin({'x': 1, 'y': 2, 'z': 0}, 1, 'slot')
+        pin.set_pin({'x': 5, 'y': 2, 'z': 0}, 1, 'hole')
 
-        with self.assertWarns(UserWarning):
-            baseplane = BasePlane()
-            baseplane.set_base_plane_dict({'x': 0, 'y': 0, 'z': 0, 'xy_angle': 0, 'elevation': np.pi/2}, 1)
+        baseplane = BasePlane()
+        baseplane.set_base_plane_dict({'x': 0, 'y': 0, 'z': 0, 'xy_angle': 0, 'elevation': np.pi/2}, 1)
 
-        with self.assertWarns(UserWarning):
-            pinframe = PinFrame()
-            pinframe.pins = pin
-            pinframe.base_planes = baseplane
-            # uchannel.pinframe_top = pinframe
-            # gives pin_basis [[1, 0, 0], [0, 0, 1], [0, -1, 0]]
+        pinframe = PinFrame()
+        pinframe.pins = pin
+        pinframe.base_planes = baseplane
+        # gives pin_basis [[1, 0, 0], [0, 0, 1], [0, -1, 0]]
 
-        with self.assertWarns(UserWarning):
-            ballframe = BallFrame()
-            ballframe.set_ball({'x': 0, 'y': 1, 'z': 1}, 1, 'slot')
-            ballframe.set_ball({'x': 6, 'y': 1, 'z': 1}, 1, 'hole')
-            ballframe.set_ball({'x': 0, 'y': 5, 'z': 1}, 3, 'slot')
-            ballframe.set_ball({'x': 6, 'y': 5, 'z': 1}, 3, 'hole')
-            # uchannel.ballframe_top = ballframe
-            # gives ball_basis [[-1, 0, 0], [0, 0, 1], [0, 1, 0]]
+        ballframe = BallFrame()
+        ballframe.set_ball({'x': 0, 'y': 1, 'z': 1}, 1, 'slot')
+        ballframe.set_ball({'x': 6, 'y': 1, 'z': 1}, 1, 'hole')
+        ballframe.set_ball({'x': 0, 'y': 5, 'z': 1}, 3, 'slot')
+        ballframe.set_ball({'x': 6, 'y': 5, 'z': 1}, 3, 'hole')
+        # gives ball_basis [[-1, 0, 0], [0, 0, 1], [0, 1, 0]]
 
         uchannel = UChannel(pinframe_bot=pinframe, ballframe_bot=ballframe)
 
-        with self.assertWarns(UserWarning):
-            fixture = Fixture()
-            fixture.set_ball({'x': 1, 'y': 1, 'z': 5}, 'oriball')
-            fixture.set_ball({'x': 8, 'y': 1, 'z': 5}, 'axiball')
-            fixture.set_ball({'x': 1, 'y': 1, 'z': 6}, 'diagball')
-            fixture.set_pin({'x': 2, 'y': 1, 'z': 1}, 'oripin')
-            fixture.set_pin({'x': 7, 'y': 1, 'z': 1}, 'axipin')
-            fixture.set_base_plane({'x': 0, 'y': 0, 'z': 0, 'xy_angle': 0, 'elevation': np.pi/2})
+        fixture = Fixture()
+        fixture.set_ball({'x': 1, 'y': 1, 'z': 5}, 'oriball')
+        fixture.set_ball({'x': 8, 'y': 1, 'z': 5}, 'axiball')
+        fixture.set_ball({'x': 1, 'y': 1, 'z': 6}, 'diagball')
+        fixture.set_pin({'x': 2, 'y': 1, 'z': 1}, 'oripin')
+        fixture.set_pin({'x': 7, 'y': 1, 'z': 1}, 'axipin')
+        fixture.set_base_plane({'x': 0, 'y': 0, 'z': 0, 'xy_angle': 0, 'elevation': np.pi/2})
 
-        with self.assertWarns(UserWarning):
-            axial_sensor = Sensor(fixture)
-            axial_sensor.set_ball({'x': 1, 'y': 1, 'z': 0}, 'oriball')
-            axial_sensor.set_ball({'x': 8, 'y': 1, 'z': 0}, 'axiball')
-            axial_sensor.set_ball({'x': 1, 'y': 2, 'z': 0}, 'diagball')
-            axial_sensor.set_sensor_plane({'x': 4, 'y': 1, 'z': 1, 'xy_angle': 0, 'elevation': np.pi/2})
-            axial_sensor.set_sensor_origin({'x': 4, 'y': 1, 'z': 1})
+        axial_sensor = Sensor(fixture)
+        axial_sensor.set_ball({'x': 1, 'y': 1, 'z': 0}, 'oriball')
+        axial_sensor.set_ball({'x': 8, 'y': 1, 'z': 0}, 'axiball')
+        axial_sensor.set_ball({'x': 1, 'y': 2, 'z': 0}, 'diagball')
+        axial_sensor.set_sensor_plane({'x': 4, 'y': 1, 'z': 1, 'xy_angle': 0, 'elevation': np.pi/2})
+        axial_sensor.set_sensor_origin({'x': 4, 'y': 1, 'z': 1})
 
-            stereo_sensor = Sensor(fixture)
-            stereo_sensor.set_ball({'x': 8, 'y': 1, 'z': 0}, 'oriball')
-            stereo_sensor.set_ball({'x': 1, 'y': 1, 'z': 0}, 'axiball')
-            stereo_sensor.set_ball({'x': 8, 'y': 2, 'z': 0}, 'diagball')
-            stereo_sensor.set_sensor_plane({'x': 4, 'y': 1, 'z': 1, 'xy_angle': 0, 'elevation': np.pi/2})
-            stereo_sensor.set_sensor_origin({'x': 4, 'y': 1, 'z': 1})
+        stereo_sensor = Sensor(fixture)
+        stereo_sensor.set_ball({'x': 8, 'y': 1, 'z': 0}, 'oriball')
+        stereo_sensor.set_ball({'x': 1, 'y': 1, 'z': 0}, 'axiball')
+        stereo_sensor.set_ball({'x': 8, 'y': 2, 'z': 0}, 'diagball')
+        stereo_sensor.set_sensor_plane({'x': 4, 'y': 1, 'z': 1, 'xy_angle': 0, 'elevation': np.pi/2})
+        stereo_sensor.set_sensor_origin({'x': 4, 'y': 1, 'z': 1})
 
         stereo_origin_ball = stereo_sensor.get_sensor_origin_ballframe()
         self.assertAlmostEqual(4, stereo_origin_ball[0])

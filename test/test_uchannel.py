@@ -62,12 +62,11 @@ class TestGetBallBasis(unittest.TestCase):
             uchannel.get_ball_basis('foo')
 
     def test_valid_input(self):
-        with self.assertWarns(UserWarning):
-            ballframe = BallFrame()
-            ballframe.set_ball({'x': 2, 'y': 0, 'z': 0}, 1, 'hole')
-            ballframe.set_ball({'x': 0, 'y': 0, 'z': 0}, 1, 'slot')
-            ballframe.set_ball({'x': 2, 'y': 6, 'z': 0}, 3, 'hole')
-            ballframe.set_ball({'x': 0, 'y': 6, 'z': 0}, 3, 'slot')
+        ballframe = BallFrame()
+        ballframe.set_ball({'x': 2, 'y': 0, 'z': 0}, 1, 'hole')
+        ballframe.set_ball({'x': 0, 'y': 0, 'z': 0}, 1, 'slot')
+        ballframe.set_ball({'x': 2, 'y': 6, 'z': 0}, 3, 'hole')
+        ballframe.set_ball({'x': 0, 'y': 6, 'z': 0}, 3, 'slot')
 
         uchannel = UChannel(ballframe_top=ballframe)
 
@@ -88,22 +87,18 @@ class TestGetPinBasis(unittest.TestCase):
             uchannel.get_pin_basis(1, 'foo')
 
     def test_valid_input(self):
-        with self.assertWarns(UserWarning):
-            pin = Pin()
+        pin = Pin()
 
-            pin.set_pin({'x': 0, 'y': 0, 'z': 0}, 0, 'hole')
-            pin.set_pin({'x': 1, 'y': 0, 'z': 0}, 0, 'slot')
+        pin.set_pin({'x': 0, 'y': 0, 'z': 0}, 0, 'hole')
+        pin.set_pin({'x': 1, 'y': 0, 'z': 0}, 0, 'slot')
 
-        with self.assertWarns(UserWarning):
-            baseplane = BasePlane()
+        baseplane = BasePlane()
+        baseplane.set_base_plane_dict({'x': 0, 'y': 0, 'z': 0, 'xy_angle': 0, 'elevation': np.pi/2}, 0)
 
-            baseplane.set_base_plane_dict({'x': 0, 'y': 0, 'z': 0, 'xy_angle': 0, 'elevation': np.pi/2}, 0)
-
-        with self.assertWarns(UserWarning):
-            pinframe = PinFrame()
-            pinframe.pins = pin
-            pinframe.base_planes = baseplane
-            # gives pin_basis [[-1, 0, 0], [0, 0, 1], [0, 1, 0]]
+        pinframe = PinFrame()
+        pinframe.pins = pin
+        pinframe.base_planes = baseplane
+        # gives pin_basis [[-1, 0, 0], [0, 0, 1], [0, 1, 0]]
 
         uchannel = UChannel(pinframe_top=pinframe)
 
@@ -124,31 +119,24 @@ class TestGetPinBasis(unittest.TestCase):
 class TestPinInBallFrame(unittest.TestCase):
 
     def test_valid_input(self):
+        pin = Pin()
+        pin.set_pin({'x': 0, 'y': 0, 'z': 0}, 0, 'hole')
+        pin.set_pin({'x': 1, 'y': 0, 'z': 0}, 0, 'slot')
 
-        with self.assertWarns(UserWarning):
-            pin = Pin()
-            pin.set_pin({'x': 0, 'y': 0, 'z': 0}, 0, 'hole')
-            pin.set_pin({'x': 1, 'y': 0, 'z': 0}, 0, 'slot')
+        baseplane = BasePlane()
+        baseplane.set_base_plane_dict({'x': 0, 'y': 0, 'z': 0, 'xy_angle': 0, 'elevation': np.pi/2}, 0)
 
-        with self.assertWarns(UserWarning):
-            baseplane = BasePlane()
-            baseplane.set_base_plane_dict({'x': 0, 'y': 0, 'z': 0, 'xy_angle': 0, 'elevation': np.pi/2}, 0)
+        pinframe = PinFrame()
+        pinframe.pins = pin
+        pinframe.base_planes = baseplane
+        # gives pin_basis [[-1, 0, 0], [0, 0, 1], [0, 1, 0]]
 
-        with self.assertWarns(UserWarning):
-            pinframe = PinFrame()
-            pinframe.pins = pin
-            pinframe.base_planes = baseplane
-            # uchannel.pinframe_top = pinframe
-            # gives pin_basis [[-1, 0, 0], [0, 0, 1], [0, 1, 0]]
-
-        with self.assertWarns(UserWarning):
-            ballframe = BallFrame()
-            ballframe.set_ball({'x': 2, 'y': 0, 'z': 0}, 1, 'hole')
-            ballframe.set_ball({'x': 0, 'y': 0, 'z': 0}, 1, 'slot')
-            ballframe.set_ball({'x': 2, 'y': 6, 'z': 0}, 3, 'hole')
-            ballframe.set_ball({'x': 0, 'y': 6, 'z': 0}, 3, 'slot')
-            # uchannel.ballframe_top = ballframe
-            # gives ball_basis [[-1, 0, 0], [0, 0, 1], [0, 1, 0]]
+        ballframe = BallFrame()
+        ballframe.set_ball({'x': 2, 'y': 0, 'z': 0}, 1, 'hole')
+        ballframe.set_ball({'x': 0, 'y': 0, 'z': 0}, 1, 'slot')
+        ballframe.set_ball({'x': 2, 'y': 6, 'z': 0}, 3, 'hole')
+        ballframe.set_ball({'x': 0, 'y': 6, 'z': 0}, 3, 'slot')
+        # gives ball_basis [[-1, 0, 0], [0, 0, 1], [0, 1, 0]]
 
         uchannel = UChannel(pinframe_top=pinframe, ballframe_top=ballframe)
 
@@ -166,30 +154,24 @@ class TestPinInBallFrame(unittest.TestCase):
         self.assertAlmostEqual(1, basis[2][2])
 
     def test_valid_input_top(self):
-        with self.assertWarns(UserWarning):
-            pin = Pin()
+        pin = Pin()
+        pin.set_pin({'x': 1, 'y': 2, 'z': 0}, 0, 'hole')
+        pin.set_pin({'x': 3, 'y': 2, 'z': 0}, 0, 'slot')
 
-            pin.set_pin({'x': 1, 'y': 2, 'z': 0}, 0, 'hole')
-            pin.set_pin({'x': 3, 'y': 2, 'z': 0}, 0, 'slot')
+        baseplane = BasePlane()
+        baseplane.set_base_plane_dict({'x': 0, 'y': 0, 'z': 0, 'xy_angle': 0, 'elevation': np.pi/2}, 0)
 
-        with self.assertWarns(UserWarning):
-            baseplane = BasePlane()
+        pinframe = PinFrame()
+        pinframe.pins = pin
+        pinframe.base_planes = baseplane
+        # gives pin_basis [[-1, 0, 0], [0, 0, 1], [0, 1, 0]]
 
-            baseplane.set_base_plane_dict({'x': 0, 'y': 0, 'z': 0, 'xy_angle': 0, 'elevation': np.pi/2}, 0)
-
-        with self.assertWarns(UserWarning):
-            pinframe = PinFrame()
-            pinframe.pins = pin
-            pinframe.base_planes = baseplane
-            # gives pin_basis [[-1, 0, 0], [0, 0, 1], [0, 1, 0]]
-
-        with self.assertWarns(UserWarning):
-            ballframe = BallFrame()
-            ballframe.set_ball({'x': 0, 'y': 1, 'z': 0}, 1, 'hole')
-            ballframe.set_ball({'x': 4, 'y': 1, 'z': 0}, 1, 'slot')
-            ballframe.set_ball({'x': 0, 'y': 4, 'z': 0}, 3, 'hole')
-            ballframe.set_ball({'x': 4, 'y': 4, 'z': 0}, 3, 'slot')
-            # gives ball_basis [[1, 0, 0], [0, 0, -1], [0, 1, 0]]
+        ballframe = BallFrame()
+        ballframe.set_ball({'x': 0, 'y': 1, 'z': 0}, 1, 'hole')
+        ballframe.set_ball({'x': 4, 'y': 1, 'z': 0}, 1, 'slot')
+        ballframe.set_ball({'x': 0, 'y': 4, 'z': 0}, 3, 'hole')
+        ballframe.set_ball({'x': 4, 'y': 4, 'z': 0}, 3, 'slot')
+        # gives ball_basis [[1, 0, 0], [0, 0, -1], [0, 1, 0]]
 
         uchannel = UChannel(pinframe_top=pinframe, ballframe_top=ballframe)
         basis, origin = uchannel.pin_in_ballframe(0, 'top')
@@ -208,30 +190,24 @@ class TestPinInBallFrame(unittest.TestCase):
         self.assertAlmostEqual(1, basis[2][2])
 
     def test_valid_input_bot(self):
-        with self.assertWarns(UserWarning):
-            pin = Pin()
+        pin = Pin()
+        pin.set_pin({'x': 1, 'y': 2, 'z': 0}, 0, 'slot')
+        pin.set_pin({'x': 3, 'y': 2, 'z': 0}, 0, 'hole')
 
-            pin.set_pin({'x': 1, 'y': 2, 'z': 0}, 0, 'slot')
-            pin.set_pin({'x': 3, 'y': 2, 'z': 0}, 0, 'hole')
+        baseplane = BasePlane()
+        baseplane.set_base_plane_dict({'x': 0, 'y': 0, 'z': 0, 'xy_angle': 0, 'elevation': np.pi/2}, 0)
 
-        with self.assertWarns(UserWarning):
-            baseplane = BasePlane()
+        pinframe = PinFrame()
+        pinframe.pins = pin
+        pinframe.base_planes = baseplane
+        # gives pin_basis [[1, 0, 0], [0, 0, 1], [0, -1, 0]]
 
-            baseplane.set_base_plane_dict({'x': 0, 'y': 0, 'z': 0, 'xy_angle': 0, 'elevation': np.pi/2}, 0)
-
-        with self.assertWarns(UserWarning):
-            pinframe = PinFrame()
-            pinframe.pins = pin
-            pinframe.base_planes = baseplane
-            # gives pin_basis [[1, 0, 0], [0, 0, 1], [0, -1, 0]]
-
-        with self.assertWarns(UserWarning):
-            ballframe = BallFrame()
-            ballframe.set_ball({'x': 0, 'y': 1, 'z': 0}, 1, 'slot')
-            ballframe.set_ball({'x': 4, 'y': 1, 'z': 0}, 1, 'hole')
-            ballframe.set_ball({'x': 0, 'y': 4, 'z': 0}, 3, 'slot')
-            ballframe.set_ball({'x': 4, 'y': 4, 'z': 0}, 3, 'hole')
-            # gives ball_basis [[-1, 0, 0], [0, 0, 1], [0, 1, 0]]
+        ballframe = BallFrame()
+        ballframe.set_ball({'x': 0, 'y': 1, 'z': 0}, 1, 'slot')
+        ballframe.set_ball({'x': 4, 'y': 1, 'z': 0}, 1, 'hole')
+        ballframe.set_ball({'x': 0, 'y': 4, 'z': 0}, 3, 'slot')
+        ballframe.set_ball({'x': 4, 'y': 4, 'z': 0}, 3, 'hole')
+        # gives ball_basis [[-1, 0, 0], [0, 0, 1], [0, 1, 0]]
 
         uchannel = UChannel(pinframe_bot=pinframe, ballframe_bot=ballframe)
         basis, origin = uchannel.pin_in_ballframe(0, 'bottom')

@@ -2,14 +2,13 @@
 import unittest
 import numpy as np
 
-from hps_align.survey._fixture import MattFixture
+from hps_align.survey._mattfixture import MattFixture
 
 
 class TestInit(unittest.TestCase):
 
     def test_no_input(self):
-        with self.assertWarns(UserWarning):
-            fixture = MattFixture()
+        fixture = MattFixture()
 
         empty_dict = {'x': 0, 'y': 0, 'z': 0}
         empty_plane_dict = {'x': 0, 'y': 0, 'z': 0, 'xy_angle': 0, 'elevation': 0}
@@ -25,8 +24,7 @@ class TestInit(unittest.TestCase):
 class TestGetBallBasis(unittest.TestCase):
 
     def test_valid_input(self):
-        with self.assertWarns(UserWarning):
-            fixture = MattFixture()
+        fixture = MattFixture()
 
         fixture.set_ball({'x': 1, 'y': 0, 'z': 0}, 'oriball')
         fixture.set_ball({'x': 1, 'y': 1, 'z': 0}, 'axiball')
@@ -42,8 +40,7 @@ class TestGetBallBasis(unittest.TestCase):
 class TestGetPinBasis(unittest.TestCase):
 
     def test_valid_input(self):
-        with self.assertWarns(UserWarning):
-            fixture = MattFixture()
+        fixture = MattFixture()
 
         fixture.set_pin({'x': 1, 'y': 0, 'z': 1}, 'oripin')
         fixture.set_pin({'x': 1, 'y': 1, 'z': 1}, 'axipin')
@@ -67,8 +64,7 @@ class TestGetPinBasis(unittest.TestCase):
 class TestGetMattBasis(unittest.TestCase):
 
     def test_basis(self):
-        with self.assertWarns(UserWarning):
-            fixture = MattFixture()
+        fixture = MattFixture()
 
         fixture.set_ball_plane({'x': 0, 'y': 0, 'z': 0, 'xy_angle': 0, 'elevation': np.pi/2})
         fixture.set_ball({'x': 0, 'y': 0, 'z': 0}, 'oriball')
@@ -93,8 +89,7 @@ class TestGetMattBasis(unittest.TestCase):
 class TestGetNestedCoords(unittest.TestCase):
 
     def test_matt_to_ball(self):
-        with self.assertWarns(UserWarning):
-            fixture = MattFixture()
+        fixture = MattFixture()
 
         fixture.set_ball_plane({'x': 0, 'y': 0, 'z': 0, 'xy_angle': 0, 'elevation': np.pi/2})
         fixture.set_ball({'x': 0, 'y': 0, 'z': 0}, 'oriball')
@@ -113,8 +108,7 @@ class TestGetNestedCoords(unittest.TestCase):
         self.assertAlmostEqual(1, transform[2][2])
 
     def test_pin_in_ball(self):
-        with self.assertWarns(UserWarning):
-            fixture = MattFixture()
+        fixture = MattFixture()
 
         # pins in matt coords
         fixture.set_pin({'x': 1, 'y': 1, 'z': 1}, 'oripin')
@@ -140,8 +134,7 @@ class TestGetNestedCoords(unittest.TestCase):
         self.assertAlmostEqual(0, origin[2])
 
     def test_ball_in_pin(self):
-        with self.assertWarns(UserWarning):
-            fixture = MattFixture()
+        fixture = MattFixture()
 
         fixture.set_pin({'x': 1, 'y': 1, 'z': 1}, 'oripin')
         fixture.set_pin({'x': 4, 'y': 1, 'z': 1}, 'axipin')
