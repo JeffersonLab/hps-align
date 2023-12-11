@@ -9,7 +9,28 @@ from ._sensors import Sensor
 
 
 class MattSensor(Sensor):
+    """SVT sensor class for Matt's survey measurement
 
+    Matt changed the coordinate system during the measurement.
+    The ball positions are in OGP coordinates, the sensor positions are in the new coordinate system ('Matt system').
+
+    Attributes
+    ----------
+    fixture : Fixture
+        Fixture object
+    oriball_dict : dict
+        Dictionary of ball coordinates {'x': x, 'y': y, 'z': z}, origin of ball frame, OGP coordinates
+    diagball_dict : dict
+        Dictionary of ball coordinates {'x': x, 'y': y, 'z': z}, OGP coordinates
+    axiball_dict : dict
+        Dictionary of ball coordinates {'x': x, 'y': y, 'z': z}, OGP coordinates
+    ball_plane_dict : dict
+        Dictionary of ball plane coordinates {'x': x, 'y': y, 'z': z, 'xy_angle': xy_angle, 'elevation': elevation}, Matt coordinates
+    sensor_origin_dict : dict
+        Dictionary of sensor origin coordinates {'x': x, 'y': y, 'z': z}, Matt coordinates
+    sensor_plane_dict : dict
+        Dictionary of sensor plane coordinates {'x': x, 'y': y, 'z': z, 'xy_angle': xy_angle, 'elevation': elevation}, Matt coordinates
+    """
     def __init__(self, fixture, input_file=None):
         self.parser = None
         super().__init__(fixture, input_file)

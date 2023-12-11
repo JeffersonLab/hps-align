@@ -6,7 +6,23 @@ from ._cli import app
 
 
 class UChannel:
+    """SVT uchannel class
 
+    The uchannel has two volumes, top and bottom. Each volume has a ball frame and multiple pin frames.
+    The PinFrame class returns the pin basis for each layer.
+    This class is used to calculate the pin frame basis in the uchannel ball frame.
+
+    Attributes
+    ----------
+    ballframe_top : BallFrame
+        BallFrame object for top volume
+    ballframe_bot : BallFrame
+        BallFrame object for bottom volume
+    pinframe_top : PinFrame
+        PinFrame object for top volume, contains information for each layer
+    pinframe_bot : PinFrame
+        PinFrame object for bottom volume, contains information for each layer
+    """
     def __init__(self, ballframe_top=BallFrame(),
                  ballframe_bot=BallFrame(),
                  pinframe_top=PinFrame(),
@@ -19,6 +35,8 @@ class UChannel:
 
     def get_ball_basis(self, volume):
         """Get basis vectors and origin for ball frame
+
+        There is only one ball frame per volume.
 
         Parameters
         ----------
@@ -45,6 +63,8 @@ class UChannel:
 
     def get_pin_basis(self, layer, volume):
         """Get basis vectors and origin for pin frame
+
+        There is a pin frame for each layer that is determined by the respective positions of the pins.
 
         Parameters
         ----------

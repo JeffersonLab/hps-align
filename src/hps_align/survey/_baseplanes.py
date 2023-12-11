@@ -5,7 +5,22 @@ from ._cli import app
 
 
 class BasePlane:
+    """SVT uchannel base plane class
 
+    The base planes are at the locations at which the sensors are mounted. The pins are mounted on the base planes.
+    The base plane coordinates in the survey data file should be given in the OGP (or other global) system.
+
+    Attributes
+    ----------
+    L0_base_plane_dict : dict
+        Dictionary of L0 base plane coordinates {'x': x, 'y': y, 'z': z, 'xy_angle': xy_angle, 'elevation': elevation}
+    L1_base_plane_dict : dict
+        Dictionary of L1 base plane coordinates {'x': x, 'y': y, 'z': z, 'xy_angle': xy_angle, 'elevation': elevation}
+    L2_base_plane_dict : dict
+        Dictionary of L2 base plane coordinates {'x': x, 'y': y, 'z': z, 'xy_angle': xy_angle, 'elevation': elevation}
+    L3_base_plane_dict : dict
+        Dictionary of L3 base plane coordinates {'x': x, 'y': y, 'z': z, 'xy_angle': xy_angle, 'elevation': elevation}
+    """
     def __init__(self, input_file=None):
         """Initialize BasePlane object
 

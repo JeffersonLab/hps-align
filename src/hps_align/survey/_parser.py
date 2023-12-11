@@ -46,7 +46,7 @@ class Parser:
 
         return first_appearances
 
-    def find_coords(self, line_number, num_lines_to_read=15):
+    def find_coords(self, line_number, num_lines_to_read=15, pos=2):
         """Find coordinates in survey data file starting at line_number
 
         Parameters
@@ -69,19 +69,19 @@ class Parser:
             for _ in range(num_lines_to_read):
                 line = next(file)
                 if "X Location" in line:
-                    coordinates["x"] = float(line.split()[2])
+                    coordinates["x"] = float(line.split()[pos])
                 elif "Y Location" in line:
-                    coordinates["y"] = float(line.split()[2])
+                    coordinates["y"] = float(line.split()[pos])
                 elif "Z Location" in line:
-                    coordinates["z"] = float(line.split()[2])
+                    coordinates["z"] = float(line.split()[pos])
                 elif "XY Angle" in line:
-                    coordinates["xy_angle"] = math.radians(float(line.split()[2]))
+                    coordinates["xy_angle"] = math.radians(float(line.split()[pos]))
                 elif "Elevation" in line:
-                    coordinates["elevation"] = math.radians(float(line.split()[1]))
+                    coordinates["elevation"] = math.radians(float(line.split()[pos-1]))
 
         return coordinates
 
-    def get_coords(self, input_string, num_lines_to_read=15):
+    def get_coords(self, input_string, num_lines_to_read=15, pos=2):
         """Find coordinates of feature of name input_string in survey data file
 
         Parameters
@@ -91,4 +91,4 @@ class Parser:
         num_lines_to_read : int
             Number of lines to read from first appearance of input_string
         """
-        return self.find_coords(self.find_names([input_string])[input_string] + 1, num_lines_to_read)
+        return self.find_coords(self.find_names([input_string])[input_string] + 1, num_lines_to_read, pos)

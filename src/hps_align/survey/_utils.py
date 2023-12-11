@@ -70,5 +70,4 @@ def make_basis(vec1, vec2):
 
 def project_to_plane(vec, plane_origin, plane_normal):
     """Project a vector onto a plane"""
-    # TODO check this
     return vec - np.dot(vec - plane_origin, plane_normal) * plane_normal

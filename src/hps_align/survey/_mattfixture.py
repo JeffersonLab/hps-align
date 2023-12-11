@@ -13,6 +13,23 @@ class MattFixture(Fixture):
     The coordinate system was changed during the measurement.
     The ball positions are in OGP coordinates, the pin positions and base planes are in the new coordinate system ('Matt system').
     It appears like the new coordinate system is related to the fixture ball frame.
+
+    Attributes
+    ----------
+    oriball_dict : dict
+        Dictionary of ball coordinates {'x': x, 'y': y, 'z': z}, origin of ball frame
+    diagball_dict : dict
+        Dictionary of ball coordinates {'x': x, 'y': y, 'z': z}
+    axiball_dict : dict
+        Dictionary of ball coordinates {'x': x, 'y': y, 'z': z}
+    ball_plane_dict : dict
+        Dictionary of ball plane coordinates {'x': x, 'y': y, 'z': z, 'xy_angle': xy_angle, 'elevation': elevation}
+    base_plane_dict : dict
+        Dictionary of base plane coordinates {'x': x, 'y': y, 'z': z, 'xy_angle': xy_angle, 'elevation': elevation}
+    oripin_dict : dict
+        Dictionary of pin coordinates {'x': x, 'y': y, 'z': z}, slot side
+    axipin_dict : dict
+        Dictionary of pin coordinates {'x': x, 'y': y, 'z': z}, hole side
     """
 
     def __init__(self, input_file=None):

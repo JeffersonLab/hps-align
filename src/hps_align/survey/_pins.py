@@ -5,7 +5,30 @@ from ._cli import app
 
 
 class Pin:
+    """SVT uchannel pin class
 
+    The pins are mounted on the base planes and are used to align the sensors.
+    The pin coordinates in the survey data file should be given in the OGP (or other global) system.
+
+    Attributes
+    ----------
+    L0_hole_pin_dict : dict
+        Dictionary of L0 hole pin coordinates {'x': x, 'y': y, 'z': z}
+    L0_slot_pin_dict : dict
+        Dictionary of L0 slot pin coordinates {'x': x, 'y': y, 'z': z}
+    L1_hole_pin_dict : dict
+        Dictionary of L1 hole pin coordinates {'x': x, 'y': y, 'z': z}
+    L1_slot_pin_dict : dict
+        Dictionary of L1 slot pin coordinates {'x': x, 'y': y, 'z': z}
+    L2_hole_pin_dict : dict
+        Dictionary of L2 hole pin coordinates {'x': x, 'y': y, 'z': z}
+    L2_slot_pin_dict : dict
+        Dictionary of L2 slot pin coordinates {'x': x, 'y': y, 'z': z}
+    L3_hole_pin_dict : dict
+        Dictionary of L3 hole pin coordinates {'x': x, 'y': y, 'z': z}
+    L3_slot_pin_dict : dict
+        Dictionary of L3 slot pin coordinates {'x': x, 'y': y, 'z': z}
+    """
     def __init__(self, input_file=None):
         """Initialize Pin object
 

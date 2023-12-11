@@ -6,7 +6,20 @@ from ._cli import app
 
 
 class PinFrame:
+    """SVT uchannel pin frame class
 
+    Gets pin positions from survey data file and calculates basis vectors and origin
+    using the BasePlane and Pin classes.
+
+    Attributes
+    ----------
+    input_file : str
+        Survey data file
+    pins : Pin
+        Pin object, uses input_file to get pin coordinates
+    base_planes : BasePlane
+        BasePlane object, uses input_file to get base plane coordinates
+    """
     def __init__(self, input_file=None):
         """Initialize PinFrame object
 

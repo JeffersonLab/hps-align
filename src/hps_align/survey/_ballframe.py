@@ -5,7 +5,22 @@ from ._cli import app
 
 
 class BallFrame:
+    """SVT uchannel ball frame class
 
+    Gets ball positions from survey data file and calculates basis vectors and origin.
+    The ball positions in the survey data file should be given in the OGP (or other global) system.
+
+    Attributes
+    ----------
+    L1_hole_ball_dict : dict
+        Dictionary of L1 hole ball coordinates {'x': x, 'y': y, 'z': z}
+    L1_slot_ball_dict : dict
+        Dictionary of L1 slot ball coordinates {'x': x, 'y': y, 'z': z}
+    L3_hole_ball_dict : dict
+        Dictionary of L3 hole ball coordinates {'x': x, 'y': y, 'z': z}
+    L3_slot_ball_dict : dict
+        Dictionary of L3 slot ball coordinates {'x': x, 'y': y, 'z': z}
+    """
     def __init__(self, input_file=None):
         """Initialize BallFrame object
 
@@ -141,7 +156,14 @@ class MattBallFrame(BallFrame):
     Ball positions and midpoints are given in the OGP system, but the pin positions,
     that have been measured in the same measurement, are given in a new system.
     To get the correct relation between the ballframe and the pinframe,
-    the ballframe basis is returned in the new system and not in the OGP system.
+    the ballframe basis is returned in the new system ('Matt system') and not in the OGP system.
+
+    Attributes
+    ----------
+    L1_midpoint_dict : dict
+        Dictionary of L1 midpoint coordinates {'x': x, 'y': y, 'z': z}
+    L3_midpoint_dict : dict
+        Dictionary of L3 midpoint coordinates {'x': x, 'y': y, 'z': z}
     """
     def __init__(self, input_file=None):
         """Initialize MattBallFrame object

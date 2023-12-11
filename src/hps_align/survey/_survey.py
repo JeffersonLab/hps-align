@@ -10,7 +10,18 @@ from ._cli import app
 
 
 class Survey:
+    """SVT survey class
 
+    This class combines the UChannel and sensor measurements.
+    Depending on the configuration of the SVT, this class contains a different set of sensors.
+
+    Attributes
+    ----------
+    uchannel : UChannel
+        UChannel object
+    sensors : dict
+        Dictionary of sensors {volume: {layer: {sensor (ax/st): Sensor()}}}
+    """
     def __init__(self):
         self.uchannel = UChannel()
         self.sensors = {'top': {}, 'bottom': {}}  # {volume: {layer: {sensor (ax/st): Sensor()}}}
@@ -38,7 +49,10 @@ class Survey:
 
 
 class Survey2019(Survey):
+    """SVT survey class for 2019 configuration
 
+    Here, only the first two layers in top and bottom are used.
+    """
     def __init__(self, survey_files):
         """Initialize Survey object with 2019 configuration"""
 
@@ -105,7 +119,16 @@ class Survey2019(Survey):
         return sensor_origin_ball, sensor_normal_ball
 
     def print_results(self, out_name):
-        """Print results to file"""
+        """Print results to file
+
+        Writes pin frame basis vectors and origins in uchannel ball frame
+        and sensor basis vectors and origins in pin frame to file.
+        
+        Parameters
+        ----------
+        out_name : str
+            Output file name    
+        """
         with open(out_name, 'w') as f:
             for volume in ['top', 'bottom']:
                 if volume == 'top':

@@ -8,7 +8,29 @@ from ._cli import app
 
 
 class Sensor:
+    """SVT sensor class
+    
+    The sensors are measured while mounted in the fixture.
+    In addition to the sensor's position and orientation, the position of the ficxture balls has to be measured.
+    The sensor coordinates in the survey data file should be given in the OGP (or other global) system.
 
+    Attributes
+    ----------
+    fixture : Fixture
+        Fixture object
+    oriball_dict : dict
+        Dictionary of ball coordinates {'x': x, 'y': y, 'z': z}, origin of ball frame
+    diagball_dict : dict
+        Dictionary of ball coordinates {'x': x, 'y': y, 'z': z}
+    axiball_dict : dict
+        Dictionary of ball coordinates {'x': x, 'y': y, 'z': z}
+    ball_plane_dict : dict
+        Dictionary of ball plane coordinates {'x': x, 'y': y, 'z': z, 'xy_angle': xy_angle, 'elevation': elevation}
+    sensor_plane_dict : dict
+        Dictionary of sensor plane coordinates {'x': x, 'y': y, 'z': z, 'xy_angle': xy_angle, 'elevation': elevation}
+    sensor_origin_dict : dict
+        Dictionary of sensor origin coordinates {'x': x, 'y': y, 'z': z}
+    """
     def __init__(self, fixture, input_file=None):
 
         self.fixture = fixture

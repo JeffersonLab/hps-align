@@ -7,7 +7,35 @@ from ._cli import app
 
 
 class Fixture:
+    """Fixture for measuring sensors
 
+    The fixture is used to measure the sensors. It consists of a base plane, a ball frame and a pin frame.
+    The pins are used to align the sensors and have the same distance as the uchannel pins.
+    Additionally, the pin frame in the fixture is defined analogously to the uchannel pin frame.
+    The pin positions cannot be used as a reference for meaurement once the sensor is installed.
+    The fixture ball frame is used as a reference frame for the sensor measurements.
+    Importantly, the fixture ball frame is not the same as the uchannel ball frame.
+    Here, the ball frame is defined by three balls on the outside of the fixture.
+
+    All measurements should be in the same global coordinate system, e.g. OGP.
+
+    Attributes
+    ----------
+    oriball_dict : dict
+        Dictionary of fixture ball coordinates {'x': x, 'y': y, 'z': z}, origin of ball frame
+    diagball_dict : dict
+        Dictionary of fixture ball coordinates {'x': x, 'y': y, 'z': z}
+    axiball_dict : dict
+        Dictionary of fixture ball coordinates {'x': x, 'y': y, 'z': z}
+    ball_plane_dict : dict
+        Dictionary of fixture ball coordinates {'x': x, 'y': y, 'z': z, 'xy_angle': xy_angle, 'elevation': elevation}
+    base_plane_dict : dict
+        Dictionary of base plane coordinates {'x': x, 'y': y, 'z': z, 'xy_angle': xy_angle, 'elevation': elevation}
+    oripin_dict : dict
+        Dictionary of pin coordinates {'x': x, 'y': y, 'z': z}, slot side
+    axipin_dict : dict
+        Dictionary of pin coordinates {'x': x, 'y': y, 'z': z}, hole side
+    """
     def __init__(self, input_file=None):
         if input_file is None:
             self.oriball_dict = {'x': 0, 'y': 0, 'z': 0}
