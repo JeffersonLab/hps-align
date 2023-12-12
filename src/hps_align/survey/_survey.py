@@ -123,11 +123,11 @@ class Survey2019(Survey):
 
         Writes pin frame basis vectors and origins in uchannel ball frame
         and sensor basis vectors and origins in pin frame to file.
-        
+
         Parameters
         ----------
         out_name : str
-            Output file name    
+            Output file name
         """
         with open(out_name, 'w') as f:
             for volume in ['top', 'bottom']:

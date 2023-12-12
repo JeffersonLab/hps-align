@@ -9,7 +9,7 @@ from ._cli import app
 
 class Sensor:
     """SVT sensor class
-    
+
     The sensors are measured while mounted in the fixture.
     In addition to the sensor's position and orientation, the position of the ficxture balls has to be measured.
     The sensor coordinates in the survey data file should be given in the OGP (or other global) system.
