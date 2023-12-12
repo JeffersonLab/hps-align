@@ -16,6 +16,7 @@ Welcome to hps_align's documentation!
    hps-java-setup
    hps_align.plot
    hps_align.detdump
+   hps_align.survey
 
 Indices and tables
 ==================
