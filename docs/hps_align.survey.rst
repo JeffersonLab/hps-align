@@ -11,8 +11,13 @@ Survey Data Conversion
 Coordinate Systems
 ------------------
 To include the survey measurements in the alignment, they need to be converted to the correct coordinate systems. 
-The relevant coordinate systems are illustrated in :ref:`background`.
 The following classes and functions are used to do this.
+
+The Uchannel has two coordinate systems, the ball frame and the pin frame which differ for top and bottom, see images below.
+
+.. image:: _static/uchannel.png
+   :width: 600
+   :alt: Diagram Showing Ball and Pin Frame Coordinate Systems for Top and Bottom of UChannel
 
 Ball Frame
 ^^^^^^^^^^
@@ -61,6 +66,12 @@ UChannel
 
 Fixture
 ^^^^^^^
+The fixture also has a pin and a ball frame, see image below. It is important to note that the pin frame is analogous to the pin frame of the UChannel, but the ball frame is different.
+
+.. image:: _static/fixture.png
+   :width: 600
+   :alt: Diagram Showing Ball and Pin Frame Coordinate Systems for Fixture
+
 .. automodule:: hps_align.survey._fixture
    :exclude-members: ShoFixture
    :members:
@@ -70,6 +81,20 @@ Fixture
 
 Sensors
 ^^^^^^^
+The sensor-local coordinates are labeled UVW and are different from the
+global XYZ coordinates by a translation and rotation. The coordinate systems are different in the front and back as well as top and bottom of the SVT, see images below.
+
+Front
+^^^^^
+.. image:: _static/uvw-coord-front.png
+   :width: 600
+   :alt: Diagram Showing UVW Coordinates for Front of Detector
+
+Back
+^^^^
+.. image:: _static/uvw-coord-back.png
+   :width: 600
+   :alt: Diagram Showing UVW Coordinates for Back of Detector
 .. automodule:: hps_align.survey._sensors
    :members:
    :undoc-members:
