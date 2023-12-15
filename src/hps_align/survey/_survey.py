@@ -5,7 +5,6 @@ from ._sensors import *
 from ._mattsensor import *
 from ._ballframe import *
 from ._pinframe import *
-from ._mattfixture import *
 from ._cli import app
 
 
@@ -66,18 +65,18 @@ class Survey2019(Survey):
                                  pinframe_top=pinframe_top,
                                  pinframe_bot=pinframe_bottom)
 
-        matt_fixture = MattFixture(survey_files['matt_fixture'])
-        sho_fixture = ShoFixture(survey_files['sho_fixture'])
+        fixture = Fixture(survey_files['fixture'])
+        transition_fixture = Fixture(survey_files['transition_fixture'])
 
-        L0_axial_top = MattSensor(matt_fixture, survey_files['L0_axial_top'])
-        L0_stereo_top = MattSensor(matt_fixture, survey_files['L0_stereo_top'])
-        L1_axial_top = MattSensor(sho_fixture, survey_files['L1_axial_top'])
-        L1_stereo_top = MattSensor(sho_fixture, survey_files['L1_stereo_top'])
+        L0_axial_top = MattSensor(transition_fixture, survey_files['L0_axial_top'])
+        L0_stereo_top = MattSensor(transition_fixture, survey_files['L0_stereo_top'])
+        L1_axial_top = MattSensor(fixture, survey_files['L1_axial_top'])
+        L1_stereo_top = MattSensor(fixture, survey_files['L1_stereo_top'])
 
-        L0_axial_bottom = MattSensor(matt_fixture, survey_files['L0_axial_bottom'])
-        L0_stereo_bottom = MattSensor(matt_fixture, survey_files['L0_stereo_bottom'])
-        L1_axial_bottom = MattSensor(sho_fixture, survey_files['L1_axial_bottom'])
-        L1_stereo_bottom = MattSensor(sho_fixture, survey_files['L1_stereo_bottom'])
+        L0_axial_bottom = MattSensor(transition_fixture, survey_files['L0_axial_bottom'])
+        L0_stereo_bottom = MattSensor(transition_fixture, survey_files['L0_stereo_bottom'])
+        L1_axial_bottom = MattSensor(fixture, survey_files['L1_axial_bottom'])
+        L1_stereo_bottom = MattSensor(fixture, survey_files['L1_stereo_bottom'])
 
         self.sensors = {
             'top': {

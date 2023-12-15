@@ -73,7 +73,6 @@ The fixture also has a pin and a ball frame, see image below. It is important to
    :alt: Diagram Showing Ball and Pin Frame Coordinate Systems for Fixture
 
 .. automodule:: hps_align.survey._fixture
-   :exclude-members: ShoFixture
    :members:
    :undoc-members:
    :show-inheritance:
@@ -111,17 +110,6 @@ Special ball frame class for Matt Solt's measurement data.
 
 .. automodule:: hps_align.survey._ballframe
    :exclude-members: BallFrame
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :private-members:
-
-Sho Fixture
-^^^^^^^^^^^
-Special fixture class to use Sho's measurement data.
-
-.. automodule:: hps_align.survey._fixture
-   :exclude-members: Fixture
    :members:
    :undoc-members:
    :show-inheritance:

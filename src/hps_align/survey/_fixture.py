@@ -49,6 +49,14 @@ class Fixture:
 
         self.parser = Parser(input_file)
 
+        if self.parser:
+            self.oriball_dict = self.parser.get_coords('oriball')
+            self.diagball_dict = self.parser.get_coords('diagball')
+            self.axiball_dict = self.parser.get_coords('axiball')
+            self.base_plane_dict = self.parser.get_coords('fixture plane')
+            self.oripin_dict = self.parser.get_coords('oripin')
+            self.axipin_dict = self.parser.get_coords('axipin')
+
     def set_ball(self, ball_coords, type):
         """Set fixture ball coordinates for a given layer and ball type
 
@@ -233,92 +241,3 @@ class Fixture:
     def get_ball_in_pin(self):
         basis, origin = self.get_pin_in_ball()
         return np.linalg.inv(basis), -np.matmul(origin, np.linalg.inv(basis))
-
-
-class ShoFixture(Fixture):
-    """Fixture class for Sho's survey measurement
-
-    The coordinate system was changed during the measurement.
-    The pin positions are in OGP coordinates, the ball positions are in the new coordinate system.
-    It appears like the new coordinate system is related to the pin frame.
-    """
-
-    def __init__(self, input_file=None):
-        self.parser = None
-        super().__init__(input_file)
-
-        if self.parser:
-            # ball coordinated in pin frame
-            self.oriball_dict = self.parser.get_coords('Step 15 - Origin ball', 5)
-            self.diagball_dict = self.parser.get_coords('Step 16 - Diagonal ball', 5)
-            self.axiball_dict = self.parser.get_coords('Step 17 - Axis ball', 5)
-            self.base_plane_dict = self.parser.get_coords('Step 9 - Datum plane', 7)
-            # pin coordinates in OGP frame
-            self.oripin_dict = self.parser.get_coords('Step 11 - Slot pin', 6)
-            self.axipin_dict = self.parser.get_coords('Step 10 - Hole pin', 6)
-
-    def get_sho_basis(self):
-        """Get basis vectors for Sho's coordinate system
-
-        Returns
-        -------
-        basis : np.array
-            Basis vectors in OGP (or other global) coordinates
-        origin : np.array
-            Origin in OGP (or other global) coordinates
-        """
-        slot_pin = self.get_pin('oripin')
-        hole_pin = self.get_pin('axipin')
-
-        plane_origin, plane_normal = self.get_base_plane()
-
-        hole_pin_projected = project_to_plane(hole_pin, plane_origin, plane_normal)
-        slot_pin_projected = project_to_plane(slot_pin, plane_origin, plane_normal)
-
-        hole_to_slot = slot_pin_projected - hole_pin_projected
-        basis = make_basis(hole_to_slot, plane_normal)
-        origin = hole_pin_projected
-
-        return np.array([basis[0], -basis[2], basis[1]]), origin
-
-    def sho_to_pin(self):
-        """Get transformation matrix from Sho to fixture pin frame
-
-        Returns
-        -------
-        transformation : np.array
-            Transformation matrix from Sho to fixture pin frame
-        """
-        pin_basis = self.get_pin_basis()[0]  # this is in OGP coordinates
-        sho_basis = self.get_sho_basis()[0]  # this is in OGP coordinates
-
-        return np.matmul(sho_basis, np.linalg.inv(pin_basis))
-
-    def get_ball_in_pin(self):
-        """Get basis vectors for ball frame in fixture pin frame
-
-        Returns
-        -------
-        basis : np.array
-            Ball basis vectors in fixture pin frame
-        origin : np.array
-            Origin in fixture pin frame
-        """
-        ball_basis, ball_origin = self.get_ball_basis()  # this is in sho coordinates
-        ball_basis = np.matmul(ball_basis, self.sho_to_pin())
-        ball_origin = np.matmul(ball_origin, self.sho_to_pin())
-
-        return ball_basis, ball_origin
-
-    def get_pin_in_ball(self):
-        """Get basis vectors for pin frame in fixture ball frame
-
-        Returns
-        -------
-        basis : np.array
-            Pin basis vectors in fixture ball frame
-        origin : np.array
-            Origin in fixture ball frame
-        """
-        ball_basis, ball_origin = self.get_ball_in_pin()
-        return np.linalg.inv(ball_basis), -np.matmul(ball_origin, np.linalg.inv(ball_basis))
