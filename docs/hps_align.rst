@@ -11,6 +11,7 @@ Sub-Modules
 
    hps_align.plot
    hps_align.detdump
+   hps_align.survey
 
 CLI Development
 ---------------

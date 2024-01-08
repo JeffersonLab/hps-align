@@ -39,3 +39,12 @@ Run the module to see an up-to-date help printout.
 ```
 python3 -m hps_align --help
 ```
+### Generating survey constants
+Here is an example of how to run the program to get the 2019 survey constants from the measurement data. Run this from the top level of hps-align.
+```
+python -m hps_align survey data 2019 survey_data/2019_file_list.json
+```
+For more information, run
+```
+python -m hps_align survey data --help
+```

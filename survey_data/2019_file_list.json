@@ -1,0 +1,16 @@
+{
+    "ballframe_top": "survey_data/meas1/uchannel_empty_top_1.txt",
+    "pinframe_top": "survey_data/meas1/uchannel_empty_top_1.txt",
+    "ballframe_bottom": "survey_data/meas1/uchannel_empty_bottom_1.txt",
+    "pinframe_bottom": "survey_data/meas1/uchannel_empty_bottom_1.txt",
+    "fixture": "survey_data/fixture/L0/empty_fixture0.txt",
+    "transition_fixture": "survey_data/fixture/L0/transitionPlate_ogp_coords.txt",
+    "L0_axial_top": "survey_data/meas1/L0_axial_top_module1_1.txt",
+    "L0_stereo_top": "survey_data/meas1/L0_stereo_top_module1_1.txt",
+    "L0_axial_bottom": "survey_data/meas1/L0_axial_bottom_module2_1.txt",
+    "L0_stereo_bottom": "survey_data/meas1/L0_stereo_bottom_module2_1.txt",
+    "L1_axial_top": "survey_data/meas1/L1_axial_top_module3_1.txt",
+    "L1_stereo_top": "survey_data/meas1/L1_stereo_top_module3_1.txt",
+    "L1_axial_bottom": "survey_data/meas1/L1_axial_bottom_module5_1.txt",
+    "L1_stereo_bottom": "survey_data/meas1/L1_stereo_bottom_module5_1.txt"
+}

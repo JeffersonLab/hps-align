@@ -1,0 +1,186 @@
+C:\Documents and Settings\Administrator\Desktop\hps_fixtures\L0\transition_plate1.RTN
+===============================================================================
+Header:   
+-------------------------------------------------------------------------------
+Setup:    
+===============================================================================
+Step:  1    MM     Cart  Decimal Degree   Measure                     ANSI 
+Comment:    
+oriball                                                                     
+Prompt:     
+                                                                            
+Sphere      
+   p r s e                            Actual     Nominal     Upper     Lower
+             Diameter             +006.35524  +006.35524 +00.00000 -00.00000
+             X Location           +457.64983  +457.64983 +00.00000 -00.00000
+             Y Location           +151.69887  +151.69887 +00.00000 -00.00000
+             Z Location           +107.94319  +107.94319 +00.00000 -00.00000
+
+   p r s e                            Actual   Tolerance    Mod       ID/OD 
+             Sphericity           +000.00328   +00.00000
+             True Position        +000.00001   +00.00000    RFS            
+
+			       Skip:    No  
+Points: 34     Touch Probe       	Data Stream:   No  	       Hide:    No  
+DSM : 2MM_STAR_20MM  Tip # 4
+-------------------------------------------------------------------------------
+Step:  2    MM     Cart  Decimal Degree   Measure                     ANSI 
+Comment:    
+diagball                                                                    
+Prompt:     
+                                                                            
+Sphere      
+   p r s e                            Actual     Nominal     Upper     Lower
+             Diameter             +006.35539  +006.35539 +00.00000 -00.00000
+             X Location           +457.92473  +457.92473 +00.00000 -00.00000
+             Y Location           +126.48785  +126.48785 +00.00000 -00.00000
+             Z Location           +082.55493  +082.55493 +00.00000 -00.00000
+
+   p r s e                            Actual   Tolerance    Mod       ID/OD 
+             Sphericity           +000.00485   +00.00000
+             True Position        +000.00001   +00.00000    RFS            
+
+			       Skip:    No  
+Points: 32     Touch Probe       	Data Stream:   No  	       Hide:    No  
+DSM : 2MM_STAR_20MM  Tip # 4
+-------------------------------------------------------------------------------
+Step:  3    MM     Cart  Decimal Degree   Measure                     ANSI 
+Comment:    
+axiball                                                                     
+Prompt:     
+                                                                            
+Sphere      
+   p r s e                            Actual     Nominal     Upper     Lower
+             Diameter             +006.35554  +006.35554 +00.00000 -00.00000
+             X Location           +142.64253  +142.64253 +00.00000 -00.00000
+             Y Location           +147.06618  +147.06618 +00.00000 -00.00000
+             Z Location           +108.03680  +108.03680 +00.00000 -00.00000
+
+   p r s e                            Actual   Tolerance    Mod       ID/OD 
+             Sphericity           +000.00555   +00.00000
+             True Position        +000.00001   +00.00000    RFS            
+
+			       Skip:    No  
+Points: 42     Touch Probe       	Data Stream:   No  	       Hide:    No  
+DSM : 2MM_STAR_20MM  Tip # 2
+-------------------------------------------------------------------------------
+Step:  4    MM     Cart  Decimal Degree  Construct          
+Comment:    
+change coord system to ball frame                                           
+Prompt:     
+                                                                            
+Datum Origin  At Actual        
+
+        v  Set X Axis           +000.00000
+        v  Set Y Axis           +000.00000
+        v  Set Z Axis           +000.00000
+
+Features: 1   		
+     Reference Feature(s): 1
+-------------------------------------------------------------------------------
+Step:  5    MM     Cart  Decimal Degree  Construct     XY Plane   
+Comment:    
+                                                                            
+Prompt:     
+                                                                            
+Datum Axis    At Actual        
+
+              Align X Axis           +000.00000
+
+Features: 1   		
+     Reference Feature(s): 3
+-------------------------------------------------------------------------------
+Step:  6    MM     Cart  Decimal Degree  Construct                    ANSI 
+Comment:    
+                                                                            
+Prompt:     
+                                                                            
+Plane        Best Fit       
+   p r s e                            Actual     Nominal     Upper     Lower
+             XY Angle             -089.98309  -089.98309 +00.00000 -00.00000
+             Elevation            -044.80076  -044.80076 +00.00000 -00.00000
+             X Location           +105.04574  +105.04574 +00.00000 -00.00000
+             Y Location           +008.40411  +008.40411 +00.00000 -00.00000
+             Z Location           -008.43155  -008.43155 +00.00000 -00.00000
+
+   p r s e                            Actual   Tolerance                    
+             Flatness             +000.00000   +00.00000
+			       Skip:    No  
+Features: 3   	     Composite:  No  	Data Stream:   No  	       Hide:    No  
+     Reference Feature(s): 3, 1, 2
+-------------------------------------------------------------------------------
+Step:  7    MM     Cart  Decimal Degree  Construct          
+Comment:    
+done changing system                                                        
+Prompt:     
+                                                                            
+Datum Plane   Align XY Plane    
+
+           Set Z Axis           +000.00000
+Features: 1   		
+     Reference Feature(s): 6
+-------------------------------------------------------------------------------
+Step:  8    MM     Cart  Decimal Degree   Measure                     ANSI 
+Comment:    
+transition plate plane                                                      
+Prompt:     
+                                                                            
+Plane        Best Fit       
+   p r s e                            Actual     Nominal     Upper     Lower
+             XY Angle             -090.05939  -090.05939 +00.00000 -00.00000
+             Elevation            +044.85656  +044.85656 +00.00000 -00.00000
+             X Location           +146.71955  +146.71955 +00.00000 -00.00000
+             Y Location           +041.85832  +041.85832 +00.00000 -00.00000
+             Z Location           -022.31636  -022.31636 +00.00000 -00.00000
+
+   p r s e                            Actual   Tolerance                    
+             Flatness             +000.08931   +00.00000
+			       Skip:    No  
+Points: 66     Touch Probe       	Data Stream:   No  	       Hide:    No  
+DSM : 2MM_STAR_20MM  Tip # 1
+-------------------------------------------------------------------------------
+Step:  9    MM     Cart  Decimal Degree   Measure                     ANSI 
+Comment:    
+axipin                                                                      
+Prompt:     
+                                                                            
+Circle      
+   p r s e                            Actual     Nominal     Upper     Lower
+             Diameter             +004.13785  +004.13785 +00.00000 -00.00000
+             X Location           +183.86660  +183.86660 +00.00000 -00.00000
+             Y Location           +041.45091  +041.45091 +00.00000 -00.00000
+             Z Location           -023.12632  -023.12632 +00.00000 -00.00000
+             XY Angle             -089.98309  -089.98309 +00.00000 -00.00000
+             Elevation            +044.80076  +044.80076 +00.00000 -00.00000
+
+   p r s e                            Actual   Tolerance    Mod       ID/OD 
+             3D Circularity       +000.02411   +00.00000
+             True Position        +000.00001   +00.00000    RFS            
+
+			       Skip:    No  
+Points: 43    	   Lens: 1x    	Data Stream:   No  	       Hide:    No  
+Target: FeatureFinder       
+-------------------------------------------------------------------------------
+Step:  10   MM     Cart  Decimal Degree   Measure                     ANSI 
+Comment:    
+oripin                                                                      
+Prompt:     
+                                                                            
+Circle      
+   p r s e                            Actual     Nominal     Upper     Lower
+             Diameter             +004.17634  +004.17634 +00.00000 -00.00000
+             X Location           +074.63466  +074.63466 +00.00000 -00.00000
+             Y Location           +041.61362  +041.61362 +00.00000 -00.00000
+             Z Location           -022.94847  -022.94847 +00.00000 -00.00000
+             XY Angle             -089.98309  -089.98309 +00.00000 -00.00000
+             Elevation            +044.80076  +044.80076 +00.00000 -00.00000
+
+   p r s e                            Actual   Tolerance    Mod       ID/OD 
+             3D Circularity       +000.02351   +00.00000
+             True Position        +000.00001   +00.00000    RFS            
+
+			       Skip:    No  
+Points: 39    	   Lens: 1x    	Data Stream:   No  	       Hide:    No  
+Target: FeatureFinder       
+-------------------------------------------------------------------------------
+
