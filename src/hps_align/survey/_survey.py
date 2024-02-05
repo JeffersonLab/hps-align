@@ -148,6 +148,7 @@ class Survey2019(Survey):
                     f.write('</SurveyVolume>\n')
 
                     for sensor in ['axial', 'stereo']:
+                        # print('volume ', volume, ' layer ', layer, ' sensor ', sensor)
                         f.write('<SurveyVolume name="module_L' + str(layer) + short_name + '_halfmodule_' + sensor
                                 + '" desc="' + volume + ' L' + str(layer) + ' ' + sensor + ' sensor basis in pin frame:">\n')
                         sensor_basis_pin, sensor_origin_pin = self.sensors[volume][str(layer-1)][sensor].get_sensor_basis_pinframe()

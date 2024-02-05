@@ -182,7 +182,7 @@ class MattSensor(Sensor):
         if np.dot(strip_direction, basis[0]) < 0:
             # strip direction needs to point away from slot pin
             strip_direction = -strip_direction
-        return strip_direction
+        return -strip_direction
 
     def get_strip_direction_pinframe(self):
         """Get sensor strip direction in fixture pinframe
@@ -212,6 +212,6 @@ class MattSensor(Sensor):
         strip_direction = self.get_strip_direction_pinframe()  # in fixture pinframe
 
         basis = make_basis(normal, strip_direction)
-        basis = np.array([basis[1], basis[2], basis[0]])
+        basis = np.array([basis[2], basis[1], basis[0]])
 
         return basis, origin
