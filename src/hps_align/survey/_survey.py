@@ -103,7 +103,7 @@ class Survey2019(Survey):
 
     def get_pin_in_uchannel_ballframe(self, volume, layer):
         """Get pin frame basis vectors and origin in uchannel ball frame
-        
+
         To attach the L2 slim sensors a transition plate is used. This transition plate has a
         different pin frame (small pin frame) than the original L2 uchannel pins (wide pin frame).
         To account for this, additional coordinate transformations are needed.
@@ -115,7 +115,7 @@ class Survey2019(Survey):
             Volume ('top' or 'bottom')
         layer : int
             Layer number
-        
+
         Returns
         -------
         basis : np.array
