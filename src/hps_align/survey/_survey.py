@@ -65,18 +65,18 @@ class Survey2019(Survey):
                                  pinframe_top=pinframe_top,
                                  pinframe_bot=pinframe_bottom)
 
-        fixture = Fixture(survey_files['fixture'])
-        transition_fixture = Fixture(survey_files['transition_fixture'])
+        self.fixture = Fixture(survey_files['fixture'])
+        self.transition_fixture = Fixture(survey_files['transition_fixture'])
 
-        L0_axial_top = MattSensor(transition_fixture, survey_files['L0_axial_top'])
-        L0_stereo_top = MattSensor(transition_fixture, survey_files['L0_stereo_top'])
-        L1_axial_top = MattSensor(fixture, survey_files['L1_axial_top'])
-        L1_stereo_top = MattSensor(fixture, survey_files['L1_stereo_top'])
+        L0_axial_top = MattSensor(self.transition_fixture, survey_files['L0_axial_top'])
+        L0_stereo_top = MattSensor(self.transition_fixture, survey_files['L0_stereo_top'])
+        L1_axial_top = MattSensor(self.transition_fixture, survey_files['L1_axial_top'])
+        L1_stereo_top = MattSensor(self.transition_fixture, survey_files['L1_stereo_top'])
 
-        L0_axial_bottom = MattSensor(transition_fixture, survey_files['L0_axial_bottom'])
-        L0_stereo_bottom = MattSensor(transition_fixture, survey_files['L0_stereo_bottom'])
-        L1_axial_bottom = MattSensor(fixture, survey_files['L1_axial_bottom'])
-        L1_stereo_bottom = MattSensor(fixture, survey_files['L1_stereo_bottom'])
+        L0_axial_bottom = MattSensor(self.transition_fixture, survey_files['L0_axial_bottom'])
+        L0_stereo_bottom = MattSensor(self.transition_fixture, survey_files['L0_stereo_bottom'])
+        L1_axial_bottom = MattSensor(self.transition_fixture, survey_files['L1_axial_bottom'])
+        L1_stereo_bottom = MattSensor(self.transition_fixture, survey_files['L1_stereo_bottom'])
 
         self.sensors = {
             'top': {
@@ -102,7 +102,71 @@ class Survey2019(Survey):
         }
 
     def get_pin_in_uchannel_ballframe(self, volume, layer):
-        return self.uchannel.pin_in_ballframe(int(layer), volume)
+        """Get pin frame basis vectors and origin in uchannel ball frame
+        
+        To attach the L2 slim sensors a transition plate is used. This transition plate has a
+        different pin frame (small pin frame) than the original L2 uchannel pins (wide pin frame).
+        To account for this, additional coordinate transformations are needed.
+        For L1, the uchannel pin frame is already the small pin frame, hence no transformation is needed.
+
+        Parameters
+        ----------
+        volume : str
+            Volume ('top' or 'bottom')
+        layer : int
+            Layer number
+        
+        Returns
+        -------
+        basis : np.array
+            Basis vectors in uchannel ball frame
+        origin : np.array
+            Origin in uchannel ball frame
+        """
+        if layer == 1:
+            # pin frame in ogp coordinates
+            pin_basis, pin_origin = self.uchannel.get_pin_basis(layer, volume)
+            # ball frame in ogp coordinates
+            ball_basis, ball_origin = self.uchannel.get_ball_basis(volume)
+
+            # wide fixture pin frame in ogp coordinates
+            wide_fixture_basis = self.fixture.get_pin_basis()[0]
+            # small fixture pin frame in ogp coordinates
+            small_fixture_basis = self.transition_fixture.get_pin_basis()[0]
+
+            # rotation of basis vectors from small fixture pin frame to wide fixture pin frame
+            small_to_wide = np.matmul(small_fixture_basis, np.linalg.inv(wide_fixture_basis))
+            # small fixture pin frame in uchannel pin frame (= wide fixture pin frame) coordinates
+            pin_small_basis = np.matmul(small_to_wide, pin_basis)
+
+            # rotation of basis vectors from pin frame to uchannel ball frame
+            basis = np.matmul(pin_small_basis, np.linalg.inv(ball_basis))
+
+            if volume == 'top' and self.uchannel.ballframe_top.__class__.__name__ == 'MattBallFrame':
+                origin = pin_origin
+            elif volume == 'bottom' and self.uchannel.ballframe_bot.__class__.__name__ == 'MattBallFrame':
+                origin = pin_origin
+            else:
+                # translation of origin in ball frame
+                origin = pin_origin - ball_origin
+
+            wide_pin_fixball_basis, wide_pin_fixball_origin = self.fixture.get_pin_in_ball()
+            small_pin_fixball_origin = self.transition_fixture.get_pin_in_ball()[1]
+
+            # translation vector between pin frames in fixture ball frame
+            wide_to_small_fixball = small_pin_fixball_origin - wide_pin_fixball_origin
+            # translation vector between pin frames in uchannel pin frame
+            wide_to_small_pin = np.matmul(wide_to_small_fixball, np.linalg.inv(wide_pin_fixball_basis))
+            # translation vector between pin frames in uchannel ball frame
+            wide_to_small_ball = np.matmul(wide_to_small_pin, np.matmul(pin_basis, np.linalg.inv(ball_basis)))
+
+            # origin in uchannel ball frame
+            origin = np.matmul(origin, np.linalg.inv(ball_basis)) + wide_to_small_ball
+
+            return basis, origin
+
+        else:
+            return self.uchannel.pin_in_ballframe(int(layer), volume)
 
     def transform_sensor_to_uchannel_ballframe(self, volume, layer, sensor_type):
         basis, origin = self.get_pin_in_uchannel_ballframe(volume, layer)
@@ -152,7 +216,7 @@ class Survey2019(Survey):
                         f.write('<SurveyVolume name="module_L' + str(layer) + short_name + '_halfmodule_' + sensor
                                 + '" desc="' + volume + ' L' + str(layer) + ' ' + sensor + ' sensor basis in pin frame:">\n')
                         sensor_basis_pin, sensor_origin_pin = self.sensors[volume][str(layer-1)][sensor].get_sensor_basis_pinframe()
-                        f.write('<origin x="' + str(sensor_origin_pin[0]) + '" y=" ' + str(sensor_origin_pin[1])
+                        f.write('<origin x="' + str(sensor_origin_pin[0]) + '" y="' + str(sensor_origin_pin[1])
                                 + '" z="' + str(sensor_origin_pin[2]) + '" />\n')
                         f.write('<unitvec name="X" x="' + str(sensor_basis_pin[0][0]) + '" y="' + str(sensor_basis_pin[0][1])
                                 + '" z="' + str(sensor_basis_pin[0][2]) + '" />\n')
