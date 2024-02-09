@@ -107,9 +107,8 @@ class UChannel:
         """
         pin_basis, pin_origin = self.get_pin_basis(layer, volume)
         ball_basis, ball_origin = self.get_ball_basis(volume)
-        inv_ball_basis = np.linalg.inv(ball_basis)
         # rotation of basis vectors from pin frame to ball frame
-        basis = np.matmul(pin_basis, inv_ball_basis)
+        basis = np.matmul(pin_basis, np.linalg.inv(ball_basis))
 
         if volume == 'top' and self.ballframe_top.__class__.__name__ == 'MattBallFrame':
             origin = pin_origin
@@ -119,6 +118,6 @@ class UChannel:
             # translation of origin in ball frame
             origin = pin_origin - ball_origin
 
-        origin = np.matmul(origin, inv_ball_basis)
+        origin = np.matmul(origin, np.linalg.inv(ball_basis))
 
         return basis, origin
