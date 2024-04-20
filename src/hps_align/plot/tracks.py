@@ -97,34 +97,34 @@ def p_vs_phi(p: Plotter):
 def eop(p: Plotter):
     """EoP plots require the EoP directory in the ROOT files"""
     p.plot_profileY(
-        "EoP_vs_trackP_top_fid", xtitle="Top track P [GeV]", rangeY=[0.7, 1.3], fit="[0]")
+        "EoP_vs_trackP_top_fid", xtitle="Top track P [GeV]", rangeY=[0.7, 1.3], fit="[0]", indir="EoP/")
 
     p.plot_profileY("EoP_vs_trackP_ele_top_fid", xtitle="Top ele track P [GeV]", rangeY=[
-        0.7, 1.3], fit="[0]", fitrange=[0.7, 1.2])
+        0.7, 1.3], fit="[0]", fitrange=[0.7, 1.2], indir="EoP/")
 
     p.plot_profileY(
-        "EoP_vs_trackP_pos_top_fid", xtitle="Top pos track P [GeV]", rangeY=[0.7, 1.3], fit="[0]")
+        "EoP_vs_trackP_pos_top_fid", xtitle="Top pos track P [GeV]", rangeY=[0.7, 1.3], fit="[0]", indir="EoP/")
 
     p.plot_profileY(
-        "EoP_vs_trackP_bottom_fid", xtitle="Bot track P [GeV]", rangeY=[0.7, 1.3], fit="[0]")
+        "EoP_vs_trackP_bottom_fid", xtitle="Bot track P [GeV]", rangeY=[0.7, 1.3], fit="[0]", indir="EoP/")
 
     p.plot_profileY("EoP_vs_trackP_ele_bottom_fid", xtitle="Bot ele track P [GeV]", rangeY=[
-        0.7, 1.3], fit="[0]", fitrange=[0.7, 1.2])
+        0.7, 1.3], fit="[0]", fitrange=[0.7, 1.2], indir="EoP/")
 
     p.plot_profileY(
-        "EoP_vs_trackP_pos_bottom_fid", xtitle="Bot pos track P [GeV]", rangeY=[0.7, 1.3], fit="[0]")
+        "EoP_vs_trackP_pos_bottom_fid", xtitle="Bot pos track P [GeV]", rangeY=[0.7, 1.3], fit="[0]", indir="EoP/")
 
     p.plot_profileY("EoP_vs_tanLambda_fid", xtitle="track tan(#lambda) [GeV]", rangeX=[
-        -0.07, 0.07], rangeY=[0.7, 1.3], fit="[0]*x*x*x + [1]*x*x + [2]*x + [3]")
+        -0.07, 0.07], rangeY=[0.7, 1.3], fit="[0]*x*x*x + [1]*x*x + [2]*x + [3]", indir="EoP/")
 
     p.plot_profileY("EoP_vs_phi_fid", xtitle="track #phi [GeV]", rangeY=[
-        0.5, 1.3], fit="[0]*x*x*x + [1]*x*x + [2]*x + [3]")
+        0.5, 1.3], fit="[0]*x*x*x + [1]*x*x + [2]*x + [3]", indir="EoP/")
 
     p.plot_profileY("EoP_vs_phi_top_fid", xtitle="Top track #phi [GeV]", rangeY=[
-        0.5, 1.3], fit="[0]*x*x*x + [1]*x*x + [2]*x + [3]")
+        0.5, 1.3], fit="[0]*x*x*x + [1]*x*x + [2]*x + [3]", indir="EoP/")
 
     p.plot_profileY("EoP_vs_phi_bottom_fid", xtitle="Bottom track #phi [GeV]", rangeY=[
-        0.5, 1.3], fit="[0]*x*x*x + [1]*x*x + [2]*x + [3]")
+        0.5, 1.3], fit="[0]*x*x*x + [1]*x*x + [2]*x + [3]", indir="EoP/")
 
 
 @Plotter.user

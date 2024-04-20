@@ -59,6 +59,7 @@ class Plotter:
     def __init__(self,
                  legend_names=[],
                  infile_names=[],
+                 vtxana_infile_names=[],
                  outdir="",
                  do_HTML=False,
                  oFext=".png",
@@ -114,6 +115,7 @@ class Plotter:
 
         self.legend_names = legend_names
         self.infile_names = infile_names
+        self.vtxana_infile_names = vtxana_infile_names
         self.outdir = outdir
         self.do_HTML = do_HTML
         self.oFext = oFext
@@ -121,6 +123,7 @@ class Plotter:
 
         # input TFiles
         self.input_files = [r.TFile(inf) for inf in self.infile_names]
+        self.vtxana_input_files = [r.TFile(inf) for inf in self.vtxana_infile_names]
 
         if (not os.path.exists(self.outdir)):
             os.mkdir(self.outdir)
@@ -164,7 +167,7 @@ class Plotter:
             # year-separation not available
             return self._plot_list[name]
 
-    def get(self, hist_name, indir=""):
+    def get(self, hist_name, indir="", is_vtxana=False):
         """Get a histogram from each ROOT file
 
         Parameters
@@ -173,6 +176,8 @@ class Plotter:
             name of histogram to get
         indir : str, optional
             optional ROOT directory histogram is contained in
+        is_vtxana : bool, optional
+            whether to pull histogram from vtxana files or not
 
         Returns
         -------
@@ -190,7 +195,10 @@ class Plotter:
 
         # do not use list expansion since we want to handle errors
         histos = []
-        for f in self.input_files:
+        if is_vtxana: files = self.vtxana_input_files
+        else: files = self.input_files
+        
+        for f in files:
             h = f.Get(path)
             if h is None or not isinstance(h, r.TH1):
                 raise KeyError(f'Histogram {path} not found in {f.GetName()}')
@@ -225,7 +233,7 @@ class Plotter:
 
         leg = None
         xshift = 0.3
-        yshift = 0.3
+        yshift = 0.2
         if (location == 1):
             leg = r.TLegend(0.6, 0.35, 0.90, 0.15)
         if (location == 2):
@@ -335,7 +343,7 @@ class Plotter:
 
         can.SaveAs(self.outdir + "/" + out_name + self.oFext)
 
-    def plot_2D_colormesh(self, name, indir='res/', xtitle=None, ytitle=None, ztitle=None, logz=True):
+    def plot_2D_colormesh(self, name, indir='res/', xtitle=None, ytitle=None, ztitle=None, logz=True, is_vtxana=False):
         """plot a 2D colormesh for _each_ histogram in the list _separately_
 
         Parameters
@@ -358,7 +366,7 @@ class Plotter:
         if not os.path.exists(self.outdir):
             os.mkdir(self.out_dir)
 
-        histolist = self.get(name, indir=indir)
+        histolist = self.get(name, indir=indir, is_vtxana=is_vtxana)
 
         can = r.TCanvas('c1', 'c1', 2200, 2200)
         can.SetMargin(
@@ -466,7 +474,7 @@ class Plotter:
 
         can.SaveAs(self.outdir + out_name + self.oFext)
 
-    def make_1D_plots_with_fit(self, histopath, xtitle="", ytitle="", fit=True, scale_histos=False):
+    def make_1D_plots_with_fit(self, histopath, xtitle="", ytitle="", fit=True, scale_histos=False, is_vtxana=False):
         """Plot the histograms with an iterative gaussian fit
 
         Parameters
@@ -492,7 +500,9 @@ class Plotter:
         canv = r.TCanvas("c", "c", 2200, 2000)
 
         histos = []
-        for infile in self.input_files:
+        if is_vtxana: files = self.vtxana_input_files
+        else: files = self.input_files
+        for infile in files:
             histos.append(infile.Get(histopath))
 
         fitList = []
@@ -565,7 +575,8 @@ class Plotter:
                       ytitle="<ures> [mm]",
                       rangeX=[], rangeY=[], do_fit=False,
                       fitrange=[-2e5, 2e5], fit="[0]*x + [1]",
-                      num_bins=1, rebin=1, do_sigma_profile=False):
+                      num_bins=1, rebin=1, do_sigma_profile=False,
+                      is_vtxana=False):
         """!
         Plot y profile of distribution
 
@@ -586,7 +597,9 @@ class Plotter:
         histos_mu = []
         histos_sigma = []
 
-        for infile in self.input_files:
+        if is_vtxana: files = self.vtxana_input_files
+        else: files = self.input_files
+        for infile in files:
             if not infile.Get(indir+name):
                 raise Exception(indir + name + "   NOT FOUND")
 

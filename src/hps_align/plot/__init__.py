@@ -17,6 +17,7 @@ from . import tracks
 from . import residual
 from . import kinks
 from . import derivatives
+from . import vtxana
 
 
 @Plotter.user
@@ -60,6 +61,8 @@ def plot(
         ),
         input_files: List[str] = typer.Option([],
                                               help='Input files for plotting'),
+        vtxana_input_files: List[str] = typer.Option([],
+                                                     help='Input files for vertex analysis'),
         legend: List[str] = typer.Option([],
                                          help='Labels for legend if not deduced from input file names'),
         out_dir: str = typer.Option(os.getcwd(),
@@ -84,6 +87,9 @@ def plot(
             if c['inputFiles']:
                 input_files = c['inputFiles']
 
+            if c['vtxana_inputFiles']:
+                vtxana_input_files = c['vtxana_inputFiles']
+
             if c['outdir']:
                 out_dir = c['outdir']
 
@@ -99,16 +105,20 @@ def plot(
     if len(input_files) == 0:
         # raise ValueError('No input files given.')
         warnings.warn('No input files given.')
+    
+    if len(vtxana_input_files) == 0:
+        warnings.warn('No vtxana input files given.')
 
     if legend is None or len(legend) == 0:
         legend = generate_legend_names(input_files)
-    elif len(input_files) != len(legend):
+    elif (len(input_files) == len(legend) or len(vtxana_input_files) == len(legend)) is False:
         # raise ValueError("Number of legend labels does not equal number of input files.")
         warnings.warn('Number of legend labels does not equal number of input files.')
 
     p = Plotter(
         plot_list_file=plot_list,
         infile_names=input_files,
+        vtxana_infile_names=vtxana_input_files,
         legend_names=legend,
         outdir=out_dir,
         do_HTML=html,
