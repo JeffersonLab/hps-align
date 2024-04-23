@@ -16,6 +16,7 @@ def fit_2D_dist(p: Plotter, histoname: str, xtitle="", ytitle="", fitfunc="[1]*x
     histos = [f.Get(histoname) for f in p.vtxana_input_files]
 
     print("Histograms to fit:", len(histos))
+
     canv = r.TCanvas("c1", "c1", 2200, 2000)
     canv.SetGridx()
     canv.SetGridy()
@@ -26,10 +27,14 @@ def fit_2D_dist(p: Plotter, histoname: str, xtitle="", ytitle="", fitfunc="[1]*x
     histos_sigma = []
 
     for ihisto in range(0, len(histos)):
+
+        # Rebin it
+        histos[ihisto].Rebin(4)
+                
         # Profile it
         histos_mu.append(r.TH1F(histos[ihisto].GetName()+"_mu"+str(ihisto), histos[ihisto].GetName()+"_mu"+str(
             ihisto), histos[ihisto].GetXaxis().GetNbins(), histos[ihisto].GetXaxis().GetXmin(), histos[ihisto].GetXaxis().GetXmax()))
-
+        
         histos_sigma.append(r.TH1F(histos[ihisto].GetName()+"_sigma"+str(ihisto), histos[ihisto].GetName()+"_sigma"+str(
             ihisto), histos[ihisto].GetXaxis().GetNbins(), histos[ihisto].GetXaxis().GetXmin(), histos[ihisto].GetXaxis().GetXmax()))
         alignment_utils.profile_y_with_iterative_gauss_fit(
@@ -67,18 +72,39 @@ def fit_2D_dist(p: Plotter, histoname: str, xtitle="", ytitle="", fitfunc="[1]*x
             histos_mu[ihisto].Draw("P")
         else:
             histos_mu[ihisto].Draw("P SAME")
-
-        fitF.SetLineColor(p.colors[ihisto])
-        fitF.DrawClone("SAME")
-
+            
+            fitF.SetLineColor(p.colors[ihisto])
+            fitF.DrawClone("SAME")
+            
     leg = p.do_legend(histos_mu, p.legend_names, 3, plotProperties)
     if (leg is not None):
         leg.Draw()
 
     canv.Update()
-    canv.SaveAs(p.outdir + "/" + outname + p.oFext)
+    canv.SaveAs(p.outdir + "/" + outname + "_mu_"+p.oFext)
+    
 
+    #Now plot the sigma
 
+    canv2 = r.TCanvas("c2", "c2", 2200, 2000)
+    canv2.SetGridx()
+    canv2.SetGridy()
+    p.set_histo_style(histos_sigma[ihisto], ihisto)
+    canv2.cd()
+    for ihisto in range(0, len(histos)):
+        
+        if (ihisto == 0):
+            histos_sigma[ihisto].Draw("P")
+        else:
+            histos_sigma[ihisto].Draw("P SAME")
+
+    leg = p.do_legend(histos_mu, p.legend_names, 3, plotProperties)
+    if (leg is not None):
+        leg.Draw()
+        
+    canv2.Update()
+    canv2.SaveAs(p.outdir + "/" + outname + "_sigma_"+p.oFext)
+    
 @Plotter.user
 def vtx_pos(p: Plotter):
     """plot vertex z distributions
