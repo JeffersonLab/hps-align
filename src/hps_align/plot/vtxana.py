@@ -29,7 +29,7 @@ def fit_2D_dist(p: Plotter, histoname: str, xtitle="", ytitle_mu="", ytitle_sigm
     for ihisto in range(0, len(histos)):
 
         # Rebin it
-        histos[ihisto].Rebin(4)
+        histos[ihisto].Rebin(10)
                 
         # Profile it
         histos_mu.append(r.TH1F(histos[ihisto].GetName() + "_mu" + str(ihisto), histos[ihisto].GetName() + "_mu" + str(
@@ -78,7 +78,7 @@ def fit_2D_dist(p: Plotter, histoname: str, xtitle="", ytitle_mu="", ytitle_sigm
             fitF.SetLineColor(p.colors[ihisto])
             fitF.DrawClone("SAME")
             
-    leg = p.do_legend(histos_mu, p.legend_names, 3, plotProperties)
+    leg = p.do_legend(histos_mu, p.legend_names, 4, plotProperties)
     if (leg is not None):
         leg.Draw()
 
@@ -111,7 +111,7 @@ def fit_2D_dist(p: Plotter, histoname: str, xtitle="", ytitle_mu="", ytitle_sigm
         else:
             histos_sigma[ihisto].Draw("P SAME")
 
-    leg = p.do_legend(histos_sigma, p.legend_names, 3, plotProperties)
+    leg = p.do_legend(histos_sigma, p.legend_names, 4, plotProperties)
     if (leg is not None):
         leg.Draw()
         
@@ -178,7 +178,7 @@ def vtx_pos(p: Plotter):
 
 @Plotter.user
 def eop(p: Plotter):
-    for selection in ['vtxSelection', 'Tight_2019']:
+    for selection in ['vtxSelection', 'Tight_2019','Tight_pBot_2019','Tight_pTop_2019']:
         for charge in ['ele', 'pos']:
             p.make_1D_plots_with_fit(
                 f'vtxana_{selection}/vtxana_{selection}_{charge}_EoP_h',
