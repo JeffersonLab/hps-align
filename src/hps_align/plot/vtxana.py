@@ -156,30 +156,30 @@ def vtx_pos(p: Plotter):
     input ROOT files have to contain the '' directory
     """
 
-    # p.make_1D_plots_with_fit(
-    #     'vtxana_vtxSelection/vtxana_vtxSelection_vtx_Z_svt_h',
-    #     xtitle='Vertex Z [mm]',
-    #     ytitle='arb. units',
-    #     scale_histos=True,
-    #     is_vtxana=True,
-    #     fit=False
-    # )
+    p.make_1D_plots_with_fit(
+        'vtxana_vtxSelection/vtxana_vtxSelection_vtx_Z_svt_h',
+        xtitle='Vertex Z [mm]',
+        ytitle='arb. units',
+        scale_histos=True,
+        is_vtxana=True,
+        fit=False
+    )
 
-    # additional_histos = []
-    # if p.additional_input_files:
-    #     additional_histos = [get_2016_vtx_z(p.additional_input_files[0], selection='Tight', name='MC_histo'), get_2016_vtx_z(p.additional_input_files[1], selection='Tight', name='data_histo')]
-    # histopaths =[]
-    # for year in p.year:
-    #     histopaths.append(f'vtxana_Tight_{year}/vtxana_Tight_{year}_vtx_Z_svt_h')
-    # p.make_1D_plots_with_fit(
-    #     histopaths,
-    #     xtitle='Vertex Z [mm]',
-    #     ytitle='arb. units',
-    #     scale_histos=True,
-    #     is_vtxana=True,
-    #     additional_histos=additional_histos,
-    #     xrange=[-30, 20]
-    # )
+    additional_histos = []
+    if p.additional_input_files:
+        additional_histos = [get_2016_vtx_z(p.additional_input_files[0], selection='Tight', name='MC_histo'), get_2016_vtx_z(p.additional_input_files[1], selection='Tight', name='data_histo')]
+    histopaths =[]
+    for year in p.year:
+        histopaths.append(f'vtxana_Tight_{year}/vtxana_Tight_{year}_vtx_Z_svt_h')
+    p.make_1D_plots_with_fit(
+        histopaths,
+        xtitle='Vertex Z [mm]',
+        ytitle='arb. units',
+        scale_histos=True,
+        is_vtxana=True,
+        additional_histos=additional_histos,
+        xrange=[-30, 20]
+    )
 
     fit_2D_dist(p, histoname=['vtxana_vtxSelection/vtxana_vtxSelection_vtx_InvM_vtx_svt_z_hh'], xtitle='M_inv [GeV]', ytitle_mu='#mu vertex z [mm]', ytitle_sigma='#sigma vertex z [mm]', outname=f'vtxana_vtxSelection_vtx_InvM_vtx_svt_z', xrange_mu=[0, 0.3], yrange_mu=[-20, 0], xrange_sigma=[0, 0.3], yrange_sigma=[0, 3])
 
@@ -227,15 +227,15 @@ def vtx_pos(p: Plotter):
 
 def get_2016_vtx_EoP(infile, charge='ele', selection='vtxSelection', name='hout'):
     """get EoP plots for 2016 data"""
-    if selection=='Tight_2019':
+    if selection=='Tight':
         tree = infile.Get("vtxana_Tight_L1L1_nvtx1/vtxana_Tight_L1L1_nvtx1_tree")
         tree.Draw("unc_vtx_"+charge+"_clust_E/unc_vtx_"+charge+"_track_p>>"+name+"(100, 0, 2)","")
         hout = r.gDirectory.Get(name)
-    elif selection=='Tight_pBot_2019':
+    elif selection=='Tight_pBot':
         tree = infile.Get("vtxana_Tight_L1L1_nvtx1/vtxana_Tight_L1L1_nvtx1_tree")
         tree.Draw("unc_vtx_"+charge+"_clust_E/unc_vtx_"+charge+"_track_p>>"+name+"(100, 0, 2)","unc_vtx_pos_track_tanLambda < 0")
         hout = r.gDirectory.Get(name)
-    elif selection=='Tight_pTop_2019':
+    elif selection=='Tight_pTop':
         tree = infile.Get("vtxana_Tight_L1L1_nvtx1/vtxana_Tight_L1L1_nvtx1_tree")
         tree.Draw("unc_vtx_"+charge+"_clust_E/unc_vtx_"+charge+"_track_p>>"+name+"(100, 0, 2)","unc_vtx_pos_track_tanLambda > 0")
         hout = r.gDirectory.Get(name)
