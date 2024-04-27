@@ -4,7 +4,7 @@ from ._plotter import Plotter
 from .index_page import htmlWriter
 from . import alignment_utils
 
-def fit_2D_dist(p: Plotter, histoname: str, xtitle="", ytitle_mu="", ytitle_sigma="", fitfunc="", outname="out", xrange_mu=[], yrange_mu=[], xrange_sigma=[], yrange_sigma=[], additional_histos=[]):
+def fit_2D_dist(p: Plotter, histoname=[], xtitle="", ytitle_mu="", ytitle_sigma="", fitfunc="", outname="out", xrange_mu=[], yrange_mu=[], xrange_sigma=[], yrange_sigma=[], additional_histos=[]):
     """!
     Plot z0 vs tanL and fit it
 
@@ -12,8 +12,15 @@ def fit_2D_dist(p: Plotter, histoname: str, xtitle="", ytitle_mu="", ytitle_sigm
 
     @param name  name of the histogram
     """
+    histos = []
+    if len(histoname) == 1:
+        histos = [f.Get(histoname[0]) for f in p.vtxana_input_files]
+    elif len(histoname) > 1:
+        for index in range(len(p.vtxana_input_files)):
+            histos.append(p.vtxana_input_files[index].Get(histoname[index]))
+    else:
+        print("No histogram given to fit.")
 
-    histos = [f.Get(histoname) for f in p.vtxana_input_files]
     histos.extend(additional_histos)
 
     print("Histograms to fit:", len(histos))
@@ -122,7 +129,7 @@ def fit_2D_dist(p: Plotter, histoname: str, xtitle="", ytitle_mu="", ytitle_sigm
 
 def get_2016_vtx_z_2D(infile, selection='vtxSelection', name='out_h'):
     """get vertex position plots for 2016 data"""
-    if selection=='Tight_2019':
+    if selection=='Tight':
         tree = infile.Get("vtxana_Tight_L1L1_nvtx1/vtxana_Tight_L1L1_nvtx1_tree")
         tree.Draw("unc_vtx_z:unc_vtx_mass>>"+name+"(300, 0, 0.3, 200, -40, 40)","")
         out_h = r.gDirectory.Get(name)
@@ -133,7 +140,7 @@ def get_2016_vtx_z_2D(infile, selection='vtxSelection', name='out_h'):
 
 def get_2016_vtx_z(infile, selection='vtxSelection', name='out_h'):
     """get vertex position plots for 2016 data"""
-    if selection=='Tight_2019':
+    if selection=='Tight':
         tree = infile.Get("vtxana_Tight_L1L1_nvtx1/vtxana_Tight_L1L1_nvtx1_tree")
         tree.Draw("unc_vtx_z>>"+name+"(150, -30, 20)","")
         out_h = r.gDirectory.Get(name)
@@ -148,30 +155,50 @@ def vtx_pos(p: Plotter):
 
     input ROOT files have to contain the '' directory
     """
-    canv1 = r.TCanvas("c", "c", 2200, 2000)
-    get_2016_vtx_z_2D(p.additional_input_files[0], selection='Tight_2019', name='MC_histo').Draw("colz")
-    canv1.SaveAs("MC_histo.png")
 
-    for selection in ['vtxSelection', 'Tight_2019']:
-        p.make_1D_plots_with_fit(
-            f'vtxana_{selection}/vtxana_{selection}_vtx_Z_svt_h',
-            xtitle='Vertex Z [mm]',
-            ytitle='arb. units',
-            scale_histos=True,
-            is_vtxana=True,
-            additional_histos=[get_2016_vtx_z(p.additional_input_files[0], selection=selection, name='MC_histo'), get_2016_vtx_z(p.additional_input_files[1], selection=selection, name='data_histo')],
-            xrange=[-30, 20]
-        )
+    # p.make_1D_plots_with_fit(
+    #     'vtxana_vtxSelection/vtxana_vtxSelection_vtx_Z_svt_h',
+    #     xtitle='Vertex Z [mm]',
+    #     ytitle='arb. units',
+    #     scale_histos=True,
+    #     is_vtxana=True,
+    #     fit=False
+    # )
 
-        fit_2D_dist(p, f'vtxana_{selection}/vtxana_{selection}_vtx_InvM_vtx_svt_z_hh', xtitle='M_inv [GeV]', ytitle_mu='#mu vertex z [mm]', ytitle_sigma='#sigma vertex z [mm]', outname=f'vtxana_{selection}_vtx_InvM_vtx_svt_z', xrange_mu=[0, 0.3], yrange_mu=[-20, 0], xrange_sigma=[0, 0.3], yrange_sigma=[0, 3], additional_histos=[get_2016_vtx_z_2D(p.additional_input_files[0], selection=selection, name='MC_histo'), get_2016_vtx_z_2D(p.additional_input_files[1], selection=selection, name='data_histo')])
+    # additional_histos = []
+    # if p.additional_input_files:
+    #     additional_histos = [get_2016_vtx_z(p.additional_input_files[0], selection='Tight', name='MC_histo'), get_2016_vtx_z(p.additional_input_files[1], selection='Tight', name='data_histo')]
+    # histopaths =[]
+    # for year in p.year:
+    #     histopaths.append(f'vtxana_Tight_{year}/vtxana_Tight_{year}_vtx_Z_svt_h')
+    # p.make_1D_plots_with_fit(
+    #     histopaths,
+    #     xtitle='Vertex Z [mm]',
+    #     ytitle='arb. units',
+    #     scale_histos=True,
+    #     is_vtxana=True,
+    #     additional_histos=additional_histos,
+    #     xrange=[-30, 20]
+    # )
 
-        fit_2D_dist(p, f'vtxana_{selection}/vtxana_{selection}_vtx_p_sigmaZ_hh', xtitle='p_{vtx} [GeV]', ytitle_mu='#mu(#sigma z) [mm]', ytitle_sigma='#sigma(#sigma z) [mm]', outname=f'vtxana_{selection}_vtx_p_sigmaZ', yrange_mu=[-20,10])
+    fit_2D_dist(p, histoname=['vtxana_vtxSelection/vtxana_vtxSelection_vtx_InvM_vtx_svt_z_hh'], xtitle='M_inv [GeV]', ytitle_mu='#mu vertex z [mm]', ytitle_sigma='#sigma vertex z [mm]', outname=f'vtxana_vtxSelection_vtx_InvM_vtx_svt_z', xrange_mu=[0, 0.3], yrange_mu=[-20, 0], xrange_sigma=[0, 0.3], yrange_sigma=[0, 3])
 
-        fit_2D_dist(p, f'vtxana_{selection}/vtxana_{selection}_vtx_p_svt_z_hh', xtitle='p_{vtx} [GeV]', ytitle_mu='#mu svt z [mm]', ytitle_sigma='#sigma svt z [mm]', outname=f'vtxana_{selection}_vtx_p_svt_z', yrange_mu=[-8, -6], xrange_mu=[0.5, 5.5])
+    if p.additional_input_files:
+        additional_histos = [get_2016_vtx_z_2D(p.additional_input_files[0], selection='Tight', name='MC_histo'), get_2016_vtx_z_2D(p.additional_input_files[1], selection='Tight', name='data_histo')]
+    histopaths =[]
+    for year in p.year:
+        histopaths.append(f'vtxana_Tight_{year}/vtxana_Tight_{year}_vtx_InvM_vtx_svt_z_hh')
+    fit_2D_dist(p, histoname=histopaths, xtitle='M_inv [GeV]', ytitle_mu='#mu vertex z [mm]', ytitle_sigma='#sigma vertex z [mm]', outname=f'vtxana_Tight_vtx_InvM_vtx_svt_z', xrange_mu=[0, 0.3], yrange_mu=[-20, 0], xrange_sigma=[0, 0.3], yrange_sigma=[0, 3], additional_histos=additional_histos)
 
-        fit_2D_dist(p, f'vtxana_{selection}/vtxana_{selection}_vtx_p_svt_x_hh', xtitle='p_{vtx} [GeV]', ytitle_mu='#mu svt x [mm]', ytitle_sigma='#sigma svt x [mm]', outname=f'vtxana_{selection}_vtx_p_svt_x')
+    # for selection in ['vtxSelection', 'Tight']:    
 
-        fit_2D_dist(p, f'vtxana_{selection}/vtxana_{selection}_vtx_p_svt_y_hh', xtitle='p_{vtx} [GeV]', ytitle_mu='#mu svt y [mm]', ytitle_sigma='#sigma svt y [mm]', outname=f'vtxana_{selection}_vtx_p_svt_y')
+        # fit_2D_dist(p, f'vtxana_{selection}/vtxana_{selection}_vtx_p_sigmaZ_hh', xtitle='p_{vtx} [GeV]', ytitle_mu='#mu(#sigma z) [mm]', ytitle_sigma='#sigma(#sigma z) [mm]', outname=f'vtxana_{selection}_vtx_p_sigmaZ', yrange_mu=[-20,10])
+
+        # fit_2D_dist(p, f'vtxana_{selection}/vtxana_{selection}_vtx_p_svt_z_hh', xtitle='p_{vtx} [GeV]', ytitle_mu='#mu svt z [mm]', ytitle_sigma='#sigma svt z [mm]', outname=f'vtxana_{selection}_vtx_p_svt_z', yrange_mu=[-8, -6], xrange_mu=[0.5, 5.5])
+
+        # fit_2D_dist(p, f'vtxana_{selection}/vtxana_{selection}_vtx_p_svt_x_hh', xtitle='p_{vtx} [GeV]', ytitle_mu='#mu svt x [mm]', ytitle_sigma='#sigma svt x [mm]', outname=f'vtxana_{selection}_vtx_p_svt_x')
+
+        # fit_2D_dist(p, f'vtxana_{selection}/vtxana_{selection}_vtx_p_svt_y_hh', xtitle='p_{vtx} [GeV]', ytitle_mu='#mu svt y [mm]', ytitle_sigma='#sigma svt y [mm]', outname=f'vtxana_{selection}_vtx_p_svt_y')
 
         # p.make_1D_plots_with_fit(
         #     f'vtxana_{selection}/vtxana_{selection}_vtx_sigma_Z_h',
@@ -181,21 +208,21 @@ def vtx_pos(p: Plotter):
         #     is_vtxana=True
         # )
 
-        p.make_1D_plots_with_fit(
-            f'vtxana_{selection}/vtxana_{selection}_vtx_X_h',
-            xtitle='x_{vtx} [mm]',
-            ytitle='arb. units',
-            scale_histos=True,
-            is_vtxana=True
-        )
+        # p.make_1D_plots_with_fit(
+        #     f'vtxana_{selection}/vtxana_{selection}_vtx_X_h',
+        #     xtitle='x_{vtx} [mm]',
+        #     ytitle='arb. units',
+        #     scale_histos=True,
+        #     is_vtxana=True
+        # )
 
-        p.make_1D_plots_with_fit(
-            f'vtxana_{selection}/vtxana_{selection}_vtx_Y_h',
-            xtitle='y_{vtx} [mm]',
-            ytitle='arb. units',
-            scale_histos=True,
-            is_vtxana=True
-        )
+        # p.make_1D_plots_with_fit(
+        #     f'vtxana_{selection}/vtxana_{selection}_vtx_Y_h',
+        #     xtitle='y_{vtx} [mm]',
+        #     ytitle='arb. units',
+        #     scale_histos=True,
+        #     is_vtxana=True
+        # )
 
 
 def get_2016_vtx_EoP(infile, charge='ele', selection='vtxSelection', name='hout'):
@@ -219,17 +246,33 @@ def get_2016_vtx_EoP(infile, charge='ele', selection='vtxSelection', name='hout'
 
 @Plotter.user
 def eop(p: Plotter):
-    for selection in ['vtxSelection', 'Tight_2019','Tight_pBot_2019','Tight_pTop_2019']:
-        for charge in ['ele', 'pos']:
-            MC_histo = get_2016_vtx_EoP(p.additional_input_files[0], charge=charge, selection=selection, name='MC_histo')
-            data_histo = get_2016_vtx_EoP(p.additional_input_files[1], charge=charge, selection=selection, name='data_histo')
+    
+    for charge in ['ele', 'pos']:
+        p.make_1D_plots_with_fit(
+            f'vtxana_vtxSelection/vtxana_vtxSelection_{charge}_EoP_h',
+            xtitle=f'{charge} E/p',
+            ytitle='arb. units',
+            scale_histos=True,
+            is_vtxana=True,
+            fit=False
+        )
+
+        for selection in ['Tight','Tight_pBot','Tight_pTop']:
+            additional_histos = []
+            if p.additional_input_files:
+                MC_histo = get_2016_vtx_EoP(p.additional_input_files[0], charge=charge, selection=selection, name='MC_histo')
+                data_histo = get_2016_vtx_EoP(p.additional_input_files[1], charge=charge, selection=selection, name='data_histo')
+                additional_histos = [MC_histo, data_histo]
+            histopaths =[]
+            for year in p.year:
+                histopaths.append(f'vtxana_{selection}_{year}/vtxana_{selection}_{year}_{charge}_EoP_h')
             p.make_1D_plots_with_fit(
-                f'vtxana_{selection}/vtxana_{selection}_{charge}_EoP_h',
+                histopaths,
                 xtitle=f'{charge} E/p',
                 ytitle='arb. units',
                 scale_histos=True,
                 is_vtxana=True,
-                additional_histos=[MC_histo, data_histo],
+                additional_histos=additional_histos
             )
 
         # fit_2D_dist(p, f'vtxana_{selection}/vtxana_{selection}_vtx_InvM_vtx_svt_z_hh', xtitle='M_inv [GeV]', ytitle='vertex z [mm]', outname=f'vtxana_{selection}_vtx_InvM_vtx_svt_z')

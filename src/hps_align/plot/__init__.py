@@ -72,6 +72,8 @@ def plot(
                                   help='write an HTML file for viewing plots'),
         is2016: bool = typer.Option(False,
                                     help='if we are looking at 2016 plots or not'),
+        year: List[int] = typer.Option([],
+                                        help='year of data'),
         ext: str = typer.Option('.png',
                                 help='plot file extension (.png or .pdf)'),
         config: str = typer.Option(None,
@@ -105,6 +107,9 @@ def plot(
 
             if c['legend']:
                 legend = c['legend']
+            
+            if c['year']:
+                year = c['year']
 
     if len(input_files) == 0:
         # raise ValueError('No input files given.')
@@ -129,6 +134,7 @@ def plot(
         do_HTML=html,
         oFext=ext,
         is2016=is2016,
+        year=year
     )
 
     if len(plots) == 0:

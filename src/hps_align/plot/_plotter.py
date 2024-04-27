@@ -65,6 +65,7 @@ class Plotter:
                  do_HTML=False,
                  oFext=".png",
                  is2016=False,
+                 year=[],
                  plot_list_file=None):
         # ROOT plot colors
         self.colors = [r.kBlue+2, r.kCyan+2, r.kRed+2, r.kOrange+10,
@@ -122,6 +123,7 @@ class Plotter:
         self.do_HTML = do_HTML
         self.oFext = oFext
         self.is2016 = is2016
+        self.year = year
 
         # input TFiles
         self.input_files = [r.TFile(inf) for inf in self.infile_names]
@@ -506,8 +508,14 @@ class Plotter:
         histos = []
         if is_vtxana: files = self.vtxana_input_files
         else: files = self.input_files
-        for infile in files:
-            histos.append(infile.Get(histopath))
+        if type(histopath) is str:
+            for infile in files:
+                histos.append(infile.Get(histopath))
+        elif type(histopath) is list:
+            for index in range(len(files)):
+                histos.append(files[index].Get(histopath[index]))
+        else:
+            raise ValueError("histopath must be a string or list of strings")
 
         fitList = []
         plotProperties = []
@@ -573,8 +581,10 @@ class Plotter:
         text.SetTextColor(r.kBlack)
         text.DrawLatex(0.62, 0.82, '#bf{#it{HPS}} Work In Progress')
 
-        saveName = self.outdir + "/" + histopath.split("/")[-1] + self.oFext
-
+        if type(histopath) is str:
+            saveName = self.outdir + "/" + histopath.split("/")[-1] + self.oFext
+        else:
+            saveName = self.outdir + "/" + histopath[0].split("/")[-1] + self.oFext
         canv.SaveAs(saveName)
 
     def plot_profileY(self, name,
