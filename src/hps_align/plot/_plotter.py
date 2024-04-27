@@ -60,6 +60,7 @@ class Plotter:
                  legend_names=[],
                  infile_names=[],
                  vtxana_infile_names=[],
+                 additional_infile_names=[],
                  outdir="",
                  do_HTML=False,
                  oFext=".png",
@@ -116,6 +117,7 @@ class Plotter:
         self.legend_names = legend_names
         self.infile_names = infile_names
         self.vtxana_infile_names = vtxana_infile_names
+        self.additional_infile_names = additional_infile_names
         self.outdir = outdir
         self.do_HTML = do_HTML
         self.oFext = oFext
@@ -124,6 +126,7 @@ class Plotter:
         # input TFiles
         self.input_files = [r.TFile(inf) for inf in self.infile_names]
         self.vtxana_input_files = [r.TFile(inf) for inf in self.vtxana_infile_names]
+        self.additional_input_files = [r.TFile(inf) for inf in self.additional_infile_names]
 
         if (not os.path.exists(self.outdir)):
             os.mkdir(self.outdir)
@@ -167,7 +170,7 @@ class Plotter:
             # year-separation not available
             return self._plot_list[name]
 
-    def get(self, hist_name, indir="", is_vtxana=False):
+    def get(self, hist_name, indir="", is_vtxana=False, is_additional=False):
         """Get a histogram from each ROOT file
 
         Parameters
@@ -196,6 +199,7 @@ class Plotter:
         # do not use list expansion since we want to handle errors
         histos = []
         if is_vtxana: files = self.vtxana_input_files
+        elif is_additional: files = self.additional_input_files
         else: files = self.input_files
         
         for f in files:
@@ -474,7 +478,7 @@ class Plotter:
 
         can.SaveAs(self.outdir + out_name + self.oFext)
 
-    def make_1D_plots_with_fit(self, histopath, xtitle="", ytitle="", fit=True, scale_histos=False, is_vtxana=False):
+    def make_1D_plots_with_fit(self, histopath, xtitle="", ytitle="", fit=True, scale_histos=False, is_vtxana=False, additional_histos=[], yrange=[], xrange=[]):
         """Plot the histograms with an iterative gaussian fit
 
         Parameters
@@ -507,11 +511,11 @@ class Plotter:
 
         fitList = []
         plotProperties = []
+        histos.extend(additional_histos)
 
         for ihisto in range(len(histos)):
-
             # Scale the histogram to unity
-            if scale_histos:
+            if scale_histos and histos[ihisto].Integral() > 0:
                 histos[ihisto].Scale(1./histos[ihisto].Integral())
 
             self.set_histo_style(histos[ihisto], ihisto, line_width=3)
@@ -539,6 +543,10 @@ class Plotter:
                 histos[ihisto].GetYaxis().SetLabelSize(0.06)
                 histos[ihisto].GetYaxis().SetTitleSize(0.05)
                 histos[ihisto].GetYaxis().SetTitleOffset(1.4)
+                if yrange:
+                    histos[ihisto].GetYaxis().SetRangeUser(yrange[0], yrange[1])
+                if xrange:
+                    histos[ihisto].GetXaxis().SetRangeUser(xrange[0], xrange[1])
 
             else:
                 histos[ihisto].Draw("hsame")

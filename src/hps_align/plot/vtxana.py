@@ -4,7 +4,7 @@ from ._plotter import Plotter
 from .index_page import htmlWriter
 from . import alignment_utils
 
-def fit_2D_dist(p: Plotter, histoname: str, xtitle="", ytitle_mu="", ytitle_sigma="", fitfunc="", outname="out", xrange_mu=[], yrange_mu=[], xrange_sigma=[], yrange_sigma=[]):
+def fit_2D_dist(p: Plotter, histoname: str, xtitle="", ytitle_mu="", ytitle_sigma="", fitfunc="", outname="out", xrange_mu=[], yrange_mu=[], xrange_sigma=[], yrange_sigma=[], additional_histos=[]):
     """!
     Plot z0 vs tanL and fit it
 
@@ -14,6 +14,7 @@ def fit_2D_dist(p: Plotter, histoname: str, xtitle="", ytitle_mu="", ytitle_sigm
     """
 
     histos = [f.Get(histoname) for f in p.vtxana_input_files]
+    histos.extend(additional_histos)
 
     print("Histograms to fit:", len(histos))
 
@@ -78,7 +79,7 @@ def fit_2D_dist(p: Plotter, histoname: str, xtitle="", ytitle_mu="", ytitle_sigm
             fitF.SetLineColor(p.colors[ihisto])
             fitF.DrawClone("SAME")
             
-    leg = p.do_legend(histos_mu, p.legend_names, 4, plotProperties)
+    leg = p.do_legend(histos_mu, p.legend_names, 2, plotProperties)
     if (leg is not None):
         leg.Draw()
 
@@ -111,29 +112,58 @@ def fit_2D_dist(p: Plotter, histoname: str, xtitle="", ytitle_mu="", ytitle_sigm
         else:
             histos_sigma[ihisto].Draw("P SAME")
 
-    leg = p.do_legend(histos_sigma, p.legend_names, 4, plotProperties)
-    if (leg is not None):
-        leg.Draw()
+    leg2 = p.do_legend(histos_sigma, p.legend_names, 2, plotProperties)
+    if (leg2 is not None):
+        leg2.Draw()
         
     canv2.Update()
     canv2.SaveAs(p.outdir + "/" + outname + "_sigma" + p.oFext)
-    
+
+
+def get_2016_vtx_z_2D(infile, selection='vtxSelection', name='out_h'):
+    """get vertex position plots for 2016 data"""
+    if selection=='Tight_2019':
+        tree = infile.Get("vtxana_Tight_L1L1_nvtx1/vtxana_Tight_L1L1_nvtx1_tree")
+        tree.Draw("unc_vtx_z:unc_vtx_mass>>"+name+"(300, 0, 0.3, 200, -40, 40)","")
+        out_h = r.gDirectory.Get(name)
+    else:
+        out_h = r.TH2F(name, name, 100, 0, 0.2, 100, -10, 10) 
+    return out_h
+
+
+def get_2016_vtx_z(infile, selection='vtxSelection', name='out_h'):
+    """get vertex position plots for 2016 data"""
+    if selection=='Tight_2019':
+        tree = infile.Get("vtxana_Tight_L1L1_nvtx1/vtxana_Tight_L1L1_nvtx1_tree")
+        tree.Draw("unc_vtx_z>>"+name+"(150, -30, 20)","")
+        out_h = r.gDirectory.Get(name)
+    else:
+        out_h = r.TH1F(name, name, 150, -15, 10) 
+    return out_h
+
+
 @Plotter.user
 def vtx_pos(p: Plotter):
     """plot vertex z distributions
 
     input ROOT files have to contain the '' directory
     """
+    canv1 = r.TCanvas("c", "c", 2200, 2000)
+    get_2016_vtx_z_2D(p.additional_input_files[0], selection='Tight_2019', name='MC_histo').Draw("colz")
+    canv1.SaveAs("MC_histo.png")
+
     for selection in ['vtxSelection', 'Tight_2019']:
         p.make_1D_plots_with_fit(
             f'vtxana_{selection}/vtxana_{selection}_vtx_Z_svt_h',
             xtitle='Vertex Z [mm]',
             ytitle='arb. units',
             scale_histos=True,
-            is_vtxana=True
+            is_vtxana=True,
+            additional_histos=[get_2016_vtx_z(p.additional_input_files[0], selection=selection, name='MC_histo'), get_2016_vtx_z(p.additional_input_files[1], selection=selection, name='data_histo')],
+            xrange=[-30, 20]
         )
 
-        fit_2D_dist(p, f'vtxana_{selection}/vtxana_{selection}_vtx_InvM_vtx_svt_z_hh', xtitle='M_inv [GeV]', ytitle_mu='#mu vertex z [mm]', ytitle_sigma='#sigma vertex z [mm]', outname=f'vtxana_{selection}_vtx_InvM_vtx_svt_z', xrange_mu=[0, 0.3], yrange_mu=[-20, 0], xrange_sigma=[0, 0.3])
+        fit_2D_dist(p, f'vtxana_{selection}/vtxana_{selection}_vtx_InvM_vtx_svt_z_hh', xtitle='M_inv [GeV]', ytitle_mu='#mu vertex z [mm]', ytitle_sigma='#sigma vertex z [mm]', outname=f'vtxana_{selection}_vtx_InvM_vtx_svt_z', xrange_mu=[0, 0.3], yrange_mu=[-20, 0], xrange_sigma=[0, 0.3], yrange_sigma=[0, 3], additional_histos=[get_2016_vtx_z_2D(p.additional_input_files[0], selection=selection, name='MC_histo'), get_2016_vtx_z_2D(p.additional_input_files[1], selection=selection, name='data_histo')])
 
         fit_2D_dist(p, f'vtxana_{selection}/vtxana_{selection}_vtx_p_sigmaZ_hh', xtitle='p_{vtx} [GeV]', ytitle_mu='#mu(#sigma z) [mm]', ytitle_sigma='#sigma(#sigma z) [mm]', outname=f'vtxana_{selection}_vtx_p_sigmaZ', yrange_mu=[-20,10])
 
@@ -143,21 +173,13 @@ def vtx_pos(p: Plotter):
 
         fit_2D_dist(p, f'vtxana_{selection}/vtxana_{selection}_vtx_p_svt_y_hh', xtitle='p_{vtx} [GeV]', ytitle_mu='#mu svt y [mm]', ytitle_sigma='#sigma svt y [mm]', outname=f'vtxana_{selection}_vtx_p_svt_y')
 
-        p.make_1D_plots_with_fit(
-            f'vtxana_{selection}/vtxana_{selection}_vtx_Z_h',
-            xtitle='z_{vtx} [mm]',
-            ytitle='arb. units',
-            scale_histos=True,
-            is_vtxana=True
-        )
-
-        p.make_1D_plots_with_fit(
-            f'vtxana_{selection}/vtxana_{selection}_vtx_sigma_Z_h',
-            xtitle='#sigma z_{vtx} [mm]',
-            ytitle='arb. units',
-            scale_histos=True,
-            is_vtxana=True
-        )
+        # p.make_1D_plots_with_fit(
+        #     f'vtxana_{selection}/vtxana_{selection}_vtx_sigma_Z_h',
+        #     xtitle='#sigma z_{vtx} [mm]',
+        #     ytitle='arb. units',
+        #     scale_histos=True,
+        #     is_vtxana=True
+        # )
 
         p.make_1D_plots_with_fit(
             f'vtxana_{selection}/vtxana_{selection}_vtx_X_h',
@@ -176,16 +198,38 @@ def vtx_pos(p: Plotter):
         )
 
 
+def get_2016_vtx_EoP(infile, charge='ele', selection='vtxSelection', name='hout'):
+    """get EoP plots for 2016 data"""
+    if selection=='Tight_2019':
+        tree = infile.Get("vtxana_Tight_L1L1_nvtx1/vtxana_Tight_L1L1_nvtx1_tree")
+        tree.Draw("unc_vtx_"+charge+"_clust_E/unc_vtx_"+charge+"_track_p>>"+name+"(100, 0, 2)","")
+        hout = r.gDirectory.Get(name)
+    elif selection=='Tight_pBot_2019':
+        tree = infile.Get("vtxana_Tight_L1L1_nvtx1/vtxana_Tight_L1L1_nvtx1_tree")
+        tree.Draw("unc_vtx_"+charge+"_clust_E/unc_vtx_"+charge+"_track_p>>"+name+"(100, 0, 2)","unc_vtx_pos_track_tanLambda < 0")
+        hout = r.gDirectory.Get(name)
+    elif selection=='Tight_pTop_2019':
+        tree = infile.Get("vtxana_Tight_L1L1_nvtx1/vtxana_Tight_L1L1_nvtx1_tree")
+        tree.Draw("unc_vtx_"+charge+"_clust_E/unc_vtx_"+charge+"_track_p>>"+name+"(100, 0, 2)","unc_vtx_pos_track_tanLambda > 0")
+        hout = r.gDirectory.Get(name)
+    else:
+        hout = r.TH1F(name, name, 100, 0, 2) 
+    return hout
+
+
 @Plotter.user
 def eop(p: Plotter):
     for selection in ['vtxSelection', 'Tight_2019','Tight_pBot_2019','Tight_pTop_2019']:
         for charge in ['ele', 'pos']:
+            MC_histo = get_2016_vtx_EoP(p.additional_input_files[0], charge=charge, selection=selection, name='MC_histo')
+            data_histo = get_2016_vtx_EoP(p.additional_input_files[1], charge=charge, selection=selection, name='data_histo')
             p.make_1D_plots_with_fit(
                 f'vtxana_{selection}/vtxana_{selection}_{charge}_EoP_h',
                 xtitle=f'{charge} E/p',
                 ytitle='arb. units',
                 scale_histos=True,
-                is_vtxana=True
+                is_vtxana=True,
+                additional_histos=[MC_histo, data_histo],
             )
 
         # fit_2D_dist(p, f'vtxana_{selection}/vtxana_{selection}_vtx_InvM_vtx_svt_z_hh', xtitle='M_inv [GeV]', ytitle='vertex z [mm]', outname=f'vtxana_{selection}_vtx_InvM_vtx_svt_z')

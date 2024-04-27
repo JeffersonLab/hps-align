@@ -63,6 +63,7 @@ def plot(
                                               help='Input files for plotting'),
         vtxana_input_files: List[str] = typer.Option([],
                                                      help='Input files for vertex analysis'),
+        additional_input_files: List[str] = typer.Option([], help='Additional input files for plotting'),
         legend: List[str] = typer.Option([],
                                          help='Labels for legend if not deduced from input file names'),
         out_dir: str = typer.Option(os.getcwd(),
@@ -90,6 +91,9 @@ def plot(
             if c['vtxana_inputFiles']:
                 vtxana_input_files = c['vtxana_inputFiles']
 
+            if c['additional_inputFiles']:
+                additional_input_files = c['additional_inputFiles']
+            
             if c['outdir']:
                 out_dir = c['outdir']
 
@@ -119,6 +123,7 @@ def plot(
         plot_list_file=plot_list,
         infile_names=input_files,
         vtxana_infile_names=vtxana_input_files,
+        additional_infile_names=additional_input_files,
         legend_names=legend,
         outdir=out_dir,
         do_HTML=html,
