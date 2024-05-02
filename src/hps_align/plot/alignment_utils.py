@@ -38,7 +38,7 @@ def make_fit(histoGram, fitType, range=[], color=None):
     if fitType == "noFit":
         return None
     elif fitType == "singleGausIterative":
-        fit = single_gauss_iterative(histoGram, 2, range, color)
+        fit = single_gauss_iterative(histoGram, 1, range, color)
 
     return fit
 
@@ -101,6 +101,8 @@ def profile_y_with_iterative_gauss_fit(hist, mu_graph, sigma_graph, num_bins, fi
 
         sigma = fit.GetParameter(2)
         sigma_err = fit.GetParError(2)
+
+        # print("mu=",mu,"sigma=",sigma)
 
         if (sigma > max_sigma or max_sigma == 0):
             max_sigma = sigma

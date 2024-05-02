@@ -59,14 +59,17 @@ class Plotter:
     def __init__(self,
                  legend_names=[],
                  infile_names=[],
+                 vtxana_infile_names=[],
+                 additional_infile_names=[],
                  outdir="",
                  do_HTML=False,
                  oFext=".png",
                  is2016=False,
+                 year=[],
                  plot_list_file=None):
         # ROOT plot colors
-        self.colors = [r.kBlue+2, r.kCyan+2, r.kRed+2, r.kOrange+10,
-                       r.kYellow+2, r.kGreen-1, r.kAzure-2, r.kGreen-8,
+        self.colors = [r.kBlue+2, r.kBlue+2, r.kRed+2, r.kRed+2,
+                       r.kGreen-1, r.kGreen-1, r.kAzure-2, r.kGreen-8,
                        r.kOrange+3, r.kYellow+2, r.kRed+2, r.kBlue+2,
                        r.kGreen-8, r.kOrange+3, r.kYellow+2, r.kRed+2,
                        r.kBlue+2, r.kGreen-8, r.kOrange+3, r.kYellow+2,
@@ -74,8 +77,8 @@ class Plotter:
                        r.kYellow+2, r.kRed+2, r.kBlue+2, r.kGreen-8,
                        r.kOrange+3]
         # ROOT markers
-        self.markers = [r.kFullCircle, r.kFullTriangleUp, r.kFullSquare,
-                        r.kOpenSquare, r.kOpenTriangleUp, r.kOpenCircle,
+        self.markers = [r.kOpenCircle, r.kFullCircle, r.kOpenSquare,
+                        r.kFullSquare, r.kOpenTriangleUp, r.kFullTriangleUp,
                         r.kFullCircle, r.kOpenSquare, r.kFullSquare,
                         r.kOpenTriangleUp, r.kOpenCircle, r.kFullCircle,
                         r.kOpenSquare, r.kFullSquare, r.kOpenTriangleUp,
@@ -114,13 +117,18 @@ class Plotter:
 
         self.legend_names = legend_names
         self.infile_names = infile_names
+        self.vtxana_infile_names = vtxana_infile_names
+        self.additional_infile_names = additional_infile_names
         self.outdir = outdir
         self.do_HTML = do_HTML
         self.oFext = oFext
         self.is2016 = is2016
+        self.year = year
 
         # input TFiles
         self.input_files = [r.TFile(inf) for inf in self.infile_names]
+        self.vtxana_input_files = [r.TFile(inf) for inf in self.vtxana_infile_names]
+        self.additional_input_files = [r.TFile(inf) for inf in self.additional_infile_names]
 
         if (not os.path.exists(self.outdir)):
             os.mkdir(self.outdir)
@@ -164,7 +172,7 @@ class Plotter:
             # year-separation not available
             return self._plot_list[name]
 
-    def get(self, hist_name, indir=""):
+    def get(self, hist_name, indir="", is_vtxana=False, is_additional=False):
         """Get a histogram from each ROOT file
 
         Parameters
@@ -173,6 +181,8 @@ class Plotter:
             name of histogram to get
         indir : str, optional
             optional ROOT directory histogram is contained in
+        is_vtxana : bool, optional
+            whether to pull histogram from vtxana files or not
 
         Returns
         -------
@@ -190,7 +200,14 @@ class Plotter:
 
         # do not use list expansion since we want to handle errors
         histos = []
-        for f in self.input_files:
+        if is_vtxana:
+            files = self.vtxana_input_files
+        elif is_additional:
+            files = self.additional_input_files
+        else:
+            files = self.input_files
+
+        for f in files:
             h = f.Get(path)
             if h is None or not isinstance(h, r.TH1):
                 raise KeyError(f'Histogram {path} not found in {f.GetName()}')
@@ -198,7 +215,7 @@ class Plotter:
 
         return histos
 
-    def do_legend(self, histos, legend_names, location=1, plot_properties=[], leg_location=[]):
+    def do_legend(self, histos, legend_names, location=1, plot_properties=[], leg_location=[], xshift=0.3, yshift=0.2):
         """Create legend
 
         Parameters
@@ -224,8 +241,6 @@ class Plotter:
                 "WARNING:: size of legends doesn't match the size of histos")
 
         leg = None
-        xshift = 0.3
-        yshift = 0.3
         if (location == 1):
             leg = r.TLegend(0.6, 0.35, 0.90, 0.15)
         if (location == 2):
@@ -244,14 +259,15 @@ class Plotter:
                 leg.AddEntry(histos[ihist], legend_names[ihist], 'lpf')
             else:
                 # splitline{The Data }{slope something }
-                entry = "#splitline{" + \
-                    legend_names[ihist] + "}{" + plot_properties[ihist] + "}"
+                entry = legend_names[ihist] + plot_properties[ihist]
+                # entry = "#splitline{" + \
+                #     legend_names[ihist] + "}{" +plot_properties[ihist] + "}"
                 leg.AddEntry(histos[ihist], entry, 'lpf')
         leg.SetBorderSize(0)
 
         return leg
 
-    def set_histo_style(self, histo, ihisto, marker_size=4, line_width=5, label_size=0.05):
+    def set_histo_style(self, histo, ihisto, marker_size=4, line_width=2, label_size=0.05):
         """Set histo properties.
 
         Parameters
@@ -331,11 +347,11 @@ class Plotter:
         text.SetTextFont(42)
         text.SetTextSize(0.04)
         text.SetTextColor(r.kBlack)
-        text.DrawLatex(0.16, 0.89, '#bf{#it{HPS}} Work In Progress')
+        text.DrawLatex(0.16, 0.89, '#bf{#it{HPS}} preliminary')
 
         can.SaveAs(self.outdir + "/" + out_name + self.oFext)
 
-    def plot_2D_colormesh(self, name, indir='res/', xtitle=None, ytitle=None, ztitle=None, logz=True):
+    def plot_2D_colormesh(self, name, indir='res/', xtitle=None, ytitle=None, ztitle=None, logz=True, is_vtxana=False):
         """plot a 2D colormesh for _each_ histogram in the list _separately_
 
         Parameters
@@ -358,7 +374,7 @@ class Plotter:
         if not os.path.exists(self.outdir):
             os.mkdir(self.out_dir)
 
-        histolist = self.get(name, indir=indir)
+        histolist = self.get(name, indir=indir, is_vtxana=is_vtxana)
 
         can = r.TCanvas('c1', 'c1', 2200, 2200)
         can.SetMargin(
@@ -404,69 +420,16 @@ class Plotter:
             text.SetTextSize(0.04)
             text.SetTextColor(r.kBlack)
             text.SetTextAlign(r.kVAlignTop+r.kHAlignCenter)
-            text.DrawLatex(0.5, 0.99, '#bf{#it{HPS}} Work In Progress')
+            text.DrawLatex(0.5, 0.99, '#bf{#it{HPS}} preliminary')
             text.DrawLatex(0.5, 0.99-text.GetTextSize(), self.legend_names[ih])
 
             can.SaveAs(f'{self.outdir}/{name}-{self.legend_names[ih]}{self.oFext}')
             can.Clear()
 
-    def make_1D_plots(self, histolist, out_name="output", xtitle="", ytitle="", yrange=[], logy=False, RebinFactor=0):
-        """!
-        Make 1D plots
-
-        @param histolist    List of histograms to plot
-        @param out_name     Name of the plot
-        @param xtitle       X-axis title
-        @param ytitle       Y-axis title
-        @param yrange       Y-axis range
-        @param logy         Set the Y-axis to log scale
-        @param RebinFactor  Rebin factor
-        """
-        can = r.TCanvas("c1", "c1", 2200, 2000)
-        if logy:
-            can.SetLogy(1)
-
-        means = []
-        meansErr = []
-
-        for ih in range(len(histolist)):
-            means.append(histolist[ih].GetMean(2))
-            meansErr.append(histolist[ih].GetMeanError(2))
-
-            self.set_histo_style(histolist[ih], ih)
-            if len(yrange) == 2:
-                histolist[ih].GetYaxis().SetRangeUser(yrange[0], yrange[1])
-            histolist[ih].GetXaxis().CenterTitle()
-            histolist[ih].GetYaxis().CenterTitle()
-
-            if ("pT" in out_name or "pt" in out_name):
-                histolist[ih].GetXaxis().SetRangeUser(1., 20.)
-            if RebinFactor > 0:
-                histolist[ih].Rebin(RebinFactor)
-
-            if ih == 0:
-                histolist[ih].Draw()
-                if xtitle:
-                    histolist[ih].GetXaxis().SetTitle(xtitle)
-                if ytitle:
-                    histolist[ih].GetYaxis().SetTitle(ytitle)
-            else:
-                histolist[ih].Draw("same")
-
-        text = r.TLatex()
-        text.SetNDC()
-        text.SetTextFont(42)
-        text.SetTextSize(0.04)
-        text.SetTextColor(r.kBlack)
-        text.DrawLatex(0.52, 0.87, '#bf{#it{HPS} Work In Progress}')
-
-        leg = self.do_legend(histolist, self.legend_names, 2)
-        if (leg is not None):
-            leg.Draw()
-
-        can.SaveAs(self.outdir + out_name + self.oFext)
-
-    def make_1D_plots_with_fit(self, histopath, xtitle="", ytitle="", fit=True, scale_histos=False):
+    def make_1D_plots_with_fit(self, histopath, xtitle="", ytitle="",
+                               fit=True, scale_histos="", is_vtxana=False,
+                               additional_histos=[], yrange=[], xrange=[],
+                               addtext="", rebin_factor=1):
         """Plot the histograms with an iterative gaussian fit
 
         Parameters
@@ -480,9 +443,8 @@ class Plotter:
             title of x-axis
         ytitle : str
             title of y-axis
-        scale_histos : bool
-            scale the histograms to unity
-
+        scale_histos : str
+            integral or maximum
         See Also
         --------
         alignment_utils.make_fit
@@ -492,19 +454,31 @@ class Plotter:
         canv = r.TCanvas("c", "c", 2200, 2000)
 
         histos = []
-        for infile in self.input_files:
-            histos.append(infile.Get(histopath))
+        if is_vtxana:
+            files = self.vtxana_input_files
+        else:
+            files = self.input_files
+        if type(histopath) is str:
+            for infile in files:
+                histos.append(infile.Get(histopath))
+        elif type(histopath) is list:
+            for index in range(len(files)):
+                histos.append(files[index].Get(histopath[index]))
+        else:
+            raise ValueError("histopath must be a string or list of strings")
 
         fitList = []
         plotProperties = []
+        histos.extend(additional_histos)
 
         for ihisto in range(len(histos)):
-
-            # Scale the histogram to unity
-            if scale_histos:
+            histos[ihisto].Rebin(rebin_factor)
+            if scale_histos == "integral" and histos[ihisto].Integral() > 0:
                 histos[ihisto].Scale(1./histos[ihisto].Integral())
+            elif scale_histos == "maximum" and histos[ihisto].GetMaximum() > 0:
+                histos[ihisto].Scale(1./histos[ihisto].GetMaximum())
 
-            self.set_histo_style(histos[ihisto], ihisto, line_width=3)
+            self.set_histo_style(histos[ihisto], ihisto, line_width=1, marker_size=3)
 
             if fit or isinstance(fit, dict):
                 fitting_kwargs = dict(
@@ -521,30 +495,36 @@ class Plotter:
             if (ihisto == 0):
                 histos[ihisto].Draw("h")
                 histos[ihisto].GetXaxis().SetTitle(xtitle)
-                histos[ihisto].GetXaxis().SetTitleSize(0.05)
+                histos[ihisto].GetXaxis().SetTitleSize(0.04)
                 histos[ihisto].GetXaxis().SetTitleOffset(1.)
-                histos[ihisto].GetXaxis().SetLabelSize(0.06)
+                histos[ihisto].GetXaxis().SetLabelSize(0.04)
 
                 histos[ihisto].GetYaxis().SetTitle(ytitle)
-                histos[ihisto].GetYaxis().SetLabelSize(0.06)
-                histos[ihisto].GetYaxis().SetTitleSize(0.05)
+                histos[ihisto].GetYaxis().SetLabelSize(0.04)
+                histos[ihisto].GetYaxis().SetTitleSize(0.04)
                 histos[ihisto].GetYaxis().SetTitleOffset(1.4)
+                if yrange:
+                    histos[ihisto].GetYaxis().SetRangeUser(yrange[0], yrange[1])
+                if xrange:
+                    histos[ihisto].GetXaxis().SetRangeUser(xrange[0], xrange[1])
 
             else:
                 histos[ihisto].Draw("hsame")
 
             if len(fitList) > 0:
-                fitList[ihisto].Draw("same")
+                # fitList[ihisto].Draw("same")
                 mu = fitList[ihisto].GetParameter(1)
-                mu_err = fitList[ihisto].GetParError(1)
+                # mu_err = fitList[ihisto].GetParError(1)
                 sigma = fitList[ihisto].GetParameter(2)
-                sigma_err = fitList[ihisto].GetParError(2)
+                # sigma_err = fitList[ihisto].GetParError(2)
 
-                plotProperties.append((" #mu=%.3f" % round(mu, 3)) + ("+/- %.3f" % round(mu_err, 3))
-                                      + (" #sigma=%.3f" % round(sigma, 3)) + ("+/- %.3f" % round(sigma_err, 3)))
+                plotProperties.append(("  #it{#mu=%.2f}" % round(mu, 2))
+                                      + (" #it{#sigma=%.2f}" % round(sigma, 2)))
+                # plotProperties.append((" #mu=%.2f" % round(mu, 2)) + ("+/- %.2f" % round(mu_err, 2))
+                #                       + (" #sigma=%.2f" % round(sigma, 2)) + ("+/- %.2f" % round(sigma_err, 2)))
 
         leg = self.do_legend(histos, self.legend_names, 3,
-                             plotProperties, leg_location=[0.6, 0.80])
+                             plotProperties, leg_location=[0.64, 0.8], xshift=0.25, yshift=0.2)
 
         leg.Draw("same")
 
@@ -553,11 +533,143 @@ class Plotter:
         text.SetTextFont(42)
         text.SetTextSize(0.04)
         text.SetTextColor(r.kBlack)
-        text.DrawLatex(0.62, 0.82, '#bf{#it{HPS}} Work In Progress')
+        text.DrawLatex(0.64, 0.84, '#bf{#it{HPS}} preliminary')
 
-        saveName = self.outdir + "/" + histopath.split("/")[-1] + self.oFext
+        if addtext:
+            text2 = r.TLatex()
+            text2.SetNDC()
+            text2.SetTextFont(42)
+            text2.SetTextSize(0.04)
+            text2.SetTextColor(r.kBlack)
+            text2.DrawLatex(0.64, 0.62, '#bf{'+addtext+'}')
 
+        if type(histopath) is str:
+            saveName = self.outdir + "/" + histopath.split("/")[-1] + self.oFext
+        else:
+            saveName = self.outdir + "/" + histopath[0].split("/")[-1] + self.oFext
         canv.SaveAs(saveName)
+
+    def fit_2D_dist(self, histoname=[], xtitle="", ytitle_mu="",
+                    ytitle_sigma="", fitfunc="", outname="out",
+                    xrange_mu=[], yrange_mu=[], xrange_sigma=[],
+                    yrange_sigma=[], additional_histos=[],
+                    rebin_factor=10):
+        """!
+        Fit a 2D histogram in y with an iterative Gaussian fit
+        """
+        histos = []
+        if len(histoname) == 1:
+            histos = [f.Get(histoname[0]) for f in self.vtxana_input_files]
+        elif len(histoname) > 1:
+            for index in range(len(self.vtxana_input_files)):
+                histos.append(self.vtxana_input_files[index].Get(histoname[index]))
+        else:
+            print("No histogram given to fit.")
+
+        histos.extend(additional_histos)
+
+        print("Histograms to fit:", len(histos))
+
+        canv = r.TCanvas("c1", "c1", 2200, 2000)
+        canv.SetGridx()
+        canv.SetGridy()
+
+        plotProperties = []
+
+        histos_mu = []
+        histos_sigma = []
+
+        for ihisto in range(0, len(histos)):
+
+            # Rebin it
+            histos[ihisto].Rebin(rebin_factor)
+
+            # Profile it
+            histos_mu.append(r.TH1F(histos[ihisto].GetName() + "_mu" + str(ihisto), histos[ihisto].GetName() + "_mu" + str(
+                ihisto), histos[ihisto].GetXaxis().GetNbins(), histos[ihisto].GetXaxis().GetXmin(), histos[ihisto].GetXaxis().GetXmax()))
+
+            histos_sigma.append(r.TH1F(histos[ihisto].GetName() + "_sigma" + str(ihisto), histos[ihisto].GetName() + "_sigma" + str(
+                ihisto), histos[ihisto].GetXaxis().GetNbins(), histos[ihisto].GetXaxis().GetXmin(), histos[ihisto].GetXaxis().GetXmax()))
+            alignment_utils.profile_y_with_iterative_gauss_fit(
+                histos[ihisto], histos_mu[ihisto], histos_sigma[ihisto], 1)
+
+            hist = histos_mu[ihisto]
+            hmin = hist.GetBinLowEdge(1)
+            hmax = (hist.GetBinLowEdge(hist.GetNbinsX())) + \
+                hist.GetBinWidth(hist.GetNbinsX())
+
+            if fitfunc:
+                fitF = r.TF1("fit" + str(ihisto), fitfunc, hmin, hmax)
+                histos_mu[ihisto].Fit("fit" + str(ihisto), "QNR")
+                string = ""
+                for i in range(fitF.GetNpar()):
+                    if i < range(fitF.GetNpar())[-1]:
+                        string += str(round(fitF.GetParameter(i), 3)) + ","
+                    else:
+                        string += str(round(fitF.GetParameter(i), 3))
+                plotProperties.append(string)
+
+            self.set_histo_style(histos_mu[ihisto], ihisto)
+            histos_mu[ihisto].GetYaxis().SetTitle(ytitle_mu)
+            histos_mu[ihisto].GetXaxis().SetTitle(xtitle)
+            histos_mu[ihisto].GetYaxis().SetTitleSize(
+                histos[ihisto].GetYaxis().GetTitleSize()*0.7)
+            histos_mu[ihisto].GetYaxis().SetTitleOffset(
+                histos[ihisto].GetYaxis().GetTitleOffset()*1.35)
+
+            if xrange_mu:
+                histos_mu[ihisto].GetXaxis().SetRangeUser(xrange_mu[0], xrange_mu[1])
+            if yrange_mu:
+                histos_mu[ihisto].GetYaxis().SetRangeUser(yrange_mu[0], yrange_mu[1])
+
+            if (ihisto == 0):
+                histos_mu[ihisto].Draw("P")
+            else:
+                histos_mu[ihisto].Draw("P SAME")
+
+            if fitfunc:
+                fitF.SetLineColor(self.colors[ihisto])
+                fitF.DrawClone("SAME")
+
+        leg = self.do_legend(histos_mu, self.legend_names, 2, plotProperties)
+        if (leg is not None):
+            leg.Draw()
+
+        canv.Update()
+        canv.SaveAs(self.outdir + "/" + outname + "_mu" + self.oFext)
+
+        # Now plot the sigma
+        canv2 = r.TCanvas("c2", "c2", 2200, 2000)
+        canv2.SetGridx()
+        canv2.SetGridy()
+
+        for ihisto in range(0, len(histos)):
+
+            self.set_histo_style(histos_sigma[ihisto], ihisto)
+            canv2.cd()
+            histos_sigma[ihisto].GetYaxis().SetTitle(ytitle_sigma)
+            histos_sigma[ihisto].GetXaxis().SetTitle(xtitle)
+            histos_sigma[ihisto].GetYaxis().SetTitleSize(
+                histos[ihisto].GetYaxis().GetTitleSize()*0.7)
+            histos_sigma[ihisto].GetYaxis().SetTitleOffset(
+                histos[ihisto].GetYaxis().GetTitleOffset()*1.35)
+
+            if xrange_sigma:
+                histos_sigma[ihisto].GetXaxis().SetRangeUser(xrange_sigma[0], xrange_sigma[1])
+            if yrange_sigma:
+                histos_sigma[ihisto].GetYaxis().SetRangeUser(yrange_sigma[0], yrange_sigma[1])
+
+            if (ihisto == 0):
+                histos_sigma[ihisto].Draw("P")
+            else:
+                histos_sigma[ihisto].Draw("P SAME")
+
+        leg2 = self.do_legend(histos_sigma, self.legend_names, 2, plotProperties)
+        if (leg2 is not None):
+            leg2.Draw()
+
+        canv2.Update()
+        canv2.SaveAs(self.outdir + "/" + outname + "_sigma" + self.oFext)
 
     def plot_profileY(self, name,
                       indir='res/',
@@ -565,7 +677,8 @@ class Plotter:
                       ytitle="<ures> [mm]",
                       rangeX=[], rangeY=[], do_fit=False,
                       fitrange=[-2e5, 2e5], fit="[0]*x + [1]",
-                      num_bins=1, rebin=1, do_sigma_profile=False):
+                      num_bins=1, rebin=1, do_sigma_profile=False,
+                      is_vtxana=False):
         """!
         Plot y profile of distribution
 
@@ -586,7 +699,11 @@ class Plotter:
         histos_mu = []
         histos_sigma = []
 
-        for infile in self.input_files:
+        if is_vtxana:
+            files = self.vtxana_input_files
+        else:
+            files = self.input_files
+        for infile in files:
             if not infile.Get(indir+name):
                 raise Exception(indir + name + "   NOT FOUND")
 
@@ -660,7 +777,7 @@ class Plotter:
         text.SetTextFont(42)
         text.SetTextSize(0.04)
         text.SetTextColor(r.kBlack)
-        text.DrawLatex(0.66, 0.89, '#bf{#it{HPS}} Work In Progress')
+        text.DrawLatex(0.66, 0.89, '#bf{#it{HPS}} preliminary')
 
         canv.SaveAs(self.outdir + "/" + name + "_profiled" + self.oFext)
 
