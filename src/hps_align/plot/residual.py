@@ -69,7 +69,7 @@ def single_residual_plot(p: Plotter, histo_name, title=""):
     text.SetTextFont(42)
     text.SetTextSize(0.04)
     text.SetTextColor(r.kBlack)
-    text.DrawLatex(0.16, 0.89, '#bf{#it{HPS}} Work In Progress')
+    text.DrawLatex(0.16, 0.89, '#bf{#it{HPS}} preliminary')
 
     canv.SaveAs(p.outdir + "/" + histo_name + p.oFext)
 
@@ -168,7 +168,7 @@ def summary(p: Plotter):
     text.SetTextFont(42)
     text.SetTextSize(0.04)
     text.SetTextColor(r.kBlack)
-    text.DrawLatex(0.52, 0.87, '#bf{#it{HPS} Work In Progress}')
+    text.DrawLatex(0.52, 0.87, '#bf{#it{HPS} preliminary}')
 
     canv.SaveAs(p.outdir + "/" + "uresiduals" + p.oFext)
 

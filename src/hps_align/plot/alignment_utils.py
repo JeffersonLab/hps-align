@@ -38,7 +38,7 @@ def make_fit(histoGram, fitType, range=[], color=None):
     if fitType == "noFit":
         return None
     elif fitType == "singleGausIterative":
-        fit = single_gauss_iterative(histoGram, 2, range, color)
+        fit = single_gauss_iterative(histoGram, 1, range, color)
 
     return fit
 
@@ -101,9 +101,9 @@ def profile_y_with_iterative_gauss_fit(hist, mu_graph, sigma_graph, num_bins, fi
 
         sigma = fit.GetParameter(2)
         sigma_err = fit.GetParError(2)
-        
-        #print("mu=",mu,"sigma=",sigma)
-        
+
+        # print("mu=",mu,"sigma=",sigma)
+
         if (sigma > max_sigma or max_sigma == 0):
             max_sigma = sigma
         if (sigma < min_sigma or min_sigma == 0):
@@ -146,7 +146,7 @@ def profile_y_with_iterative_gauss_fit(hist, mu_graph, sigma_graph, num_bins, fi
     if (fDebug and num_skipped):
         print("Number of skipped bins: ", num_skipped)
 
-    
+
 def single_gauss_iterative(hist, sigmaRange, range=[], color=None):
     """!
     Perform a single Gaussian fit to a histogram

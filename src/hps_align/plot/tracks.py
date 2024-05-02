@@ -5,8 +5,7 @@ from .index_page import htmlWriter
 
 @Plotter.user
 def tracks(p: Plotter):
-    """
-    """
+
     if not os.path.exists(p.outdir + "/TrackPlots"):
         os.makedirs(p.outdir + "/TrackPlots")
 
@@ -28,8 +27,6 @@ def tracks(p: Plotter):
     for crg in charges:
         for vol in vols:
             for var in variables:
-                hname = plotFolder + var + vol + crg
-
                 if ("pos" in crg):
                     corrcrg = "q-"
                 elif ("neg" in crg):
@@ -37,12 +34,9 @@ def tracks(p: Plotter):
                 else:
                     corrcrg = "All"
 
-                # File loop
-                histos = [f.Get(hname) for f in p.input_files]
-                p.make_1D_plots(histos,
-                                out_name='/TrackPlots/'+var+vol+crg,
-                                xtitle=var + " " + vol + " " + corrcrg,
-                                RebinFactor=0, yrange=[0, 0.05])
+                p.make_1D_plots_with_fit(plotFolder + var + vol + crg,
+                                         xtitle=var + " " + vol + " " + corrcrg,
+                                         yrange=[0, 0.05])
 
     if p.do_HTML:
         img_type = p.oFext.strip(".")
@@ -130,34 +124,52 @@ def eop(p: Plotter):
 @Plotter.user
 def fee(p: Plotter):
     for half in ['top', 'bottom']:
-        p.make_1D_plots_with_fit(
-            f'trk_params/z0_{half}',
-            xtitle=f'{half} z_{{0}} [mm]'
-        )
-        p.make_1D_plots_with_fit(
-            f'trk_params/d0_{half}',
-            xtitle=f'{half} d_{{0}} [mm]'
-        )
-        for coord in ['x', 'y']:
-            p.make_1D_plots_with_fit(
-                f'trk_params/trk_extr_bs_{coord}_{half}',
-                xtitle=f'Track BS {half} {coord} [mm]'
-            )
-        for sign in ['neg', 'pos']:
-            p.make_1D_plots_with_fit(
-                f'trk_params/Chi2_{half}_{sign}',
-                xtitle=f'{half} {sign} #chi^{{2}}',
-                fit=False
-            )
+        # p.make_1D_plots_with_fit(
+        #     f'trk_params/z0_{half}',
+        #     xtitle=f'{half} z_{{0}} [mm]',
+        #     scale_histos="integral",
+        #     xrange=[2,7]
+        # )
+        # p.make_1D_plots_with_fit(
+        #     f'trk_params/d0_{half}',
+        #     xtitle=f'{half} d_{{0}} [mm]',
+        #     scale_histos="integral",
+        #     xrange=[2,7]
+        # )
+        # for coord in ['x', 'y']:
+        #     p.make_1D_plots_with_fit(
+        #         f'trk_params/trk_extr_bs_{coord}_{half}',
+        #         xtitle=f'Track BS {half} {coord} [mm]',
+        #         scale_histos="integral",
+        #         xrange=[2,7]
+        #     )
+        # for sign in ['neg', 'pos']:
+        #     p.make_1D_plots_with_fit(
+        #         f'trk_params/Chi2_{half}_{sign}',
+        #         xtitle=f'{half} {sign} #chi^{{2}}',
+        #         fit=False,
+        #         scale_histos="integral",
+        #         xrange=[2,7]
+        #     )
+        addtext = half
+        if addtext == "top":
+            addtext = "TOP"
+        elif addtext == "bottom":
+            addtext = "BOT"
         p.make_1D_plots_with_fit(
             f'trk_params/p_{half}',
-            xtitle=f'{half} p [GeV]'
+            xtitle=f'full energy electron p [GeV]',
+            ytitle='a.u.',
+            scale_histos="integral",
+            xrange=[2, 8], addtext=f'{addtext} volume'
         )
         for side in ['slot', 'hole']:
             p.make_1D_plots_with_fit(
                 f'trk_params/p_{side}_{half}',
                 xtitle=f'e^{{-}} {side} side {half} p [GeV]',
-                ytitle='Tracks'
+                ytitle='Tracks',
+                scale_histos="integral",
+                xrange=[2, 7]
             )
 
     # not 100p what these are since I'm working on 2016

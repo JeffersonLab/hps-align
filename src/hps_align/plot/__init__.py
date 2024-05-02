@@ -73,7 +73,7 @@ def plot(
         is2016: bool = typer.Option(False,
                                     help='if we are looking at 2016 plots or not'),
         year: List[int] = typer.Option([],
-                                        help='year of data'),
+                                       help='year of data'),
         ext: str = typer.Option('.png',
                                 help='plot file extension (.png or .pdf)'),
         config: str = typer.Option(None,
@@ -95,7 +95,7 @@ def plot(
 
             if c['additional_inputFiles']:
                 additional_input_files = c['additional_inputFiles']
-            
+
             if c['outdir']:
                 out_dir = c['outdir']
 
@@ -107,14 +107,14 @@ def plot(
 
             if c['legend']:
                 legend = c['legend']
-            
+
             if c['year']:
                 year = c['year']
 
     if len(input_files) == 0:
         # raise ValueError('No input files given.')
         warnings.warn('No input files given.')
-    
+
     if len(vtxana_input_files) == 0:
         warnings.warn('No vtxana input files given.')
 
