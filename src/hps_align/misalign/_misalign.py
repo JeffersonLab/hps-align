@@ -2,6 +2,7 @@ from random import gauss, uniform
 from os import *
 import xml.etree.ElementTree as ET
 
+
 class Misalignment:
 
     def __init__(self, detector_file, new_name=None):
@@ -27,7 +28,7 @@ class Misalignment:
                        22306, 22307, 22308, 22309, 22310,
                        22311, 22312, 22313, 22314, 22315,
                        22316, 22317, 22318, 22319, 22320]
-        
+
         self.tulist = [11101, 11102, 11103, 11104, 11105,
                        11106, 11107, 11108, 11109, 11110,
                        11111, 11112, 11113, 11114, 11115,
@@ -36,7 +37,7 @@ class Misalignment:
                        21106, 21107, 21108, 21109, 21110,
                        21111, 21112, 21113, 21114, 21115,
                        21116, 21117, 21118, 21119, 21120]
-    
+
     def move_rw(self, distribution, sigma):
         """Draw random numbers from a distribution and add to Rw aligment constants.
 
@@ -59,18 +60,18 @@ class Misalignment:
             if name in self.rwlist:
                 value = milleconst.get('value')
                 if distribution == 'gauss':
-                    new_value = value + " + " + "%6f"%gauss(0, sigma)
+                    new_value = value + " + " + "%6f" % gauss(0, sigma)
                 elif distribution == 'uniform':
-                    new_value = value + " + " + "%6f"%uniform(0, sigma)
+                    new_value = value + " + " + "%6f" % uniform(0, sigma)
                 else:
                     new_value = value
                 milleconst.set('value', new_value)
-        
+
         tree.write(self.detector)
 
     def move_tu(self, distribution, sigma):
         """Draw random numbers from a distribution and add to Tu aligment constants.
-        
+
         Parameters
         ----------
         distribution : str
@@ -90,15 +91,15 @@ class Misalignment:
             if name in self.tulist:
                 value = milleconst.get('value')
                 if distribution == 'gauss':
-                    new_value = value + " + " + "%6f"%gauss(0, sigma)
+                    new_value = value + " + " + "%6f" % gauss(0, sigma)
                 elif distribution == 'uniform':
-                    new_value = value + " + " + "%6f"%uniform(0, sigma)
+                    new_value = value + " + " + "%6f" % uniform(0, sigma)
                 else:
                     new_value = value
                 milleconst.set('value', new_value)
-        
+
         tree.write(self.detector)
-    
+
     def misalign(self, distribution, params={'rw': 0.5, 'tu': 10}):
         if params['rw']:
             rw = params['rw']

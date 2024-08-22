@@ -7,6 +7,7 @@ from .._cli import typer_unpacker
 
 from . import _misalign
 
+
 @app.command()
 @typer_unpacker
 def movement(
@@ -20,7 +21,7 @@ def movement(
     """Moving the sensors"""
     if rw is None and tu is None:
         raise ValueError('must provide at least one of rw or tu')
-    
+
     # create misaligner object
     misaligner = _misalign.Misalignment(detector, new_name=output)
 
@@ -32,4 +33,3 @@ def movement(
     if tu is not None:
         tu = float(tu)
         misaligner.move_tu(method, tu)
-    
