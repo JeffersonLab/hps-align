@@ -38,12 +38,24 @@ class Misalignment:
                        21116, 21117, 21118, 21119, 21120]
     
     def move_rw(self, distribution, sigma):
+        """Draw random numbers from a distribution and add to Rw aligment constants.
+
+        Parameters
+        ----------
+        distribution : str
+            Distribution to draw from (gauss, uniform)
+        sigma : float
+            Characteristic displacement in Rw
+        """
         # open detector xml file to edit values
         tree = ET.parse(self.detector)
         root = tree.getroot()
+        # find the detector element
         detector = root.find('detectors').find('detector')
+        # find all millepede constants
         for milleconst in detector.find('millepede_constants').findall('millepede_constant'):
             name = int(milleconst.get('name'))
+            # check if millerpede constant is Rw
             if name in self.rwlist:
                 value = milleconst.get('value')
                 if distribution == 'gauss':
@@ -57,11 +69,24 @@ class Misalignment:
         tree.write(self.detector)
 
     def move_tu(self, distribution, sigma):
+        """Draw random numbers from a distribution and add to Tu aligment constants.
+        
+        Parameters
+        ----------
+        distribution : str
+            Distribution to draw from (gauss, uniform)
+        sigma : float
+            Characteristic displacement in Tu
+        """
+        # open detector xml file to edit values
         tree = ET.parse(self.detector)
         root = tree.getroot()
+        # find the detector element
         detector = root.find('detectors').find('detector')
+        # find all millepede constants
         for milleconst in detector.find('millepede_constants').findall('millepede_constant'):
             name = int(milleconst.get('name'))
+            # check if millerpede constant is Tu
             if name in self.tulist:
                 value = milleconst.get('value')
                 if distribution == 'gauss':

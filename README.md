@@ -48,3 +48,13 @@ For more information, run
 ```
 python -m hps_align survey data --help
 ```
+
+### Misaligning a detector
+Example for misaligning 2016 detector HPS-PhysicsRun2016-Pass2 with Rw=0.05mrad and Tu=10um.
+```
+python -m hps_align misalign movement --rw 0.00005 --tu 0.01 2016 HPS-PhysicsRun2016-Pass2/compact.xml
+```
+For more information, run
+```
+python -m hps_align misalign movement --help
+```

@@ -11,7 +11,7 @@ from . import _misalign
 @typer_unpacker
 def movement(
     year: int = typer.Argument(..., help='year of detector'),
-    detector: str = typer.Argument(..., help='input detector .xml file'),
+    detector: str = typer.Argument(..., help='input detector compact.xml file'),
     method: str = typer.Argument('gauss', help='distribution to draw from (gauss, uniform)'),
     rw: float = typer.Option(None, help='characteristic displacement in Rw'),
     tu: float = typer.Option(None, help='characteristic displacement in Tu'),
@@ -21,8 +21,10 @@ def movement(
     if rw is None and tu is None:
         raise ValueError('must provide at least one of rw or tu')
     
+    # create misaligner object
     misaligner = _misalign.Misalignment(detector, new_name=output)
 
+    # move the sensors for provided misalignments
     if rw is not None:
         rw = float(rw)
         misaligner.move_rw(method, rw)
