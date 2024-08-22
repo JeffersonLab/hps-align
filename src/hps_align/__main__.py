@@ -17,7 +17,7 @@ from . import plot
 
 from ._cli import app
 
-for module_name in ['detdump', 'survey']:
+for module_name in ['detdump', 'survey', 'misalign']:
     module = importlib.import_module('.'+module_name, 'hps_align')
     app.add_typer(
         module.app,
