@@ -10,10 +10,10 @@ prevents ROOT from opening any GUI windows while constructing
 plots.
 """
 
-import ROOT
+#import ROOT
 import importlib
 
-from . import plot
+#from . import plot
 
 from ._cli import app
 
@@ -25,7 +25,7 @@ for module_name in ['detdump', 'survey']:
         help=module.__doc__
     )
 
-ROOT.gROOT.SetBatch(1)
+#ROOT.gROOT.SetBatch(1)
 
 if __name__ == '__main__':
     app()
