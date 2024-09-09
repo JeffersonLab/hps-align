@@ -72,7 +72,7 @@ def _local(data_items, output_file, title=None, **kwargs):
     plt.clear()
 
 
-def _global(data_items, output_file, title=None, position='hps', angle_title='Angles', ref_line=0., **kwargs):
+def _global(data_items, output_file, title=None, position='hps', angle_title='Angles', ref_line=0., delta_prefix = '', **kwargs):
     """the global coordinate system is plottined in a 3x2 grid
     where the first column is position and the second column is
     euler angles. The rows go through x, y, z.
@@ -97,31 +97,34 @@ def _global(data_items, output_file, title=None, position='hps', angle_title='An
 
     import matplotlib.pyplot as plt
     fig, axes = plt.subplots(
-        nrows=3,
-        ncols=2,
-        sharex='col'
+        nrows=2,
+        ncols=3,
+        sharey='row',
+        gridspec_kw = dict(
+            hspace=0.25
+        )
     )
-    fig.set_size_inches(17, 8)
+    fig.set_size_inches(8, 13)
 
     for i_c, c in enumerate(['x', 'y', 'z']):
         for i_tr, tr in enumerate([position, 'theta']):
             # go through coordinates down columns and
             # and position/rotation across rows
-            ax = axes[i_c][i_tr]
+            ax = axes[i_tr][i_c]
             for name, data in data_items:
                 ax.scatter(
-                    data.sensor,
                     data[f'{tr}{c}']*1000,
+                    data.sensor,
                     label=name if i_c == 0 and i_tr == 0 else '_no_legend'
                 )
             if i_tr == 0:
-                ax.set_ylabel(f'{c.upper()} [$\\mu$m]')
+                ax.set_xlabel(f'${delta_prefix}{c.upper()}$ / $\\mu$m')
             else:
-                ax.set_ylabel(f'$\\theta_{c}$ [mrad]')
+                ax.set_xlabel(f'${delta_prefix}\\theta_{c}$ / mrad')
             if ref_line is not None:
-                ax.axhline(ref_line, color='gray')
-            ax.grid(axis='x')
-            if c == 'x':
+                ax.axvline(ref_line, color='gray')
+            ax.grid(axis='both')
+            if c == 'y':
                 if i_tr == 0:
                     if tr == 'hps':
                         ax.set_title('HPS Global Position')
@@ -129,9 +132,9 @@ def _global(data_items, output_file, title=None, position='hps', angle_title='An
                         ax.set_title('SVT Global Position')
                 else:
                     ax.set_title(angle_title)
-            if c == 'z':
+            if c == 'z' and i_tr == 0 and delta_prefix=='':
                 ax.tick_params(
-                    labelrotation=90
+                    labelrotation=30
                 )
     fig.legend(
         title=title,

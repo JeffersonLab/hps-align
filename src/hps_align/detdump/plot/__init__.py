@@ -151,6 +151,7 @@ def plot(
             data = [((name, df[df.lay > 1.5]) if (df['lay'] == 1.0).any() else (name, df[df.lay > 2.5])) for name, df in data]
         # change plot title
         plot_kw['title'] = f'Difference Relative to {ref_name}'
+        plot_kw['delta_prefix'] = r'\Delta '
 
     plotter(
         data,
